@@ -80,8 +80,8 @@ dependencies:
   open_file_safe: ^3.2.3
   syncfusion_flutter_pdfviewer:
   society_gatepass:
-    git:
-      url: https://zapniroshana@bitbucket.org/Convivialsoln/society_gatepass.git
+     git:
+       url: https://zapniroshana@bitbucket.org/Convivialsoln/society_gatepass.git
   # amazon_cognito_identity_dart: ^0.0.22
 
   #intl_translation: ^0.17.1

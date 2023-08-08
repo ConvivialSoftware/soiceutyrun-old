@@ -1,4 +1,29 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "dart.flutterSdkPath": "C:/Development/flutter_windows_3.0.1-stable/flutter"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "dart.flutterSdkPath": "C:/Development/flutter_windows_3.0.1-stable/flutter",
+  "files.exclude": {
+    "*.class": "explorerExcludedFiles",
+    "*.log": "explorerExcludedFiles",
+    "*.pyc": "explorerExcludedFiles",
+    "*.swp": "explorerExcludedFiles",
+    ".DS_Store": "explorerExcludedFiles",
+    ".atom/": "explorerExcludedFiles",
+    ".buildlog/": "explorerExcludedFiles",
+    ".history": "explorerExcludedFiles",
+    ".svn/": "explorerExcludedFiles",
+    "*.iml": "explorerExcludedFiles",
+    "*.ipr": "explorerExcludedFiles",
+    "*.iws": "explorerExcludedFiles",
+    ".idea/": "explorerExcludedFiles",
+    "**/doc/api/": "explorerExcludedFiles",
+    ".dart_tool/": "explorerExcludedFiles",
+    ".flutter-plugins": "explorerExcludedFiles",
+    ".flutter-plugins-dependencies": "explorerExcludedFiles",
+    ".packages": "explorerExcludedFiles",
+    ".pub-cache/": "explorerExcludedFiles",
+    ".pub/": "explorerExcludedFiles",
+    "build/": "explorerExcludedFiles",
+    "lib/generated_plugin_registrant.dart": "explorerExcludedFiles",
+    "!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages": "explorerExcludedFiles"
+  }
 }

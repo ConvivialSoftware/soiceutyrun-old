@@ -1,20 +1,21 @@
 PODS:
-  - Alamofire (4.9.1)
-  - clipboard_manager (0.0.3):
+  - audioplayers_darwin (0.0.1):
+    - Flutter
+  - awesome_notifications (0.0.3):
     - Flutter
   - connectivity (0.0.1):
     - Flutter
     - Reachability
-  - contact_picker (0.0.1):
+  - device_info_plus (0.0.1):
     - Flutter
-  - DKImagePickerController/Core (4.3.2):
+  - DKImagePickerController/Core (4.3.4):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
-  - DKImagePickerController/ImageDataManager (4.3.2)
-  - DKImagePickerController/PhotoGallery (4.3.2):
+  - DKImagePickerController/ImageDataManager (4.3.4)
+  - DKImagePickerController/PhotoGallery (4.3.4):
     - DKImagePickerController/Core
     - DKPhotoGallery
-  - DKImagePickerController/Resource (4.3.2)
+  - DKImagePickerController/Resource (4.3.4)
   - DKPhotoGallery (0.0.17):
     - DKPhotoGallery/Core (= 0.0.17)
     - DKPhotoGallery/Model (= 0.0.17)
@@ -38,57 +39,70 @@ PODS:
   - DKPhotoGallery/Resource (0.0.17):
     - SDWebImage
     - SwiftyGif
-  - ext_storage (0.0.1):
-    - Flutter
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
-  - Firebase/CoreOnly (6.33.0):
-    - FirebaseCore (= 6.10.3)
-  - Firebase/Messaging (6.33.0):
+  - Firebase/Analytics (10.10.0):
+    - Firebase/Core
+  - Firebase/Core (10.10.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 4.7.0)
-  - firebase_core (0.5.3):
-    - Firebase/CoreOnly (~> 6.33.0)
-    - Flutter
-  - firebase_messaging (7.0.3):
-    - Firebase/CoreOnly (~> 6.33.0)
-    - Firebase/Messaging (~> 6.33.0)
+    - FirebaseAnalytics (~> 10.10.0)
+  - Firebase/CoreOnly (10.10.0):
+    - FirebaseCore (= 10.10.0)
+  - Firebase/Messaging (10.10.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.10.0)
+  - firebase_analytics (10.4.3):
+    - Firebase/Analytics (= 10.10.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (6.10.3):
-    - FirebaseCoreDiagnostics (~> 1.6)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-  - FirebaseCoreDiagnostics (1.7.0):
-    - GoogleDataTransport (~> 7.4)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-    - nanopb (~> 1.30906.0)
-  - FirebaseInstallations (1.7.0):
-    - FirebaseCore (~> 6.10)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/UserDefaults (~> 6.7)
-    - PromisesObjC (~> 1.2)
-  - FirebaseInstanceID (4.8.0):
-    - FirebaseCore (~> 6.10)
-    - FirebaseInstallations (~> 1.6)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/UserDefaults (~> 6.7)
-  - FirebaseMessaging (4.7.1):
-    - FirebaseCore (~> 6.10)
-    - FirebaseInstanceID (~> 4.7)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Reachability (~> 6.7)
-    - GoogleUtilities/UserDefaults (~> 6.7)
-    - Protobuf (>= 3.9.2, ~> 3.9)
+  - firebase_core (2.14.0):
+    - Firebase/CoreOnly (= 10.10.0)
+    - Flutter
+  - firebase_messaging (14.6.3):
+    - Firebase/Messaging (= 10.10.0)
+    - firebase_core
+    - Flutter
+  - FirebaseAnalytics (10.10.0):
+    - FirebaseAnalytics/AdIdSupport (= 10.10.0)
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
+    - GoogleUtilities/MethodSwizzler (~> 7.11)
+    - GoogleUtilities/Network (~> 7.11)
+    - "GoogleUtilities/NSData+zlib (~> 7.11)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseAnalytics/AdIdSupport (10.10.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleAppMeasurement (= 10.10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
+    - GoogleUtilities/MethodSwizzler (~> 7.11)
+    - GoogleUtilities/Network (~> 7.11)
+    - "GoogleUtilities/NSData+zlib (~> 7.11)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseCore (10.10.0):
+    - FirebaseCoreInternal (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Logger (~> 7.8)
+  - FirebaseCoreInternal (10.13.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseInstallations (10.13.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.10.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
-  - flutter_downloader (0.0.1):
-    - Flutter
-  - flutter_full_pdf_viewer (1.0.1):
-    - Flutter
-  - flutter_image_compress (0.0.1):
+  - flutter_image_compress_common (1.0.0):
     - Flutter
     - Mantle
     - SDWebImage
@@ -97,12 +111,7 @@ PODS:
     - Flutter
   - flutter_share (0.0.1):
     - Flutter
-  - flutter_statusbarcolor (0.0.1):
-    - Flutter
-  - flutter_uploader (1.2.0):
-    - Alamofire (= 4.9.1)
-    - Flutter
-  - flutter_webview_plugin (0.0.1):
+  - fluttercontactpicker (4.6.0):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
@@ -110,131 +119,163 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GoogleDataTransport (7.5.1):
-    - nanopb (~> 1.30906.0)
-  - GoogleUtilities/AppDelegateSwizzler (6.7.2):
+  - GoogleAppMeasurement (10.10.0):
+    - GoogleAppMeasurement/AdIdSupport (= 10.10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
+    - GoogleUtilities/MethodSwizzler (~> 7.11)
+    - GoogleUtilities/Network (~> 7.11)
+    - "GoogleUtilities/NSData+zlib (~> 7.11)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/AdIdSupport (10.10.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
+    - GoogleUtilities/MethodSwizzler (~> 7.11)
+    - GoogleUtilities/Network (~> 7.11)
+    - "GoogleUtilities/NSData+zlib (~> 7.11)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/WithoutAdIdSupport (10.10.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
+    - GoogleUtilities/MethodSwizzler (~> 7.11)
+    - GoogleUtilities/Network (~> 7.11)
+    - "GoogleUtilities/NSData+zlib (~> 7.11)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleDataTransport (9.2.5):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.11.5):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.7.2):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (6.7.2):
+  - GoogleUtilities/Environment (7.11.5):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.11.5):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (6.7.2):
+  - GoogleUtilities/MethodSwizzler (7.11.5):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (7.11.5):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.7.2)"
-  - GoogleUtilities/Reachability (6.7.2):
+  - "GoogleUtilities/NSData+zlib (7.11.5)"
+  - GoogleUtilities/Reachability (7.11.5):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.7.2):
+  - GoogleUtilities/UserDefaults (7.11.5):
     - GoogleUtilities/Logger
   - image_picker (0.0.1):
     - Flutter
-  - libwebp (1.2.0):
-    - libwebp/demux (= 1.2.0)
-    - libwebp/mux (= 1.2.0)
-    - libwebp/webp (= 1.2.0)
-  - libwebp/demux (1.2.0):
+  - libwebp (1.3.1):
+    - libwebp/demux (= 1.3.1)
+    - libwebp/mux (= 1.3.1)
+    - libwebp/sharpyuv (= 1.3.1)
+    - libwebp/webp (= 1.3.1)
+  - libwebp/demux (1.3.1):
     - libwebp/webp
-  - libwebp/mux (1.2.0):
+  - libwebp/mux (1.3.1):
     - libwebp/demux
-  - libwebp/webp (1.2.0)
-  - Mantle (2.1.6):
-    - Mantle/extobjc (= 2.1.6)
-  - Mantle/extobjc (2.1.6)
-  - nanopb (1.30906.0):
-    - nanopb/decode (= 1.30906.0)
-    - nanopb/encode (= 1.30906.0)
-  - nanopb/decode (1.30906.0)
-  - nanopb/encode (1.30906.0)
+  - libwebp/sharpyuv (1.3.1)
+  - libwebp/webp (1.3.1):
+    - libwebp/sharpyuv
+  - Mantle (2.2.0):
+    - Mantle/extobjc (= 2.2.0)
+  - Mantle/extobjc (2.2.0)
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
   - notification_permissions (0.4.4):
+    - Flutter
+  - open_file_safe (0.0.1):
     - Flutter
   - package_info (0.0.1):
     - Flutter
-  - path_provider (0.0.1):
+  - package_info_plus (0.4.5):
     - Flutter
-  - "permission_handler (5.1.0+2)":
+  - path_provider_ios (0.0.1):
     - Flutter
-  - PromisesObjC (1.2.12)
-  - Protobuf (3.17.0)
-  - rate_my_app (1.1.1):
+  - permission_handler_apple (9.1.1):
     - Flutter
-  - razorpay-pod (1.1.13)
-  - razorpay_flutter (1.1.5):
+  - PromisesObjC (2.3.1)
+  - rate_my_app (2.0.0):
+    - Flutter
+  - razorpay-pod (1.3.3)
+  - razorpay_flutter (1.1.10):
     - Flutter
     - razorpay-pod
   - Reachability (3.2)
-  - SDWebImage (5.11.1):
-    - SDWebImage/Core (= 5.11.1)
-  - SDWebImage/Core (5.11.1)
-  - SDWebImageWebPCoder (0.8.4):
+  - SDWebImage (5.17.0):
+    - SDWebImage/Core (= 5.17.0)
+  - SDWebImage/Core (5.17.0)
+  - SDWebImageWebPCoder (0.13.0):
     - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.10)
-  - searchable_dropdown (1.1.1):
+    - SDWebImage/Core (~> 5.17)
+  - shared_preferences_foundation (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
-    - Flutter
+    - FlutterMacOS
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
-  - SwiftyGif (5.4.0)
-  - Toast (4.0.0)
-  - url_launcher (0.0.1):
+  - SwiftyGif (5.4.4)
+  - syncfusion_flutter_pdfviewer (0.0.1):
     - Flutter
-  - workmanager (0.0.1):
+  - Toast (4.0.0)
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - vibration (1.7.5):
+    - Flutter
+  - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
 DEPENDENCIES:
-  - clipboard_manager (from `.symlinks/plugins/clipboard_manager/ios`)
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
-  - contact_picker (from `.symlinks/plugins/contact_picker/ios`)
-  - ext_storage (from `.symlinks/plugins/ext_storage/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
+  - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
-  - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
-  - flutter_full_pdf_viewer (from `.symlinks/plugins/flutter_full_pdf_viewer/ios`)
-  - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
+  - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_share (from `.symlinks/plugins/flutter_share/ios`)
-  - flutter_statusbarcolor (from `.symlinks/plugins/flutter_statusbarcolor/ios`)
-  - flutter_uploader (from `.symlinks/plugins/flutter_uploader/ios`)
-  - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
+  - fluttercontactpicker (from `.symlinks/plugins/fluttercontactpicker/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
+  - open_file_safe (from `.symlinks/plugins/open_file_safe/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - rate_my_app (from `.symlinks/plugins/rate_my_app/ios`)
   - razorpay_flutter (from `.symlinks/plugins/razorpay_flutter/ios`)
-  - searchable_dropdown (from `.symlinks/plugins/searchable_dropdown/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - workmanager (from `.symlinks/plugins/workmanager/ios`)
+  - syncfusion_flutter_pdfviewer (from `.symlinks/plugins/syncfusion_flutter_pdfviewer/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - vibration (from `.symlinks/plugins/vibration/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - DKImagePickerController
     - DKPhotoGallery
     - Firebase
+    - FirebaseAnalytics
     - FirebaseCore
-    - FirebaseCoreDiagnostics
+    - FirebaseCoreInternal
     - FirebaseInstallations
-    - FirebaseInstanceID
     - FirebaseMessaging
     - FMDB
+    - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
     - libwebp
     - Mantle
     - nanopb
     - PromisesObjC
-    - Protobuf
     - razorpay-pod
     - Reachability
     - SDWebImage
@@ -243,119 +284,118 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
-  clipboard_manager:
-    :path: ".symlinks/plugins/clipboard_manager/ios"
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
-  contact_picker:
-    :path: ".symlinks/plugins/contact_picker/ios"
-  ext_storage:
-    :path: ".symlinks/plugins/ext_storage/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
+  firebase_analytics:
+    :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
-  flutter_downloader:
-    :path: ".symlinks/plugins/flutter_downloader/ios"
-  flutter_full_pdf_viewer:
-    :path: ".symlinks/plugins/flutter_full_pdf_viewer/ios"
-  flutter_image_compress:
-    :path: ".symlinks/plugins/flutter_image_compress/ios"
+  flutter_image_compress_common:
+    :path: ".symlinks/plugins/flutter_image_compress_common/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_share:
     :path: ".symlinks/plugins/flutter_share/ios"
-  flutter_statusbarcolor:
-    :path: ".symlinks/plugins/flutter_statusbarcolor/ios"
-  flutter_uploader:
-    :path: ".symlinks/plugins/flutter_uploader/ios"
-  flutter_webview_plugin:
-    :path: ".symlinks/plugins/flutter_webview_plugin/ios"
+  fluttercontactpicker:
+    :path: ".symlinks/plugins/fluttercontactpicker/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   notification_permissions:
     :path: ".symlinks/plugins/notification_permissions/ios"
+  open_file_safe:
+    :path: ".symlinks/plugins/open_file_safe/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   rate_my_app:
     :path: ".symlinks/plugins/rate_my_app/ios"
   razorpay_flutter:
     :path: ".symlinks/plugins/razorpay_flutter/ios"
-  searchable_dropdown:
-    :path: ".symlinks/plugins/searchable_dropdown/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
-  workmanager:
-    :path: ".symlinks/plugins/workmanager/ios"
+  syncfusion_flutter_pdfviewer:
+    :path: ".symlinks/plugins/syncfusion_flutter_pdfviewer/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  vibration:
+    :path: ".symlinks/plugins/vibration/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
-  clipboard_manager: f4800834e62cc26b1cc4e0a92a35cd452dd8b827
+  audioplayers_darwin: 387322cb364026a1782298c982693b1b6aa9fa1b
+  awesome_notifications: 04530aafec8dac4635244ed4b4072f4aea6cc938
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
-  contact_picker: 57db5d8b410b52a0457d88f7b15de7d3307e8f16
-  DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
+  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
+  DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  ext_storage: 4eaf3a84d5594106e2ebcc2502248cfde53c8fa1
-  file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
-  Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
-  firebase_core: 5d6a02f3d85acd5f8321c2d6d62877626a670659
-  firebase_messaging: 0aea2cd5885b65e19ede58ee3507f485c992cc75
-  FirebaseCore: d889d9e12535b7f36ac8bfbf1713a0836a3012cd
-  FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
-  FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
-  FirebaseInstanceID: bd3ffc24367f901a43c063b36c640b345a4a5dd1
-  FirebaseMessaging: 5eca4ef173de76253352511aafef774caa1cba2a
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
-  flutter_full_pdf_viewer: 1b65139fc3236cde300ba6bea2a72669cb07f2e6
-  flutter_image_compress: fd2b476345226e1a10ea352fa306af95704642c1
+  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
+  Firebase: facd334e557a979bd03a0b58d90fd56b52b8aba0
+  firebase_analytics: 1a5ad75876257318ba5fdc6bf7aae73b6e98d0cf
+  firebase_core: 85b6664038311940ad60584eaabc73103c61f5de
+  firebase_messaging: db0dab2713aafcf69591a1dc4ee8af7d8bba2abd
+  FirebaseAnalytics: 7bc7de519111dae802f5bc0c9c083918f8b8870d
+  FirebaseCore: d027ff503d37edb78db98429b11f580a24a7df2a
+  FirebaseCoreInternal: b342e37cd4f5b4454ec34308f073420e7920858e
+  FirebaseInstallations: b28af1b9f997f1a799efe818c94695a3728c352f
+  FirebaseMessaging: 8a3b9a8b98ce72a42d22e69865cf662e38d2d6f5
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_image_compress_common: ec1d45c362c9d30a3f6a0426c297f47c52007e3e
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_share: 4be0208963c60b537e6255ed2ce1faae61cd9ac2
-  flutter_statusbarcolor: 8afb1071ed8c58be929f1e32b36c629771fd2259
-  flutter_uploader: 7957e1b9d6516b6cccc37e5ffd6c5a0975a7cc4c
-  flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
-  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  fluttercontactpicker: d582836dea6b5d489f3d259f35d7817ae82ee5e6
+  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
-  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
-  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
-  libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
-  Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
-  nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
-  notification_permissions: b74860c2967c1579243a675e63cd55e0ae75cef7
+  GoogleAppMeasurement: bbbfd4bcb2b40ae9b772c3b0823a58c1e3d618f9
+  GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
+  GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
+  image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
+  libwebp: 33dc822fbbf4503668d09f7885bbfedc76c45e96
+  Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  notification_permissions: 825ea1bf2a52ab585c53fd7b5e8e96876d735d4b
+  open_file_safe: 84c01ac91378bd9166ab570d7f22f4fb3532141a
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
-  rate_my_app: 8e49687f3520c56352f974f0cb401afea07cd496
-  razorpay-pod: c0e9c4ae3ed168ab0f59be2acfb3ba8fd57eba57
-  razorpay_flutter: bf22a7c0e12d9f906b6a493f546ee9afe7f8b508
+  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
+  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  rate_my_app: 80fba94c4885cd31738231b7b1f51c1ad726f5c7
+  razorpay-pod: a0a0de741488584dcc9513b9c3999bbb08d4e95d
+  razorpay_flutter: 84b3bfd206ae9c9c2a9ba585524a1b3d8102b6c1
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
-  SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
-  searchable_dropdown: 5058be32fdc5e0481d300ff2087129072e71bd62
-  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
+  SDWebImageWebPCoder: af09429398d99d524cae2fe00f6f0f6e491ed102
+  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
-  SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
+  syncfusion_flutter_pdfviewer: bb9998884b864cfedf72628df3503bdf57e397c0
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  workmanager: ffff78bf18495e2bc5b8c955ead94a81db340681
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
+  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
-PODFILE CHECKSUM: 3053171d328ee4576d9e013b4ab6c9898579a138
+PODFILE CHECKSUM: 007da0fb5efb4e29f03db7ff72872a0f2f002dec
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.12.1
