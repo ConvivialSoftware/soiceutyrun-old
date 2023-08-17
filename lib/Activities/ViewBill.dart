@@ -49,7 +49,6 @@ class ViewBillState extends State<BaseViewBill> {
   TextEditingController _emailTextController = TextEditingController();
   bool isEditEmail = false;
 
-  bool isStoragePermission = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isCreditDebitNote = false;
 
@@ -59,10 +58,7 @@ class ViewBillState extends State<BaseViewBill> {
     isCreditDebitNote = widget.type?.TYPE?.toLowerCase() == 'credit note' ||
         widget.type?.TYPE?.toLowerCase() == 'debit note';
     getSharedPrefData();
-    //getTransactionList();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+
     //getTransactionList();
     if (!isCreditDebitNote) {
       GlobalFunctions.checkInternetConnection().then((internet) {

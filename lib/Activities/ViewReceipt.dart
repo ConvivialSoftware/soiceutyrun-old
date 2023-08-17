@@ -49,7 +49,6 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
 
   /*String _taskId;
   ReceivePort _port = ReceivePort();*/
-  bool isStoragePermission = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isCreditDebitNote = false;

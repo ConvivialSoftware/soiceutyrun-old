@@ -17,6 +17,9 @@ import 'package:societyrun/Models/Vehicle.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/main.dart';
+import 'package:society_gatepass/society_gatepass.dart' as g;
+
+import '../locator.dart';
 
 class UserManagementResponse extends ChangeNotifier {
   bool isLoading = true;
@@ -50,7 +53,7 @@ class UserManagementResponse extends ChangeNotifier {
   List<Member> memberList = <Member>[];
   List<TenantRentalRequest> tenantAgreementList = <TenantRentalRequest>[];
   List<Member> tenantList = <Member>[];
-  List<Staff> staffList = <Staff>[];
+  List<g.Staff> staffList = <g.Staff>[];
   List<Vehicle> vehicleList = <Vehicle>[];
 
   List<Member> memberListForAdmin = <Member>[];
@@ -248,7 +251,7 @@ class UserManagementResponse extends ChangeNotifier {
       if (value.status!) {
         memberList =
             List<Member>.from(value.members!.map((i) => Member.fromJson(i)));
-       
+
         vehicleList =
             List<Vehicle>.from(value.vehicles!.map((i) => Vehicle.fromJson(i)));
         tenantAgreementList = <TenantRentalRequest>[];
@@ -405,29 +408,35 @@ class UserManagementResponse extends ChangeNotifier {
   }
 
   Future<dynamic> getStaffList({String? block, String? flat}) async {
-    staffList.clear();
-    isLoading = true;
-    final dio = Dio();
-    final assignFlat = flat ?? await GlobalFunctions.getFlat();
-    final assignBlock = block ?? await GlobalFunctions.getBlock();
+    try {
+      isLoading = true;
+       final dio = Dio();
+    final RestClient restClient =
+        RestClient(dio, baseUrl: GlobalVariables.BaseURL);
+      
+      final assignFlat = flat ?? await GlobalFunctions.getFlat();
+      final assignBlock = block ?? await GlobalFunctions.getBlock();
 
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    await restClient
-        .getAllSocietyStaffData(societyId, assignBlock, assignFlat)
-        .then((value) {
-      staffList.clear();
-      List<dynamic> _list = value.data ?? [];
-      final allStaff = List<Staff>.from(_list.map((i) => Staff.fromJson(i)));
+      String societyId = await GlobalFunctions.getSocietyId();
+      await restClient
+          .getAllSocietyStaffData(societyId, assignBlock, assignFlat)
+          .then((value) {
+        staffList.clear();
+        List<dynamic> _list = value.data ?? [];
+        final allStaff =
+            List<g.Staff>.from(_list.map((i) => g.Staff.fromJson(i)));
 
-      staffList = allStaff
-          .where((e) =>
-              e.TYPE == 'Helper' &&
-              e.ASSIGN_FLATS!.split(',').contains('$assignBlock $assignFlat'))
-          .toList();
-      isLoading = false;
-      notifyListeners();
-    });
+        staffList = allStaff
+            .where((e) =>
+                e.type == 'Helper' &&
+                e.assignFlats!.split(',').contains('$assignBlock $assignFlat'))
+            .toList();
+        isLoading = false;
+        notifyListeners();
+      });
+    } catch (_) {
+      print(_);
+    }
   }
 
   Future<String> getUserManagementDashboard() async {

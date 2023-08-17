@@ -75,7 +75,6 @@ class _BaseBroadcastState extends State<BaseBroadcast>
 
   ProgressDialog? _progressDialog;
 
-  bool isStoragePermission = false;
 
   List<DropdownMenuItem<String>> _smsHoursListItems =
       <DropdownMenuItem<String>>[];
@@ -986,21 +985,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         Container(
                           child: TextButton.icon(
                             onPressed: () {
-                              if (isStoragePermission) {
-                                mailOpenFile(context);
-                              } else {
-                                GlobalFunctions.askPermission(
-                                        Permission.storage)
-                                    .then((value) {
-                                  if (value) {
-                                    mailOpenFile(context);
-                                  } else {
-                                    GlobalFunctions.showToast(
-                                        AppLocalizations.of(context)
-                                            .translate('download_permission'));
-                                  }
-                                });
-                              }
+                              mailOpenFile(context);
                             },
                             icon: Icon(
                               Icons.attach_file,
@@ -1024,22 +1009,7 @@ class _BaseBroadcastState extends State<BaseBroadcast>
                         Container(
                           child: TextButton.icon(
                               onPressed: () {
-                                if (isStoragePermission) {
-                                  mailOpenCamera(context);
-                                } else {
-                                  GlobalFunctions.askPermission(
-                                          Permission.storage)
-                                      .then((value) {
-                                    if (value) {
-                                      mailOpenCamera(context);
-                                    } else {
-                                      GlobalFunctions.showToast(
-                                          AppLocalizations.of(context)
-                                              .translate(
-                                                  'download_permission'));
-                                    }
-                                  });
-                                }
+                                mailOpenCamera(context);
                               },
                               icon: Icon(
                                 Icons.camera_alt,

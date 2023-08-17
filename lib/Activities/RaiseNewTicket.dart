@@ -65,9 +65,8 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     if (widget.isAdmin) getBlockFlatData();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+
+
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         //getComplaintAreaData();

@@ -21,6 +21,7 @@ import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:societyrun/controllers/notification_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:society_gatepass/society_gatepass.dart' as g;
 
 import 'AddAgreement.dart';
 
@@ -378,8 +379,10 @@ class MyUnitState extends State<BaseMyUnit>
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: value.staffList.length,
                           itemBuilder: (context, position) {
-                            return getContactListItemLayout(
-                                value.staffList, position, 'staff');
+                            return buildStaffLayout(
+                              value.staffList,
+                              position,
+                            );
                           },
                           //  scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -643,15 +646,10 @@ class MyUnitState extends State<BaseMyUnit>
             }
           }
         } else {
-          print('_list[position] : ' + _list[position].toString());
-          var result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseStaffDetails(_list[position])));
-          if (result == 'back') {
-            Provider.of<UserManagementResponse>(context, listen: false)
-                .getUnitMemberData();
-          }
+          await Get.find<AppNotificationController>()
+              .goToStaffDetail(_list[position]);
+          Provider.of<UserManagementResponse>(context, listen: false)
+              .getStaffList();
         }
       },
       child: Container(
@@ -856,6 +854,77 @@ class MyUnitState extends State<BaseMyUnit>
                         ),
                       )
                     : Container()*/
+          ],
+        ),
+      ),
+    );
+  }
+
+  buildStaffLayout(
+    var _list,
+    int position,
+  ) {
+    final g.Staff staff = _list[position];
+
+    return InkWell(
+      onTap: () async {
+        await Get.find<AppNotificationController>().goToStaffDetail(staff);
+        Provider.of<UserManagementResponse>(context, listen: false)
+            .getStaffList();
+      },
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    //margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: AppNetworkImage(
+                  staff.photo,
+                  imageWidth: 50.0,
+                  imageHeight: 50.0,
+                  borderColor: GlobalVariables.grey,
+                  borderWidth: 1.0,
+                  fit: BoxFit.cover,
+                  radius: 25.0,
+                )),
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      primaryText(
+                        staff.name,
+                        maxLine: 2,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          launch("tel://" + staff.contact!);
+                        },
+                        child: secondaryText(staff.contact,
+                            maxLine: 2, textColor: GlobalVariables.skyBlue),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  child: AppIconButton(
+                    Icons.share,
+                    iconColor: GlobalVariables.grey,
+                    iconSize: 20.0,
+                    onPressed: () {
+                      String name = staff.name ?? '';
+
+                      GlobalFunctions.shareData(name, text);
+                    },
+                  ),
+                )
+              ],
+            ),
+            position != _list.length - 1 ? Divider() : Container(),
           ],
         ),
       ),

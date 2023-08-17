@@ -34,8 +34,8 @@ class AppNotificationController extends GetxController {
     final username = await GlobalFunctions.getUserName();
     SocietyGatepass.initializeNotificationOptions(NotificationOptions(
         username: username,
-        channelKey: "societyrun_channel",
-        channelName: "societyrun_channel",
+        channelKey: "GatepassCallChannel",
+        channelName: "GatepassCallChannel",
         channelGroupName: "GatepassCallChannel_group",
         channelGroupKey: "GatepassCallChannel_group",
         soundSourceDialog: "assets/audio/res_alert.mp3",
@@ -94,5 +94,12 @@ class AppNotificationController extends GetxController {
     Get.to(() => MyGatePage(
         pageName: 'My Gate', isAdmin: isAdmin, type: 'helper', vid: '2548'));
     Get.put(MyGateController()).setSelectedTab(1);
+  }
+
+  goToStaffDetail(Staff staff) async {
+    initGatepass();
+    await Get.to(() => StaffDetailPage(
+          staff: staff,
+        ));
   }
 }

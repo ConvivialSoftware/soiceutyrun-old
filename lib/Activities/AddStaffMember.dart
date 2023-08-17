@@ -68,7 +68,6 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   String _selectedGender = "Male";
   String _selectedStaffType = "Staff";
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
   //final ContactPicker _contactPicker = ContactPicker();
   PhoneContact? _contact;
   //String mobileNumber;
@@ -85,9 +84,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getBlockFlatData();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+  
     getRoleTypeData(_selectedStaffType);
     //_dobController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
   }
@@ -600,22 +597,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                               Container(
                                 child: TextButton.icon(
                                   onPressed: () {
-                                    if (isStoragePermission) {
-                                      openFile(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openFile(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'download_permission'));
-                                        }
-                                      });
-                                    }
+                                     openFile(context);
                                   },
                                   icon: AppIcon(
                                     Icons.attach_file,
@@ -639,22 +621,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                               Container(
                                 child: TextButton.icon(
                                     onPressed: () {
-                                      if (isStoragePermission) {
-                                        openCamera(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                                Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openCamera(context);
-                                          } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'download_permission'));
-                                          }
-                                        });
-                                      }
+                                       openCamera(context);
                                     },
                                     icon: AppIcon(
                                       Icons.camera_alt,
@@ -712,22 +679,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                               Container(
                                 child: TextButton.icon(
                                   onPressed: () {
-                                    if (isStoragePermission) {
-                                      openIdentityProofFile(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openIdentityProofFile(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'download_permission'));
-                                        }
-                                      });
-                                    }
+                                   openIdentityProofFile(context);
                                   },
                                   icon: AppIcon(
                                     Icons.attach_file,
@@ -753,22 +705,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                               Container(
                                 child: TextButton.icon(
                                     onPressed: () {
-                                      if (isStoragePermission) {
                                         openIdentityProofCamera(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                                Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openIdentityProofCamera(context);
-                                          } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'download_permission'));
-                                          }
-                                        });
-                                      }
                                     },
                                     icon: AppIcon(
                                       Icons.camera_alt,

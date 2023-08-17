@@ -40,7 +40,6 @@ class ExpenseVoucherState extends AppStatefulState<BaseExpenseVoucher> {
   String? attachmentFileImagePath;
   String? attachmentFileImageName;
   String? attachmentCompressFileImagePath;
-  bool isStoragePermission = false;
 
   final GlobalKey<ScaffoldState> _dashboardSacfoldKey =
       new GlobalKey<ScaffoldState>();
@@ -87,9 +86,7 @@ class ExpenseVoucherState extends AppStatefulState<BaseExpenseVoucher> {
 */
 
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+   
     super.initState();
   }
 

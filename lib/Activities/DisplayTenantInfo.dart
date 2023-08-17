@@ -46,15 +46,12 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
   StreamSubscription _resultSubscription;
   Map<String, UploadItem> _tasks = {};*/
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+
 
     /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
@@ -680,24 +677,7 @@ class TenantInfoState extends AppStatefulState<BaseTenantInfo> {
                                         Container(
                                           child: TextButton.icon(
                                             onPressed: () {
-                                              if (isStoragePermission) {
-                                                openFile(context, _setState);
-                                              } else {
-                                                GlobalFunctions.askPermission(
-                                                        Permission.storage)
-                                                    .then((value) {
-                                                  if (value) {
-                                                    openFile(
-                                                        context, _setState);
-                                                  } else {
-                                                    GlobalFunctions.showToast(
-                                                        AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                'download_permission'));
-                                                  }
-                                                });
-                                              }
+                                               openFile(context, _setState);
                                             },
                                             icon: AppIcon(
                                               Icons.attach_file,

@@ -2073,3 +2073,4 @@ extension PathX on String {
     return ext == 'doc' || ext == 'docx' || ext == 'pdf';
   }
 }
+

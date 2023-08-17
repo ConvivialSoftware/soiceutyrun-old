@@ -58,7 +58,6 @@ class AddNewMemberByAdminState extends State<BaseAddNewMemberByAdmin> {
   String? _selectedLivesHere;
 
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
   //final ContactPicker _contactPicker = ContactPicker();
   PhoneContact? _contact;
 
@@ -78,10 +77,7 @@ class AddNewMemberByAdminState extends State<BaseAddNewMemberByAdmin> {
 */
     getMembershipTypeData();
     gteLivesHereData();
-    //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+
   }
 
   @override
@@ -549,22 +545,7 @@ class AddNewMemberByAdminState extends State<BaseAddNewMemberByAdmin> {
                               Container(
                                 child: TextButton.icon(
                                   onPressed: () {
-                                    if (isStoragePermission) {
-                                      openFile(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openFile(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'download_permission'));
-                                        }
-                                      });
-                                    }
+                                   openFile(context);
                                   },
                                   icon: AppIcon(
                                     Icons.attach_file,
@@ -587,22 +568,7 @@ class AddNewMemberByAdminState extends State<BaseAddNewMemberByAdmin> {
                               Container(
                                 child: TextButton.icon(
                                     onPressed: () {
-                                      if (isStoragePermission) {
-                                        openCamera(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                                Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openCamera(context);
-                                          } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'download_permission'));
-                                          }
-                                        });
-                                      }
+                                       openCamera(context);
                                     },
                                     icon: AppIcon(
                                       Icons.camera_alt,
