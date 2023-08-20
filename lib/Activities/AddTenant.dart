@@ -61,7 +61,6 @@ class AddTenantState extends State<BaseAddTenant> {
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
 
   final PageController pageController = PageController();
   int currentPageIndex = 0;
@@ -84,9 +83,7 @@ class AddTenantState extends State<BaseAddTenant> {
     //  getMembershipTypeData();
     // gteLivesHereData();
     //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+  
     _selectedMembershipType = 'Tenant';
     //_addTenantInfoList = List<AddTenantInfo>.filled(int.parse(widget.agreementInfo.noOfBachelor), null, growable: false);
     //_addTenantInfoList.length = (int.parse(widget.agreementInfo.noOfBachelor));

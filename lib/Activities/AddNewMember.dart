@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:societyrun/Activities/MyUnit.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -75,7 +74,6 @@ class AddNewMemberState extends State<BaseAddNewMember> {
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
   //final ContactPicker _contactPicker = ContactPicker();
   PhoneContact? _contact;
   @override
@@ -85,10 +83,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
     getBloodGroupData();
     getMembershipTypeData();
     gteLivesHereData();
-    //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+
     _selectedMembershipType = 'Owner Family';
   }
 
@@ -522,22 +517,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                             Container(
                               child: TextButton.icon(
                                 onPressed: () {
-                                  if (isStoragePermission) {
-                                    openFile(context);
-                                  } else {
-                                    GlobalFunctions.askPermission(
-                                            Permission.storage)
-                                        .then((value) {
-                                      if (value) {
-                                        openFile(context);
-                                      } else {
-                                        GlobalFunctions.showToast(
-                                            AppLocalizations.of(context)
-                                                .translate(
-                                                    'download_permission'));
-                                      }
-                                    });
-                                  }
+                                  openFile(context);
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
@@ -560,22 +540,7 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                             Container(
                               child: TextButton.icon(
                                   onPressed: () {
-                                    if (isStoragePermission) {
-                                      openCamera(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openCamera(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'download_permission'));
-                                        }
-                                      });
-                                    }
+                                    openCamera(context);
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,
@@ -633,7 +598,6 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                             Container(
                               child: TextButton.icon(
                                 onPressed: () {
-                                  if (isStoragePermission) {
                                     openIdentityProofFile(context);
                                   } else {
                                     GlobalFunctions.askPermission(
@@ -675,7 +639,6 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                             Container(
                               child: TextButton.icon(
                                   onPressed: () {
-                                    if (isStoragePermission) {
                                       openIdentityProofCamera(context);
                                     } else {
                                       GlobalFunctions.askPermission(
@@ -725,7 +688,6 @@ class AddNewMemberState extends State<BaseAddNewMember> {
                             Container(
                               child: TextButton.icon(
                                 onPressed: () {
-                                  if (isStoragePermission) {
                                     openPoliceVerificationFile(context);
                                   } else {
                                     GlobalFunctions.askPermission(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 //import 'package:societyrun/AWS/AWSClient.dart';
@@ -57,7 +56,6 @@ class AddAgreementState extends State<BaseAddAgreement> {
   String? _selectedIssueNOC;
 
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
 
   // List<String> selectedUserList = List<String>();
 
@@ -72,9 +70,6 @@ class AddAgreementState extends State<BaseAddAgreement> {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getRentedToData();
     getGroupCountData();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
 
     /* _progressSubscription = uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
@@ -431,22 +426,7 @@ class AddAgreementState extends State<BaseAddAgreement> {
                             Container(
                               child: TextButton.icon(
                                 onPressed: () {
-                                  if (isStoragePermission) {
-                                    openFile(context);
-                                  } else {
-                                    GlobalFunctions.askPermission(
-                                            Permission.storage)
-                                        .then((value) {
-                                      if (value) {
-                                        openFile(context);
-                                      } else {
-                                        GlobalFunctions.showToast(
-                                            AppLocalizations.of(context)
-                                                .translate(
-                                                    'download_permission'));
-                                      }
-                                    });
-                                  }
+                                  openFile(context);
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,

@@ -29,7 +29,6 @@ class _BaseRentalRequestUserDetailsState
   List<Tenant> tenantDetailsList = <Tenant>[];
   ProgressDialog? _progressDialog;
   int? _selectedPosition;
-  //bool isStoragePermission = false;
   @override
   void initState() {
     super.initState();

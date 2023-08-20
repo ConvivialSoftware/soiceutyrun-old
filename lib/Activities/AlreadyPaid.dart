@@ -70,7 +70,6 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   String? attachmentCompressFilePath;
 
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
 
   /* String invoiceNo;
   double amount;*/
@@ -80,9 +79,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+ 
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBankData();
@@ -398,22 +395,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                               Container(
                                 child: TextButton.icon(
                                   onPressed: () {
-                                    if (isStoragePermission) {
-                                      openFile(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openFile(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'download_permission'));
-                                        }
-                                      });
-                                    }
+                                     openFile(context);
                                   },
                                   icon: AppIcon(
                                     Icons.attach_file,
@@ -437,22 +419,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                               Container(
                                 child: TextButton.icon(
                                     onPressed: () {
-                                      if (isStoragePermission) {
-                                        openCamera(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                                Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openCamera(context);
-                                          } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'download_permission'));
-                                          }
-                                        });
-                                      }
+                                      openCamera(context);
                                     },
                                     icon: AppIcon(
                                       Icons.camera_alt,

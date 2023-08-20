@@ -39,9 +39,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     AwesomeNotifications().actionStream.listen((receivedNotification) async {
       await Get.find<AppNotificationController>().initGatepass();
-      if (receivedNotification.channelKey == "societyrun_channel") {
-        Get.find<AppNotificationController>().initGatepass();
-        Get.find<AppNotificationController>().initGatepassNotifications();
+      if (receivedNotification.channelKey == "GatepassCallChannel") {
+          await Get.find<AppNotificationController>().initGatepass();
+          await Get.find<AppNotificationController>()
+              .initGatepassNotifications();
         if (receivedNotification.buttonKeyPressed.isEmpty) {
           GatePassFields.showCallUi = true;
         }

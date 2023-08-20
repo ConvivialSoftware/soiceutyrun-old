@@ -58,7 +58,6 @@ class AddExpenseState extends State<BaseAddExpense> {
   String? _selectedBankAccount;
 
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
 
   String currentLedgerAccountText = '';
   String currentLedgerAccountTextID = '';
@@ -74,9 +73,7 @@ class AddExpenseState extends State<BaseAddExpense> {
             DateTime.now().toLocal().month.toString().padLeft(2, '0') +
             "-" +
             DateTime.now().toLocal().year.toString();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+  
     GlobalFunctions.checkInternetConnection().then((value) {
       if (value) {
         getExpenseAccountLedger();
@@ -436,22 +433,7 @@ class AddExpenseState extends State<BaseAddExpense> {
                                     Container(
                                       child: TextButton.icon(
                                         onPressed: () {
-                                          if (isStoragePermission) {
                                             openFile(context);
-                                          } else {
-                                            GlobalFunctions.askPermission(
-                                                    Permission.storage)
-                                                .then((value) {
-                                              if (value) {
-                                                openFile(context);
-                                              } else {
-                                                GlobalFunctions.showToast(
-                                                    AppLocalizations.of(context)
-                                                        .translate(
-                                                            'download_permission'));
-                                              }
-                                            });
-                                          }
                                         },
                                         icon: AppIcon(
                                           Icons.attach_file,
@@ -476,23 +458,7 @@ class AddExpenseState extends State<BaseAddExpense> {
                                     Container(
                                       child: TextButton.icon(
                                           onPressed: () {
-                                            if (isStoragePermission) {
-                                              openCamera(context);
-                                            } else {
-                                              GlobalFunctions.askPermission(
-                                                      Permission.storage)
-                                                  .then((value) {
-                                                if (value) {
-                                                  openCamera(context);
-                                                } else {
-                                                  GlobalFunctions.showToast(
-                                                      AppLocalizations.of(
-                                                              context)
-                                                          .translate(
-                                                              'download_permission'));
-                                                }
-                                              });
-                                            }
+                                            openCamera(context);
                                           },
                                           icon: AppIcon(
                                             Icons.camera_alt,

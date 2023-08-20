@@ -61,15 +61,12 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+   
     getRoleTypeData();
 
     /*societyId, block, flat, _staffList[0].STAFF_NAME,  _staffList[0].GENDER,  _staffList[0].DOB, _mobileController.text
@@ -495,22 +492,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                 child: TextButton.icon(
                                     onPressed: () {
-                                      if (isStoragePermission) {
-                                        openFile(context);
-                                      } else {
-                                        GlobalFunctions.askPermission(
-                                                Permission.storage)
-                                            .then((value) {
-                                          if (value) {
-                                            openFile(context);
-                                          } else {
-                                            GlobalFunctions.showToast(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'download_permission'));
-                                          }
-                                        });
-                                      }
+                                      openFile(context);
                                     },
                                     icon: Icon(
                                       Icons.camera_alt,
@@ -720,7 +702,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
             _qualificationController.text,
             _addressController.text,
             attachment!,
-            attachmentIdentityProof!)
+            attachmentIdentityProof!,"")
         .then((value) async {
       _progressDialog!.dismiss();
       if (value.status!) {

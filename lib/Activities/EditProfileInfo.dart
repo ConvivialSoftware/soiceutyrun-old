@@ -63,7 +63,6 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
   //final ContactPicker _contactPicker = ContactPicker();
   PhoneContact? _contact;
 
@@ -75,9 +74,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
     getMembershipTypeData();
     gteLivesHereData();
     //_dobController.text = DateTime.now().toLocal().day.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().month.toString().padLeft(2, '0')+"-"+DateTime.now().toLocal().year.toString();
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getProfileData();
@@ -642,22 +639,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                             Container(
                               child: TextButton.icon(
                                 onPressed: () {
-                                  if (isStoragePermission) {
-                                    openFile(context);
-                                  } else {
-                                    GlobalFunctions.askPermission(
-                                            Permission.storage)
-                                        .then((value) {
-                                      if (value) {
-                                        openFile(context);
-                                      } else {
-                                        GlobalFunctions.showToast(
-                                            AppLocalizations.of(context)
-                                                .translate(
-                                                    'download_permission'));
-                                      }
-                                    });
-                                  }
+                                  openFile(context);
                                 },
                                 icon: AppIcon(
                                   Icons.attach_file,
@@ -679,22 +661,7 @@ class EditProfileInfoState extends State<BaseEditProfileInfo> {
                             Container(
                               child: TextButton.icon(
                                   onPressed: () {
-                                    if (isStoragePermission) {
                                       openCamera(context);
-                                    } else {
-                                      GlobalFunctions.askPermission(
-                                              Permission.storage)
-                                          .then((value) {
-                                        if (value) {
-                                          openCamera(context);
-                                        } else {
-                                          GlobalFunctions.showToast(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'download_permission'));
-                                        }
-                                      });
-                                    }
                                   },
                                   icon: AppIcon(
                                     Icons.camera_alt,

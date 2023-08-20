@@ -29,15 +29,12 @@ class FeedbackState extends State<BaseFeedback> {
   String? attachmentFileName;
   String? attachmentCompressFilePath;
   ProgressDialog? _progressDialog;
-  bool isStoragePermission = false;
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
-    GlobalFunctions.checkPermission(Permission.storage).then((value) {
-      isStoragePermission = value;
-    });
+ 
   }
 
   @override
@@ -174,21 +171,7 @@ class FeedbackState extends State<BaseFeedback> {
                         Container(
                           child: TextButton.icon(
                             onPressed: () {
-                              if (isStoragePermission) {
                                 openFile(context);
-                              } else {
-                                GlobalFunctions.askPermission(
-                                        Permission.storage)
-                                    .then((value) {
-                                  if (value) {
-                                    openFile(context);
-                                  } else {
-                                    GlobalFunctions.showToast(
-                                        AppLocalizations.of(context)
-                                            .translate('download_permission'));
-                                  }
-                                });
-                              }
                             },
                             icon: AppIcon(
                               Icons.attach_file,
@@ -211,22 +194,7 @@ class FeedbackState extends State<BaseFeedback> {
                         Container(
                           child: TextButton.icon(
                               onPressed: () {
-                                if (isStoragePermission) {
-                                  openCamera(context);
-                                } else {
-                                  GlobalFunctions.askPermission(
-                                          Permission.storage)
-                                      .then((value) {
-                                    if (value) {
-                                      openCamera(context);
-                                    } else {
-                                      GlobalFunctions.showToast(
-                                          AppLocalizations.of(context)
-                                              .translate(
-                                                  'download_permission'));
-                                    }
-                                  });
-                                }
+                                 openCamera(context);
                               },
                               icon: AppIcon(
                                 Icons.camera_alt,

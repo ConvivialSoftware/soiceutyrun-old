@@ -1365,22 +1365,21 @@ class RestAPI
       String qualification,
       String address,
       String? picture,
-      String? identityProof,) async {
-    // TODO: implement addStaffMember
+      String? identityProof,
+      String? type) async {
     FormData formData = FormData.fromMap({
-      GlobalVariables.societyId: socId,
-      "ASSIGN_FLATS": assignFlat,
-      GlobalVariables.STAFF_NAME: name,
-      GlobalVariables.GENDER: gender,
-      GlobalVariables.ROLE: role,
-      GlobalVariables.DOB: dob,
-      GlobalVariables.userID: userId,
-      GlobalVariables.Contact: mobile,
-      GlobalVariables.QUALIFICATION: qualification,
-      GlobalVariables.ADDRESS: address,
-      GlobalVariables.VEHICLE_NO: vehicleNo,
-      "Attachment": identityProof,
-      "IMAGE": picture,
+      'SOCIETY_ID': socId,
+      'NAME': name,
+      'GENDER': gender,
+      'CONTACT': mobile,
+      'ADDRESS': address,
+      'ASSIGN_FLATS': type == 'Helper' ? assignFlat : 'Common area',
+      'VEHICLE_NO': vehicleNo,
+      'IMAGE': picture ?? '',
+      'ROLE': role,
+      'IDENTITY_PROOF': identityProof ?? '',
+      'APP_NAME': 'TjsbSociety',
+      'TYPE': type
     });
     print({
       GlobalVariables.societyId: socId,
@@ -1398,13 +1397,14 @@ class RestAPI
       "IMAGE": picture,
     }.toString());
 
-    print('baseurl : ' + baseUrl! + GlobalVariables.addStaffMemberAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addStaffMemberAPI,
+    final Response _result = await _dio.post(
+        GlobalVariables.BaseURLGatepass +
+            GlobalVariables.addStaffMemberGatepassAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
-    print('value of addStaffMember : ' + value.toString());
-    return StatusMsgResponse.fromJson(value);
+
+    return StatusMsgResponse.fromJsonWithPassCode(value);
   }
 
 
