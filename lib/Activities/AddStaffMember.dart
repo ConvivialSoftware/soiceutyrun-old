@@ -4,21 +4,20 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
+import 'package:society_gatepass/society_gatepass.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
-import 'package:societyrun/Models/StaffCount.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:societyrun/Retrofit/RestClient.dart';
-import 'package:societyrun/Widgets/AppImage.dart';
-import 'package:societyrun/Widgets/AppTextField.dart';
-import 'package:societyrun/Widgets/AppWidget.dart';
 
 class BaseAddStaffMember extends StatefulWidget {
+  final List<StaffCount>? allStaff;
+
+  const BaseAddStaffMember({Key? key, this.allStaff}) : super(key: key);
   //String mobileNumber;
   // BaseAddStaffMember(this.mobileNumber);
 
@@ -66,7 +65,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
 
   // String _selectedOccupation="Software Engg.";
   String _selectedGender = "Male";
-  String _selectedStaffType = "Staff";
+  String _selectedStaffType = "Helper";
   ProgressDialog? _progressDialog;
   //final ContactPicker _contactPicker = ContactPicker();
   PhoneContact? _contact;
@@ -78,13 +77,42 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
 
   List<DropdownMenuItem<String>> _flatListItems = <DropdownMenuItem<String>>[];
   String? _selectedFlat;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isValidate = true;
+
+  List<String> assignFlat = [];
+
+  addToAssignFlat(String value) {
+    setState(() {
+      assignFlat.add(value);
+    });
+  }
+
+  removeFromAssignFlat(String value) {
+    setState(() {
+      assignFlat.remove(value);
+    });
+  }
+
+  Widget _buildAddedAssignFlats() => _selectedStaffType == 'Helper'
+      ? Wrap(
+          spacing: 4,
+          crossAxisAlignment: WrapCrossAlignment.start,
+          alignment: WrapAlignment.start,
+          children: List.generate(
+              assignFlat.length,
+              (index) => Chip(
+                  onDeleted: () => removeFromAssignFlat(assignFlat[index]),
+                  label: Text(assignFlat[index]))),
+        )
+      : const SizedBox.shrink();
 
   @override
   void initState() {
     super.initState();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     getBlockFlatData();
-  
+
     getRoleTypeData(_selectedStaffType);
     //_dobController.text = DateTime.now().toLocal().day.toString()+"/"+DateTime.now().toLocal().month.toString()+"/"+DateTime.now().toLocal().year.toString();
   }
@@ -117,8 +145,6 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
           Flexible(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 200.0),
                 getAddStaffMemberLayout(),
               ],
             ),
@@ -130,26 +156,69 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
 
   getAddStaffMemberLayout() {
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
-        padding: EdgeInsets.all(20),
-        // height: MediaQuery.of(context).size.height / 0.5,
-        decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(20)),
+      child: Form(
+        key: _formKey,
         child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: InkWell(
+          margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
+          padding: EdgeInsets.all(20),
+          // height: MediaQuery.of(context).size.height / 0.5,
+          decoration: BoxDecoration(
+              color: GlobalVariables.white,
+              borderRadius: BorderRadius.circular(20)),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: InkWell(
+                          //  splashColor: GlobalVariables.mediumGreen,
+                          onTap: () {
+                            _selectedStaffType = 'Helper';
+                            getRoleTypeData(_selectedStaffType);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      color: _selectedStaffType == 'Helper'
+                                          ? GlobalVariables.primaryColor
+                                          : GlobalVariables.white,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: _selectedStaffType == 'Helper'
+                                            ? GlobalVariables.primaryColor
+                                            : GlobalVariables.secondaryColor
+                                                .withOpacity(0.5),
+                                        width: 2.0,
+                                      )),
+                                  child: Icon(Icons.check,
+                                      color: GlobalVariables.white),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    'Helper',
+                                    style: TextStyle(
+                                        color: GlobalVariables.primaryColor,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-                          _selectedStaffType =
-                              AppLocalizations.of(context).translate('staff');
+                          _selectedStaffType = 'Maintenance';
                           getRoleTypeData(_selectedStaffType);
                         },
                         child: Container(
@@ -160,18 +229,15 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: _selectedStaffType ==
-                                            AppLocalizations.of(context)
-                                                .translate('staff')
+                                    color: _selectedStaffType == 'Maintenance'
                                         ? GlobalVariables.primaryColor
                                         : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedStaffType ==
-                                              AppLocalizations.of(context)
-                                                  .translate('staff')
+                                      color: _selectedStaffType == 'Maintenance'
                                           ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
+                                          : GlobalVariables.secondaryColor
+                                              .withOpacity(0.5),
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -180,8 +246,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('staff'),
+                                  'Maintenance',
                                   style: TextStyle(
                                       color: GlobalVariables.primaryColor,
                                       fontSize: 16),
@@ -191,14 +256,10 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: InkWell(
+                      InkWell(
                         //  splashColor: GlobalVariables.mediumGreen,
                         onTap: () {
-                          _selectedStaffType = AppLocalizations.of(context)
-                              .translate('maintenance_staff');
+                          _selectedStaffType = 'Vendor';
                           getRoleTypeData(_selectedStaffType);
                         },
                         child: Container(
@@ -209,19 +270,15 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: _selectedStaffType ==
-                                            AppLocalizations.of(context)
-                                                .translate('maintenance_staff')
+                                    color: _selectedStaffType == 'Vendor'
                                         ? GlobalVariables.primaryColor
                                         : GlobalVariables.white,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: _selectedStaffType ==
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      'maintenance_staff')
+                                      color: _selectedStaffType == 'Vendor'
                                           ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
+                                          : GlobalVariables.secondaryColor
+                                              .withOpacity(0.5),
                                       width: 2.0,
                                     )),
                                 child: Icon(Icons.check,
@@ -230,8 +287,7 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('maintenance_staff'),
+                                  'Vendor',
                                   style: TextStyle(
                                       color: GlobalVariables.primaryColor,
                                       fontSize: 16),
@@ -240,519 +296,536 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
                             ],
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              _selectedStaffType == "Staff"
-                  ? Row(
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.white,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: GlobalVariables.lightGray,
-                                  width: 2.0,
-                                )),
-                            child: ButtonTheme(
-                              child: DropdownButtonFormField(
-                                items: _blockListItems,
-                                value: _selectedBlock,
-                                onChanged: (value) {
-                                  _selectedBlock = value as String?;
-                                  _selectedFlat = null;
-                                  getBlockFlatData();
-                                },
-                                isExpanded: true,
-                                icon: AppIcon(
-                                  Icons.keyboard_arrow_down,
-                                  iconColor: GlobalVariables.secondaryColor,
+                _selectedStaffType == "Helper"
+                    ? Row(
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                              decoration: BoxDecoration(
+                                  color: GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: GlobalVariables.lightGray,
+                                    width: 2.0,
+                                  )),
+                              child: ButtonTheme(
+                                child: DropdownButtonFormField(
+                                  items: _blockListItems,
+                                  value: _selectedBlock,
+                                  onChanged: (value) {
+                                    _selectedBlock = value as String?;
+                                    _selectedFlat = null;
+                                    _flatListItems.clear();
+                                    getBlockFlatData();
+                                  },
+                                  isExpanded: true,
+                                  icon: AppIcon(
+                                    Icons.keyboard_arrow_down,
+                                    iconColor: GlobalVariables.secondaryColor,
+                                  ),
+                                  decoration: InputDecoration(
+                                      //filled: true,
+                                      //fillColor: Hexcolor('#ecedec'),
+                                      labelText: AppLocalizations.of(context)
+                                          .translate('block'),
+                                      labelStyle: TextStyle(
+                                          color: GlobalVariables.lightGray,
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium),
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.transparent))
+                                      // border: new CustomBorderTextFieldSkin().getSkin(),
+                                      ),
                                 ),
-                                decoration: InputDecoration(
-                                    //filled: true,
-                                    //fillColor: Hexcolor('#ecedec'),
-                                    labelText: AppLocalizations.of(context)
-                                        .translate('block'),
-                                    labelStyle: TextStyle(
-                                        color: GlobalVariables.lightGray,
-                                        fontSize:
-                                            GlobalVariables.textSizeSMedium),
-                                    enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.transparent))
-                                    // border: new CustomBorderTextFieldSkin().getSkin(),
-                                    ),
                               ),
                             ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                            decoration: BoxDecoration(
-                                color: GlobalVariables.white,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: GlobalVariables.lightGray,
-                                  width: 2.0,
-                                )),
-                            child: ButtonTheme(
-                              child: DropdownButtonFormField(
-                                items: _flatListItems,
-                                value: _selectedFlat,
-                                onChanged: (value) {
-                                  _selectedFlat = value as String?;
-                                  setState(() {});
-                                },
-                                isExpanded: true,
-                                icon: AppIcon(
-                                  Icons.keyboard_arrow_down,
-                                  iconColor: GlobalVariables.secondaryColor,
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                              decoration: BoxDecoration(
+                                  color: GlobalVariables.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: GlobalVariables.lightGray,
+                                    width: 2.0,
+                                  )),
+                              child: ButtonTheme(
+                                child: DropdownButtonFormField(
+                                  items: _flatListItems,
+                                  value: _selectedFlat,
+                                  onChanged: (value) {
+                                    _selectedFlat = value as String?;
+                                    setState(() {});
+                                  },
+                                  isExpanded: true,
+                                  icon: AppIcon(
+                                    Icons.keyboard_arrow_down,
+                                    iconColor: GlobalVariables.secondaryColor,
+                                  ),
+                                  decoration: InputDecoration(
+                                      //filled: true,
+                                      //fillColor: Hexcolor('#ecedec'),
+                                      labelText: AppLocalizations.of(context)
+                                          .translate('flat'),
+                                      labelStyle: TextStyle(
+                                          color: GlobalVariables.lightGray,
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium),
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.transparent))
+                                      // border: new CustomBorderTextFieldSkin().getSkin(),
+                                      ),
                                 ),
-                                decoration: InputDecoration(
-                                    //filled: true,
-                                    //fillColor: Hexcolor('#ecedec'),
-                                    labelText: AppLocalizations.of(context)
-                                        .translate('flat'),
-                                    labelStyle: TextStyle(
-                                        color: GlobalVariables.lightGray,
-                                        fontSize:
-                                            GlobalVariables.textSizeSMedium),
-                                    enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.transparent))
-                                    // border: new CustomBorderTextFieldSkin().getSkin(),
-                                    ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : SizedBox(),
-              AppTextField(
+                          IconButton(
+                              onPressed: () => addToAssignFlat(
+                                  '$_selectedBlock $_selectedFlat'),
+                              icon: Icon(
+                                Icons.add_circle,
+                                color: GlobalVariables.primaryColor,
+                              ))
+                        ],
+                      )
+                    : SizedBox(),
+                _buildAddedAssignFlats(),
+                AppTextField(
                   textHintContent:
-                      AppLocalizations.of(context).translate('name'),
-                  controllerCallback: _nameController),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('contact1') + '*',
-                controllerCallback: _mobileController,
-                keyboardType: TextInputType.number,
-                maxLength: 10,
-                contentPadding: EdgeInsets.only(top: 14),
-                suffixIcon: AppIconButton(
-                  Icons.phone_android,
-                  iconColor: GlobalVariables.secondaryColor,
-                  onPressed: () async {
-                    PhoneContact contact =
-                        await FlutterContactPicker.pickPhoneContact();
-                    print('contact Name : ' + contact.fullName!);
-                    print('contact Number : ' + contact.phoneNumber.toString());
-                    _contact = contact;
-                    setState(() {
-                      if (_contact != null) {
-                        //  _nameController.text = _contact.fullName;
-                        /*String phoneNumber = _contact!.phoneNumber
-                            .toString()
-                            .substring(
-                            0,
-                            _contact!.phoneNumber
-                                .toString()
-                                .indexOf('(') -
-                                1);*/
-                        String phoneNumber = contact.phoneNumber!.number!
-                            .trim()
-                            .toString()
-                            .replaceAll(" ", "");
-                        _mobileController.text =
-                            GlobalFunctions.getMobileFormatNumber(
-                                phoneNumber.toString());
-                        // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
-                      }
-                    });
+                      AppLocalizations.of(context).translate('name') + '*',
+                  controllerCallback: _nameController,
+                  /* inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(AppRegExpPattern.namePattern)),
+                  ],*/
+                  validator: (value) {
+                    print('validate value : ' + value.toString());
+                    if (!GlobalFunctions.isNameValid(value)) {
+                      return AppLocalizations.of(context)
+                          .translate('invalid_name');
+                    }
+                    return null;
                   },
                 ),
-              ),
-              _selectedStaffType ==
-                      AppLocalizations.of(context)
-                          .translate('maintenance_staff')
-                  ? AppTextField(
-                      textHintContent:
-                          AppLocalizations.of(context).translate('email') + '*',
-                      controllerCallback: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      contentPadding: EdgeInsets.only(top: 14),
-                      suffixIcon: AppIconButton(
-                        Icons.email,
-                        iconColor: GlobalVariables.secondaryColor,
+                AppTextField(
+                  textHintContent:
+                      AppLocalizations.of(context).translate('contact1') + '*',
+                  controllerCallback: _mobileController,
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  contentPadding: EdgeInsets.only(top: 14),
+                  /*inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(AppRegExpPattern.mobilePattern)),
+                  ],*/
+                  validator: (value) {
+                    print('validate value : ' + value.toString());
+                    if (!GlobalFunctions.isMobileNumberValid(value)) {
+                      return AppLocalizations.of(context)
+                          .translate('invalid_mobile');
+                    }
+                    return null;
+                  },
+                  suffixIcon: AppIconButton(
+                    Icons.phone_android,
+                    iconColor: GlobalVariables.secondaryColor,
+                    onPressed: () async {
+                      PhoneContact contact =
+                          await FlutterContactPicker.pickPhoneContact();
+                      print('contact Name : ' + contact.fullName!);
+                      print(
+                          'contact Number : ' + contact.phoneNumber.toString());
+                      _contact = contact;
+                      setState(() {
+                        if (_contact != null) {
+                          String phoneNumber = contact.phoneNumber!.number!
+                              .trim()
+                              .toString()
+                              .replaceAll(" ", "");
+                          _mobileController.text =
+                              GlobalFunctions.getMobileFormatNumber(
+                                  phoneNumber.toString());
+                          // _nameController.selection = TextSelection.fromPosition(TextPosition(offset: _nameController.text.length));
+                        }
+                      });
+                    },
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: GlobalVariables.lightGray,
+                        width: 2.0,
+                      )),
+                  child: ButtonTheme(
+                    child: DropdownButton(
+                      items: __roleTypeListItems,
+                      value: _selectedRoleType,
+                      onChanged: changeBRoleTypeDropDownItem,
+                      isExpanded: true,
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: GlobalVariables.secondaryColor,
                       ),
-                    )
-                  : SizedBox(),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButton(
-                    items: __roleTypeListItems,
-                    value: _selectedRoleType,
-                    onChanged: changeBRoleTypeDropDownItem,
-                    isExpanded: true,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: GlobalVariables.secondaryColor,
-                    ),
-                    underline: SizedBox(),
-                    hint: Text(
-                      AppLocalizations.of(context).translate('select_role'),
-                      style: TextStyle(
-                          color: GlobalVariables.lightGray, fontSize: 12),
+                      underline: SizedBox(),
+                      hint: Text(
+                        AppLocalizations.of(context).translate('select_role'),
+                        style: TextStyle(
+                            color: GlobalVariables.lightGray, fontSize: 12),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedGender = "Male";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: _selectedGender == "Male"
-                                        ? GlobalVariables.primaryColor
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        child: InkWell(
+                          //  splashColor: GlobalVariables.mediumGreen,
+                          onTap: () {
+                            _selectedGender = "Male";
+                            setState(() {});
+                          },
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
                                       color: _selectedGender == "Male"
                                           ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
-                                      width: 2.0,
-                                    )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('male'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.primaryColor,
-                                      fontSize: 16),
+                                          : GlobalVariables.white,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: _selectedGender == "Male"
+                                            ? GlobalVariables.primaryColor
+                                            : GlobalVariables.secondaryColor
+                                                .withOpacity(0.5),
+                                        width: 2.0,
+                                      )),
+                                  child: Icon(Icons.check,
+                                      color: GlobalVariables.white),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('male'),
+                                    style: TextStyle(
+                                        color: GlobalVariables.primaryColor,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          _selectedGender = "Female";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: _selectedGender == "Female"
-                                        ? GlobalVariables.primaryColor
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: InkWell(
+                          //  splashColor: GlobalVariables.mediumGreen,
+                          onTap: () {
+                            _selectedGender = "Female";
+                            setState(() {});
+                          },
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
                                       color: _selectedGender == "Female"
                                           ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
-                                      width: 2.0,
-                                    )),
-                                child: Icon(Icons.check,
-                                    color: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('female'),
-                                  style: TextStyle(
-                                      color: GlobalVariables.primaryColor,
-                                      fontSize: 16),
+                                          : GlobalVariables.white,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: _selectedGender == "Female"
+                                            ? GlobalVariables.primaryColor
+                                            : GlobalVariables.secondaryColor
+                                                .withOpacity(0.5),
+                                        width: 2.0,
+                                      )),
+                                  child: Icon(Icons.check,
+                                      color: GlobalVariables.white),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('female'),
+                                    style: TextStyle(
+                                        color: GlobalVariables.primaryColor,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                height: 100,
-                child: AppTextField(
+                AppTextField(
                   textHintContent:
                       AppLocalizations.of(context).translate('address') + '*',
                   controllerCallback: _addressController,
-                  maxLines: 99,
+                  /*inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(AppRegExpPattern.addressPattern)),
+                  ],*/
+                  validator: (value) {
+                    print('validate value : ' + value.toString());
+                    if (!GlobalFunctions.isAddressValid(value)) {
+                      return AppLocalizations.of(context)
+                          .translate('invalid_address');
+                    }
+                    return null;
+                  },
                   contentPadding: EdgeInsets.only(top: 14),
                 ),
-              ),
-              AppTextField(
-                  textHintContent:
-                      AppLocalizations.of(context).translate('qualification'),
-                  controllerCallback: _qualificationController),
-              AppTextField(
+                AppTextField(
                   textHintContent:
                       AppLocalizations.of(context).translate('vehicle_no'),
-                  controllerCallback: _vehicleNumberController),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('date_of_birth'),
-                controllerCallback: _dobController,
-                readOnly: true,
-                contentPadding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                suffixIcon: AppIconButton(
-                  Icons.date_range,
-                  iconColor: GlobalVariables.secondaryColor,
-                  onPressed: () {
-                    GlobalFunctions.getSelectedDateForDOB(context)
-                        .then((value) {
-                      _dobController.text =
-                          value.day.toString().padLeft(2, '0') +
-                              "-" +
-                              value.month.toString().padLeft(2, '0') +
-                              "-" +
-                              value.year.toString();
-                    });
+                  controllerCallback: _vehicleNumberController,
+                  maxLength: 10,
+                  /*inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(AppRegExpPattern.vehicleNumberPattern)),
+                  ],*/
+                  validator: (value) {
+                    print('validate value : ' + value.toString());
+                    if (value.toString().length > 0 && !isValidate) {
+                      if (!GlobalFunctions.isVehicleNumberValid(value)) {
+                        return AppLocalizations.of(context)
+                            .translate('invalid_vehicle_number');
+                      }
+                    }
+                    return null;
                   },
                 ),
-              ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentFilePath == null
-                                ? BoxDecoration(
-                                    color: GlobalVariables.secondaryColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                    //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                                  )
-                                : BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: FileImage(
-                                            File(attachmentFilePath!)),
-                                        fit: BoxFit.cover),
-                                    border: Border.all(
-                                        color: GlobalVariables.primaryColor,
-                                        width: 2.0)),
-                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                child: TextButton.icon(
-                                  onPressed: () {
-                                     openFile(context);
-                                  },
-                                  icon: AppIcon(
-                                    Icons.attach_file,
-                                    iconColor: GlobalVariables.secondaryColor,
-                                    iconSize: 20.0,
-                                  ),
-                                  label: text(
-                                      AppLocalizations.of(context)
-                                          .translate('attach_photo'),
-                                      textColor: GlobalVariables.primaryColor,
-                                      fontSize:
-                                          GlobalVariables.textSizeSMedium),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: text('OR',
-                                    textColor: GlobalVariables.lightGray,
-                                    fontSize: GlobalVariables.textSizeSMedium),
-                              ),
-                              Container(
-                                child: TextButton.icon(
+                Row(
+                  children: <Widget>[
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 50,
+                              height: 50,
+                              margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                              decoration: attachmentFilePath == null
+                                  ? BoxDecoration(
+                                      color: GlobalVariables.secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                      //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                    )
+                                  : BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: FileImage(
+                                              File(attachmentFilePath!)),
+                                          fit: BoxFit.cover),
+                                      border: Border.all(
+                                          color: GlobalVariables.primaryColor,
+                                          width: 2.0)),
+                              //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  child: TextButton.icon(
                                     onPressed: () {
-                                       openCamera(context);
+                                      openFile(context);
                                     },
                                     icon: AppIcon(
-                                      Icons.camera_alt,
+                                      Icons.attach_file,
                                       iconColor: GlobalVariables.secondaryColor,
                                       iconSize: 20.0,
                                     ),
                                     label: text(
                                         AppLocalizations.of(context)
-                                            .translate('take_picture'),
+                                            .translate('attach_photo'),
                                         textColor: GlobalVariables.primaryColor,
                                         fontSize:
-                                            GlobalVariables.textSizeSMedium)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentIdentityProofFilePath == null
-                                ? BoxDecoration(
-                                    color: GlobalVariables.secondaryColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                    //   border: Border.all(color: GlobalVariables.green,width: 2.0)
-                                  )
-                                : BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: FileImage(File(
-                                            attachmentIdentityProofFilePath!)),
-                                        fit: BoxFit.cover),
-                                    border: Border.all(
-                                        color: GlobalVariables.primaryColor,
-                                        width: 2.0)),
-                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                          ),
-                          Column(
-                            //mainAxisAlignment: MainAxisAlignment.start,
-                            //crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                child: TextButton.icon(
-                                  onPressed: () {
-                                   openIdentityProofFile(context);
-                                  },
-                                  icon: AppIcon(
-                                    Icons.attach_file,
-                                    iconColor: GlobalVariables.secondaryColor,
-                                    iconSize: 20.0,
+                                            GlobalVariables.textSizeSMedium),
                                   ),
-                                  label: text(
-                                      AppLocalizations.of(context).translate(
-                                              'attach_identity_proof') +
-                                          '*',
-                                      textColor: GlobalVariables.primaryColor,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  child: text('OR',
+                                      textColor: GlobalVariables.lightGray,
                                       fontSize:
                                           GlobalVariables.textSizeSMedium),
                                 ),
-                              ),
-                              Container(
-                                //alignment: Alignment.center,
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: text('OR',
-                                    textColor: GlobalVariables.lightGray,
-                                    fontSize: GlobalVariables.textSizeSMedium),
-                              ),
-                              Container(
-                                child: TextButton.icon(
+                                Container(
+                                  child: TextButton.icon(
+                                      onPressed: () {
+                                        openCamera(context);
+                                      },
+                                      icon: AppIcon(
+                                        Icons.camera_alt,
+                                        iconColor:
+                                            GlobalVariables.secondaryColor,
+                                        iconSize: 20.0,
+                                      ),
+                                      label: text(
+                                          AppLocalizations.of(context)
+                                              .translate('take_picture'),
+                                          textColor:
+                                              GlobalVariables.primaryColor,
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 50,
+                              height: 50,
+                              margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                              decoration: attachmentIdentityProofFilePath ==
+                                      null
+                                  ? BoxDecoration(
+                                      color: GlobalVariables.secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                      //   border: Border.all(color: GlobalVariables.green,width: 2.0)
+                                    )
+                                  : BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: FileImage(File(
+                                              attachmentIdentityProofFilePath!)),
+                                          fit: BoxFit.cover),
+                                      border: Border.all(
+                                          color: GlobalVariables.primaryColor,
+                                          width: 2.0)),
+                              //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
+                            ),
+                            Column(
+                              //mainAxisAlignment: MainAxisAlignment.start,
+                              //crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  child: TextButton.icon(
                                     onPressed: () {
-                                        openIdentityProofCamera(context);
+                                      openIdentityProofFile(context);
                                     },
                                     icon: AppIcon(
-                                      Icons.camera_alt,
+                                      Icons.attach_file,
                                       iconColor: GlobalVariables.secondaryColor,
                                       iconSize: 20.0,
                                     ),
                                     label: text(
                                         AppLocalizations.of(context).translate(
-                                                'take_identity_proof_picture') +
+                                                'attach_identity_proof') +
                                             '*',
                                         textColor: GlobalVariables.primaryColor,
                                         fontSize:
-                                            GlobalVariables.textSizeSMedium)),
-                              ),
-                            ],
-                          ),
-                        ],
+                                            GlobalVariables.textSizeSMedium),
+                                  ),
+                                ),
+                                Container(
+                                  //alignment: Alignment.center,
+                                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  child: text('OR',
+                                      textColor: GlobalVariables.lightGray,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium),
+                                ),
+                                Container(
+                                  child: TextButton.icon(
+                                      onPressed: () {
+                                        openIdentityProofCamera(context);
+                                      },
+                                      icon: AppIcon(
+                                        Icons.camera_alt,
+                                        iconColor:
+                                            GlobalVariables.secondaryColor,
+                                        iconSize: 20.0,
+                                      ),
+                                      label: text(
+                                          AppLocalizations.of(context).translate(
+                                                  'take_identity_proof_picture') +
+                                              '*',
+                                          textColor:
+                                              GlobalVariables.primaryColor,
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  height: 45,
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: ButtonTheme(
+                    // minWidth: MediaQuery.of(context).size.width/2,
+                    child: MaterialButton(
+                      color: GlobalVariables.primaryColor,
+                      onPressed: () {
+                        if (GlobalFunctions.textFormFieldValidate(_formKey)) {
+                          verifyInfo();
+                        }
+                      },
+                      textColor: GlobalVariables.white,
+                      //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side:
+                              BorderSide(color: GlobalVariables.primaryColor)),
+                      child: Text(
+                        AppLocalizations.of(context).translate('submit'),
+                        style:
+                            TextStyle(fontSize: GlobalVariables.textSizeMedium),
                       ),
                     ),
                   ),
-                ],
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                height: 45,
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ButtonTheme(
-                  // minWidth: MediaQuery.of(context).size.width/2,
-                  child: MaterialButton(
-                    color: GlobalVariables.primaryColor,
-                    onPressed: () {
-                      verifyInfo();
-                    },
-                    textColor: GlobalVariables.white,
-                    //padding: EdgeInsets.fromLTRB(25, 10, 45, 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: GlobalVariables.primaryColor)),
-                    child: Text(
-                      AppLocalizations.of(context).translate('submit'),
-                      style:
-                          TextStyle(fontSize: GlobalVariables.textSizeMedium),
-                    ),
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -760,37 +833,43 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   }
 
   void verifyInfo() {
-    if (_nameController.text.length > 0) {
-      if (_mobileController.text.length > 0 &&
-          _mobileController.text.length == 10) {
-        if (_selectedRoleType != null || _selectedRoleType!.length > 0) {
-          if (_addressController.text.length > 0) {
-            if (attachmentIdentityProofFileName != null &&
-                attachmentIdentityProofFilePath != null) {
-              addMember();
-            } else {
-              GlobalFunctions.showToast("Please Select Identity Proof");
-            }
-          } else {
-            GlobalFunctions.showToast("Please Enter Address");
-          }
+    if (_vehicleNumberController.text.length > 0 &&
+        !GlobalFunctions.isVehicleNumberValid(_vehicleNumberController.text)) {
+      isValidate = false;
+    } else {
+      isValidate = true;
+    }
+    if (_qualificationController.text.length > 0 &&
+        !GlobalFunctions.isNameValid(_qualificationController.text)) {
+      isValidate = false;
+    } else {
+      isValidate = true;
+    }
+    if (_selectedStaffType == 'Helper' && assignFlat.isEmpty) {
+      GlobalFunctions.showToast('Please add flat');
+      return;
+    }
+
+    if (isValidate) {
+      if (_selectedRoleType != null || _selectedRoleType!.length > 0) {
+        if (attachmentIdentityProofFilePath != null ||
+            attachmentFilePath != null) {
+          addMember();
         } else {
-          GlobalFunctions.showToast('Please Select Role');
+          GlobalFunctions.showToast("Please add required documents");
         }
       } else {
-        GlobalFunctions.showToast('Please Enter Valid Mobile Number');
+        GlobalFunctions.showToast('Please Select Role');
       }
     } else {
-      GlobalFunctions.showToast('Please Enter Name');
+      setState(() {});
+      return;
     }
   }
 
   Future<void> addMember() async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
     String societyId = await GlobalFunctions.getSocietyId();
-    String block = await GlobalFunctions.getBlock();
-    String flat = await GlobalFunctions.getFlat();
+
     String userId = await GlobalFunctions.getUserId();
 
     String? attachmentName;
@@ -814,63 +893,50 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
     //print('attachment lengtth : '+attachment.length.toString());
 
     _progressDialog!.show();
-    if (_selectedStaffType == 'Staff') {
-      restClient
-          .addStaffMember(
-              userId,
-              societyId,
-              _nameController.text,
-              _mobileController.text,
-              _vehicleNumberController.text,
-              block + ' ' + flat,
-              _selectedGender,
-              _dobController.text,
-              _selectedRoleType!,
-              _qualificationController.text,
-              _addressController.text,
-              attachment,
-              attachmentIdentityProof)
-          .then((value) async {
-        _progressDialog!.dismiss();
-        if (value.status!) {
-          Provider.of<UserManagementResponse>(context, listen: false)
-              .getUserManagementDashboard();
-          removeCacheImages();
-          Navigator.of(context).pop();
-        }
-        GlobalFunctions.showToast(value.message!);
-      });
-    } else {
-      restClient
-          .addMaintenanceStaffMember(
-              userId,
-              societyId,
-              _nameController.text,
-              _mobileController.text,
-              _emailController.text,
-              _vehicleNumberController.text,
-              _selectedGender,
-              _dobController.text,
-              _selectedRoleType!,
-              _qualificationController.text,
-              _addressController.text,
-              attachment,
-              attachmentIdentityProof)
-          .then((value) {
-        _progressDialog!.dismiss();
-        if (value.status!) {
-          Provider.of<UserManagementResponse>(context, listen: false)
-              .getUserManagementDashboard();
-          removeCacheImages();
-          Navigator.of(context).pop();
-        }
-        GlobalFunctions.showToast(value.message!);
-      });
-    }
+
+    final dio = Dio();
+    final RestClient restClient =
+        RestClient(dio, baseUrl: GlobalVariables.BaseURL);
+    restClient
+        .addStaffMember(
+            userId,
+            societyId,
+            _nameController.text,
+            _mobileController.text,
+            _vehicleNumberController.text,
+            assignFlat.join(','),
+            _selectedGender,
+            _dobController.text,
+            _selectedRoleType!,
+            _qualificationController.text,
+            _addressController.text,
+            attachment,
+            attachmentIdentityProof,
+            _selectedStaffType)
+        .then((value) async {
+      _progressDialog!.dismiss();
+      if (value.status ?? false) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) => StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                  return Dialog(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                    child: displayPassCode(
+                      value.passCode ?? '',
+                    ),
+                  );
+                }));
+      }
+      GlobalFunctions.showToast(value.message!);
+    });
   }
 
   void openFile(BuildContext context) {
-    GlobalFunctions.getFilePath(context).then((value) {
+    GlobalFunctions.getFilePath(context, AppFileExtensions.imageFileExtensions)
+        .then((value) {
       attachmentFilePath = value;
       getCompressFilePath();
     });
@@ -900,7 +966,8 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   }
 
   void openIdentityProofFile(BuildContext context) {
-    GlobalFunctions.getFilePath(context).then((value) {
+    GlobalFunctions.getFilePath(context, AppFileExtensions.imageFileExtensions)
+        .then((value) {
       attachmentIdentityProofFilePath = value;
       getCompressIdentityProofFilePath();
     });
@@ -932,28 +999,26 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
   }
 
   Future<void> getRoleTypeData(String staffType) async {
-    final dio = Dio();
-    final RestClient restClient = RestClient(dio);
-    String societyId = await GlobalFunctions.getSocietyId();
-    _progressDialog!.show();
-    restClient.staffCount(societyId, staffType).then((value) {
-      _progressDialog!.dismiss();
-      List<dynamic> _list = value.Role!;
-      _roleTypeList = <StaffCount>[];
-      __roleTypeListItems = <DropdownMenuItem<String>>[];
-      _roleTypeList =
-          List<StaffCount>.from(_list.map((i) => StaffCount.fromJson(i)));
-      for (int i = 0; i < _roleTypeList.length; i++) {
-        __roleTypeListItems.add(DropdownMenuItem(
-          value: _roleTypeList[i].ROLE,
-          child: Text(
-            _roleTypeList[i].ROLE!,
-            style: TextStyle(color: GlobalVariables.primaryColor),
-          ),
-        ));
-      }
-      setState(() {});
-    });
+    _roleTypeList.clear();
+    __roleTypeListItems.clear();
+    List<StaffCount> staff = widget.allStaff ?? [];
+    if (staffType == 'Helper') {
+      _roleTypeList = staff.where((e) => e.type == 'Helper').toList();
+    } else if (staffType == 'Maintenance') {
+      _roleTypeList = staff.where((e) => e.type == 'Maintenance').toList();
+    } else if (staffType == 'Vendor') {
+      _roleTypeList = staff.where((e) => e.type == 'Vendor').toList();
+    }
+    for (int i = 0; i < _roleTypeList.length; i++) {
+      __roleTypeListItems.add(DropdownMenuItem(
+        value: _roleTypeList[i].role,
+        child: Text(
+          _roleTypeList[i].role!,
+          style: TextStyle(color: GlobalVariables.primaryColor),
+        ),
+      ));
+    }
+    setState(() {});
   }
 
   void getBlockFlatData() {
@@ -1025,5 +1090,71 @@ class AddStaffMemberState extends State<BaseAddStaffMember> {
       await GlobalFunctions.removeFileFromDirectory(
           attachmentIdentityProofCompressFilePath!);
     }
+  }
+
+  displayPassCode(String passCode) {
+    String line =
+        "Please tell this number at security gate hassle free entry at society";
+    return Material(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: AppIconButton(
+                  Icons.close,
+                  iconColor: GlobalVariables.primaryColor,
+                  onPressed: () {
+                    Provider.of<UserManagementResponse>(context, listen: false)
+                        .getUserManagementDashboard();
+                    removeCacheImages();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+              Text(
+                'Passcode',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontWeight: FontWeight.bold, fontSize: 24),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                passCode,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                line,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              AppButton(
+                  textContent: 'Okay',
+                  onPressed: () {
+                    Provider.of<UserManagementResponse>(context, listen: false)
+                        .getUserManagementDashboard();
+                    removeCacheImages();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  })
+            ],
+          ),
+        ));
   }
 }

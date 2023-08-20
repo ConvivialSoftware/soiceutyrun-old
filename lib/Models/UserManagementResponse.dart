@@ -19,8 +19,6 @@ import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/main.dart';
 import 'package:society_gatepass/society_gatepass.dart' as g;
 
-import '../locator.dart';
-
 class UserManagementResponse extends ChangeNotifier {
   bool isLoading = true;
   String? errMsg;
@@ -35,8 +33,13 @@ class UserManagementResponse extends ChangeNotifier {
       closeComplaint = '0',
       openComplaint = '0',
       maintenanceStaff = '0',
-      normalStaff = '0';
+      normalStaff = '0',
+      pendingVehicle = '0';
+  int helperCount = 0;
+  int maintenanceCount = 0;
+  int vendorCount = 0;
   List<User> registerList = <User>[];
+  List<g.StaffCount> staffCount = <g.StaffCount>[];
   List<User> unRegisterList = <User>[];
   List<User> activeUserList = <User>[];
   List<User> inactiveUserList = <User>[];
@@ -410,10 +413,10 @@ class UserManagementResponse extends ChangeNotifier {
   Future<dynamic> getStaffList({String? block, String? flat}) async {
     try {
       isLoading = true;
-       final dio = Dio();
-    final RestClient restClient =
-        RestClient(dio, baseUrl: GlobalVariables.BaseURL);
-      
+      final dio = Dio();
+      final RestClient restClient =
+          RestClient(dio, baseUrl: GlobalVariables.BaseURL);
+
       final assignFlat = flat ?? await GlobalFunctions.getFlat();
       final assignBlock = block ?? await GlobalFunctions.getBlock();
 
@@ -437,6 +440,47 @@ class UserManagementResponse extends ChangeNotifier {
     } catch (_) {
       print(_);
     }
+  }
+
+  Future<void> getStaffCountData(String staffType) async {
+    staffCount.clear();
+    helperCount = 0;
+    maintenanceCount = 0;
+    vendorCount = 0;
+
+    isLoading = true;
+    notifyListeners();
+
+    final dio = Dio();
+    final RestClient restClient =
+        RestClient(dio, baseUrl: GlobalVariables.BaseURL);
+    String societyId = await GlobalFunctions.getSocietyId();
+
+    await restClient.staffCount(societyId, staffType).then((value) {
+      List<dynamic> _list = value.data ?? [];
+      staffCount =
+          List<g.StaffCount>.from(_list.map((i) => g.StaffCount.fromJson(i)));
+
+      //add helper count
+      staffCount.where((e) => e.type == 'Helper').toList().forEach((helper) {
+        helperCount += int.parse(helper.roleCount ?? '0');
+      });
+
+      //add helper count
+      staffCount
+          .where((e) => e.type == 'Maintenance')
+          .toList()
+          .forEach((helper) {
+        maintenanceCount += int.parse(helper.roleCount ?? '0');
+      });
+
+      //add vendors
+      staffCount.where((e) => e.type == 'Vendor').toList().forEach((helper) {
+        vendorCount += int.parse(helper.roleCount ?? '0');
+      });
+      isLoading = false;
+      notifyListeners();
+    });
   }
 
   Future<String> getUserManagementDashboard() async {

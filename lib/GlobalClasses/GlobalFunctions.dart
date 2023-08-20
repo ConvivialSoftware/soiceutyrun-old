@@ -837,15 +837,8 @@ class GlobalFunctions {
     return selectedDate;
   }
 
-  static Future<String?> getFilePath(BuildContext context) async {
-    /*return await FilePicker.getFilePath(
-      type: FileType.custom,
-      allowCompression: true,
-      allowedExtensions: ['jpg', 'jgpe', 'png'],
-      */ /*allowedExtensions: (_extension?.isNotEmpty ?? false)
-            ? _extension?.replaceAll(' ', '')?.split(',')
-            : null*/ /*
-    );*/
+  static Future<String?> getFilePath(BuildContext context,[List<String>? allowedExtensions]) async {
+    
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: false);
 
@@ -853,6 +846,58 @@ class GlobalFunctions {
     print('result.files.single.path : ' + result!.files.single.path.toString());
 
     return result.files.single.path;
+  }
+   static bool isEmailValid(String email) {
+    bool isValid = RegExp(AppRegExpPattern.emailPattern).hasMatch(email);
+    //email.length <= 20 && regex.test(email)
+    print('Pattern match : ' + isValid.toString());
+    print('email.length : ' + email.length.toString());
+    return email.length > 60 ? false : isValid;
+  }
+
+  static bool isMobileNumberValid(String mobileNumber) {
+    bool isValid =
+        RegExp(AppRegExpPattern.mobilePattern).hasMatch(mobileNumber);
+    print('Pattern match : ' + isValid.toString());
+    print('mobileNumber.length : ' + mobileNumber.length.toString());
+    return isValid;
+  }
+  static bool isAddressValid(String name) {
+    bool isValid = RegExp(AppRegExpPattern.addressPattern).hasMatch(name);
+    print('Pattern match : ' + isValid.toString());
+    print('addressPattern.length : ' + name.length.toString());
+    return isValid;
+  }
+   static bool isVehicleNumberValid(String vehicleNumber) {
+    //todo number, charcters,no space, length 11 no special charcters MH14CR5546
+    bool isValid =
+        RegExp(AppRegExpPattern.vehicleNumberPattern).hasMatch(vehicleNumber);
+    return isValid;
+  }
+  static bool textFormFieldValidate(GlobalKey<FormState> _formKey) {
+    final FormState? form = _formKey.currentState;
+    if (form!.validate()) {
+      print('Valid');
+      return true;
+    } else {
+      print('Not Valid');
+      return false;
+    }
+  }
+
+
+  static bool isNameValid(String name) {
+    bool isValid = RegExp(AppRegExpPattern.namePattern).hasMatch(name);
+    print('Pattern match : ' + isValid.toString());
+    print('name.length : ' + name.length.toString());
+    return isValid;
+  }
+
+  static bool isSubjectValid(String name) {
+    bool isValid = RegExp(AppRegExpPattern.subjectPattern).hasMatch(name);
+    print('Pattern match : ' + isValid.toString());
+    print('subjectPattern.length : ' + name.length.toString());
+    return isValid;
   }
 
   static Future<Map<String, String>> getMultiFilePath(
@@ -1786,13 +1831,6 @@ class GlobalFunctions {
     }
   }
 
-  static bool isEmailValid(String email) {
-    String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
-    bool emailValid = RegExp(p).hasMatch(email);
-    return emailValid;
-  }
 
   static paymentSuccessDialog(BuildContext context, String paymentId,
       {VoidCallback? onCompleted}) async {

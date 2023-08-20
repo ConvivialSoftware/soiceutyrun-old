@@ -702,7 +702,7 @@ class EditStaffMemberState extends State<BaseEditStaffMember> {
             _qualificationController.text,
             _addressController.text,
             attachment!,
-            attachmentIdentityProof!)
+            attachmentIdentityProof!,"")
         .then((value) async {
       _progressDialog!.dismiss();
       if (value.status!) {

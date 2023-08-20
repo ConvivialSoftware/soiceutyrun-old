@@ -292,8 +292,8 @@ abstract class RestClient {
   @POST(GlobalVariables.bannerAPI)
   Future<DataResponse> getBannerData();
 
-  @FormUrlEncoded()
-  @POST(GlobalVariables.addStaffMemberAPI)
+ @FormUrlEncoded()
+  @GET(GlobalVariables.addStaffMemberGatepassAPI)
   Future<StatusMsgResponse> addStaffMember(
       @Field("USER_ID") String userId,
       @Field("SOCIETY_ID") String societyId,
@@ -307,7 +307,8 @@ abstract class RestClient {
       @Field("QUALIFICATION") String qualification,
       @Field("ADDRESS") String address,
       @Field("IMAGE") String? staffImage,
-      @Field("Attachment") String? identityProof);
+      @Field("IDENTITY_PROOF") String? identityProof,
+      @Field("TYPE") String? type);
 
   @FormUrlEncoded()
   @POST(GlobalVariables.addMaintenanceStaffMemberAPI)

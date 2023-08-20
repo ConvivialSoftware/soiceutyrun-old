@@ -243,7 +243,9 @@ class GlobalVariables {
   static const payOptionAPI = "Api/payoption";
   static const staffMobileVerifyAPI = "Staff/mobileverifystaff";
   static const addStaffMemberAPI = "Gatepassapp/staffinsert";
-  static const addMaintenanceStaffMemberAPI = "Gatepassapp/maintenancestaff_insert";
+  static const addStaffMemberGatepassAPI = "Gatepassapp/frequentvisitorinsert";
+  static const addMaintenanceStaffMemberAPI =
+      "Gatepassapp/maintenancestaff_insert";
   static const bannerAPI = "Api/banner";
   static const feedbackAPI = "Feedback";
   static const allMemberAPI = "View_directory/all_member";
@@ -558,7 +560,8 @@ class GlobalVariables {
   static const emergency = "emergency";
    static const vehicle = "vehicle";
   static const Role = "Role";
-
+  static const Unit = "Unit";
+  static const token = "token";
 }
 
 class BannerType{
@@ -796,8 +799,41 @@ class AppUserPermission{
 
   static bool isUserCommitteePhonePermission=false;
   static var userCommitteePhonePermission = '';*/
-
 }
+
+class AppRegExpPattern {
+  static const String emailPattern =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  //static const String emailPattern = r'^[a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6}$';
+  static const String mobilePattern = r'^^(?:[+0]9)?[0-9]{10}$';
+  static const String namePattern = r'^[a-zA-Z. ]{1,50}$';
+  static const String subjectPattern = r'^[a-zA-Z0-9\.,& -]{1,100}$';
+  static const String descriptionPattern = r'^[a-zA-Z0-9\.,& -]{1,1000}$';
+  static const String addressPattern = r'^[a-zA-Z0-9\.,& -]{3,200}$';
+  static const String intercomPattern = r'^[0-9]{4,10}$';
+  static const String GSTNPattern = r'^[a-zA-Z0-9.,-]{15}$';
+  //static const String vehicleNumberPattern = r'^[A-Z]{2}([ \-])[0-9]{2}[ ,][A-Z0-9]{1,2}[A-Z]\1[0-9]{4}$';
+  static const String vehicleNumberPattern = r'^[a-zA-Z0-9]+$';
+  static const String modelStickerPattern = r'^[a-zA-Z0-9- ]{3,15}$';
+  //static const String passwordPattern = r'[a-zA-Z0-9@#$]{8,15}$';
+  static const String passwordPattern =
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[@#$]).{8,15}$';
+}
+
+class AppFileExtensions {
+  static const List<String> allFileExtensions = [
+    'pdf',
+    'doc',
+    'jpg',
+    'jpeg',
+    'png',
+    'xls',
+    'doc'
+  ];
+  static const List<String> documentFileExtensions = ['pdf', 'doc', 'xls'];
+  static const List<String> imageFileExtensions = ['jpg', 'jpeg', 'png'];
+}
+
 class AvenueConst {
   static const tid = 'tid';
   static const merchantId = 'merchant_id';
