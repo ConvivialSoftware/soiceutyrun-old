@@ -1,6 +1,6 @@
-
 //import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
@@ -21,9 +21,9 @@ import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:societyrun/controllers/notification_controller.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class BaseNotifications extends StatefulWidget {
   @override
@@ -34,7 +34,6 @@ class BaseNotifications extends StatefulWidget {
 }
 
 class NotificationsState extends State<BaseNotifications> {
-
   List<DBNotificationPayload> _dbNotificationList = <DBNotificationPayload>[];
   //var notificationFormatData='';
 
@@ -42,7 +41,6 @@ class NotificationsState extends State<BaseNotifications> {
   void initState() {
     super.initState();
     getNotificationData();
-
   }
 
   @override
@@ -51,7 +49,7 @@ class NotificationsState extends State<BaseNotifications> {
     return Builder(
       builder: (context) => Scaffold(
         appBar: CustomAppBar(
-         /* actions: [
+          /* actions: [
             AppIconButton(Icons.remove_red_eye,iconColor: GlobalVariables.white,onPressed: () async {
               notificationFormatData = await GlobalFunctions.getNotificationBackGroundData();
               setState(() {
@@ -89,7 +87,10 @@ class NotificationsState extends State<BaseNotifications> {
 
             },)
           ],*/
-          title: AppLocalizations.of(context).translate('notification')+" ("+GlobalVariables.notificationCounterValueNotifer.value.toString()+")",
+          title: AppLocalizations.of(context).translate('notification') +
+              " (" +
+              GlobalVariables.notificationCounterValueNotifer.value.toString() +
+              ")",
         ),
         body: getBaseLayout(),
       ),
@@ -115,13 +116,12 @@ class NotificationsState extends State<BaseNotifications> {
                       margin: EdgeInsets.all(16),
                       width: 100,
                       child: AppButton(
-                        textContent: AppLocalizations.of(context)
-                            .translate('read_all'),
+                        textContent:
+                            AppLocalizations.of(context).translate('read_all'),
                         onPressed: () async {
-                        await SQLiteDbProvider.db.updateUnReadNotification();
-                        getNotificationData();
-                      },
-
+                          await SQLiteDbProvider.db.updateUnReadNotification();
+                          getNotificationData();
+                        },
                       ),
                     ),
                   ),
@@ -138,68 +138,70 @@ class NotificationsState extends State<BaseNotifications> {
   getNotificationsLayout() {
     return Container(
       //padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(
-          18,80, 18, 0),
+      margin: EdgeInsets.fromLTRB(18, 80, 18, 0),
       child: Builder(
           builder: (context) => ListView.builder(
-            // scrollDirection: Axis.vertical,
-            itemCount: _dbNotificationList.length,
-            itemBuilder: (context, position) {
-              return getNotificationsListItemLayout(position);
-            }, //  scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          )),
+                // scrollDirection: Axis.vertical,
+                itemCount: _dbNotificationList.length,
+                itemBuilder: (context, position) {
+                  return getNotificationsListItemLayout(position);
+                }, //  scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+              )),
     );
   }
 
-
   getNotificationsListItemLayout(int position) {
-    var displayDate='';
+    if (_dbNotificationList[position].DATE_TIME == null ||
+        _dbNotificationList[position].DATE_TIME == '') {
+      return Container();
+    }
+    var displayDate = '';
     print(_dbNotificationList[position].DATE_TIME);
-    if(GlobalFunctions.isDateSameOrGrater(_dbNotificationList[position].DATE_TIME!)){
+    if (GlobalFunctions.isDateSameOrGrater(
+        _dbNotificationList[position].DATE_TIME ?? '')) {
       print('isDateSameOrGrater True');
-      displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME!, 'dd MMM');
-    }else{
+      displayDate = GlobalFunctions.convertDateFormat(
+          _dbNotificationList[position].DATE_TIME!, 'dd MMM');
+    } else {
       print('isDateSameOrGrater False');
-      displayDate = GlobalFunctions.convertDateFormat(_dbNotificationList[position].DATE_TIME!, 'hh:mm aa');
+      displayDate = GlobalFunctions.convertDateFormat(
+          _dbNotificationList[position].DATE_TIME ?? '', 'hh:mm aa');
     }
 
-    var image  =  GlobalVariables.appLogoGreenIcon;
-    if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR ||
+    var image = GlobalVariables.appLogoGreenIcon;
+    if (_dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_FVISITOR ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_SInApp ||
-        _dbNotificationList[position].TYPE == NotificationTypes.TYPE_VISITOR_VERIFY ){
-
+        _dbNotificationList[position].TYPE ==
+            NotificationTypes.TYPE_VISITOR_VERIFY) {
       image = GlobalVariables.myGateIconPath;
-
-    }else if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_ANNOUNCEMENT ||
+    } else if (_dbNotificationList[position].TYPE ==
+            NotificationTypes.TYPE_ANNOUNCEMENT ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_MEETING ||
         _dbNotificationList[position].TYPE == NotificationTypes.TYPE_EVENT ||
-        _dbNotificationList[position].TYPE == NotificationTypes.TYPE_POLL ){
-
+        _dbNotificationList[position].TYPE == NotificationTypes.TYPE_POLL) {
       image = GlobalVariables.myBuildingIconPath;
-
-    }else if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_COMPLAINT ||
-        _dbNotificationList[position].TYPE == NotificationTypes.TYPE_ASSIGN_COMPLAINT ){
-
+    } else if (_dbNotificationList[position].TYPE ==
+            NotificationTypes.TYPE_COMPLAINT ||
+        _dbNotificationList[position].TYPE ==
+            NotificationTypes.TYPE_ASSIGN_COMPLAINT) {
       image = GlobalVariables.myServiceIconPath;
-
-    }else if(_dbNotificationList[position].TYPE == NotificationTypes.TYPE_BILL ||
-        _dbNotificationList[position].TYPE == NotificationTypes.TYPE_RECEIPT ){
-
+    } else if (_dbNotificationList[position].TYPE ==
+            NotificationTypes.TYPE_BILL ||
+        _dbNotificationList[position].TYPE == NotificationTypes.TYPE_RECEIPT) {
       image = GlobalVariables.expenseIconPath;
-
     }
-
 
     return InkWell(
       onTap: () {
         setState(() {
-          DBNotificationPayload dbNotificationPayload = _dbNotificationList[position];
-          dbNotificationPayload.read=1;
+          DBNotificationPayload dbNotificationPayload =
+              _dbNotificationList[position];
+          dbNotificationPayload.read = 1;
           SQLiteDbProvider.db.updateReadNotification(dbNotificationPayload);
         });
-        if(GlobalVariables.notificationCounterValueNotifer.value>0) {
+        if (GlobalVariables.notificationCounterValueNotifer.value > 0) {
           GlobalVariables.notificationCounterValueNotifer.value--;
         }
         navigateToPage(_dbNotificationList[position]);
@@ -223,13 +225,20 @@ class NotificationsState extends State<BaseNotifications> {
                       visible: true,
                       child: Container(
                         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        width:50,
+                        width: 50,
                         height: 50,
                         decoration: BoxDecoration(
                             color: GlobalVariables.transparent,
-                            shape: BoxShape.circle
-                        ),
-                        child: image.toLowerCase().contains(".svg") ? AppAssetsImage(image,imageColor: GlobalVariables.primaryColor,):AppAssetsImage(image,imageColor: GlobalVariables.primaryColor,),
+                            shape: BoxShape.circle),
+                        child: image.toLowerCase().contains(".svg")
+                            ? AppAssetsImage(
+                                image,
+                                imageColor: GlobalVariables.primaryColor,
+                              )
+                            : AppAssetsImage(
+                                image,
+                                imageColor: GlobalVariables.primaryColor,
+                              ),
                       ),
                     ),
                   ),
@@ -245,39 +254,45 @@ class NotificationsState extends State<BaseNotifications> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _dbNotificationList[position].read==0 ? Container(
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                width: 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                    color: GlobalVariables
-                                        .skyBlue,
-                                    shape: BoxShape.circle),
-                              ):Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              ),
+                              _dbNotificationList[position].read == 0
+                                  ? Container(
+                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                          color: GlobalVariables.skyBlue,
+                                          shape: BoxShape.circle),
+                                    )
+                                  : Container(
+                                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                    ),
                               Flexible(
                                 child: Container(
                                   margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                   child: text(
-                                      _dbNotificationList[position].title??'',
+                                      _dbNotificationList[position].title ?? '',
                                       maxLine: 3,
                                       textColor: GlobalVariables.primaryColor,
-                                          fontSize: GlobalVariables.textSizeMedium,
-                                          fontWeight: FontWeight.bold),
+                                      fontSize: GlobalVariables.textSizeMedium,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
                           ),
                           Container(
                             alignment: Alignment.topLeft,
-                            margin: EdgeInsets.fromLTRB(_dbNotificationList[position].read==0 ? 15 : 10, 0, 0, 0),
-                            child: text(
-                                _dbNotificationList[position].body??'',
-                                // maxLine: 2,
-                                textColor: GlobalVariables.grey,
-                                fontSize: GlobalVariables.textSizeSMedium
-                            ),
+                            margin: EdgeInsets.fromLTRB(
+                                _dbNotificationList[position].read == 0
+                                    ? 15
+                                    : 10,
+                                0,
+                                0,
+                                0),
+                            child:
+                                text(_dbNotificationList[position].body ?? '',
+                                    // maxLine: 2,
+                                    textColor: GlobalVariables.grey,
+                                    fontSize: GlobalVariables.textSizeSMedium),
                           ),
                         ],
                       ),
@@ -287,8 +302,9 @@ class NotificationsState extends State<BaseNotifications> {
                     flex: 0,
                     child: Container(
                       margin: EdgeInsets.fromLTRB(3, 5, 0, 0),
-                      child: text(displayDate,fontSize: GlobalVariables.textSizeSmall,
-    textColor: GlobalVariables.grey),
+                      child: text(displayDate,
+                          fontSize: GlobalVariables.textSizeSmall,
+                          textColor: GlobalVariables.grey),
                     ),
                   )
                 ],
@@ -302,116 +318,114 @@ class NotificationsState extends State<BaseNotifications> {
 
   void getNotificationData() async {
     String userId = await GlobalFunctions.getUserId();
-    var _list =  await SQLiteDbProvider.db.getUnReadNotification(userId);
-    if(_list!=null) {
+    var _list = await SQLiteDbProvider.db.getUnReadNotification(userId);
+    if (_list != null) {
       _dbNotificationList = List<DBNotificationPayload>.from(
           _list.map((i) => DBNotificationPayload.fromJson(i)));
       setState(() {});
     }
-
   }
 
-  navigateToPage(DBNotificationPayload _dbNotificationPayload)  async {
+  navigateToPage(DBNotificationPayload _dbNotificationPayload) async {
     print('context : ' + context.toString());
-    print('_dbNotificationPayload.ID : ' + _dbNotificationPayload.ID.toString());
-    print('_dbNotificationPayload.VID : ' + _dbNotificationPayload.VID.toString());
+    print(
+        '_dbNotificationPayload.ID : ' + _dbNotificationPayload.ID.toString());
+    print('_dbNotificationPayload.VID : ' +
+        _dbNotificationPayload.VID.toString());
     if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_COMPLAINT) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(_dbNotificationPayload.ID!, false)));
-
-    } else if (_dbNotificationPayload.TYPE== NotificationTypes.TYPE_ASSIGN_COMPLAINT) {
+              builder: (context) => BaseComplaintInfoAndComments.ticketNo(
+                  _dbNotificationPayload.ID!, false)));
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_ASSIGN_COMPLAINT) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BaseComplaintInfoAndComments.ticketNo(_dbNotificationPayload.ID!, true)));
-
+              builder: (context) => BaseComplaintInfoAndComments.ticketNo(
+                  _dbNotificationPayload.ID!, true)));
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_MEETING) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('meetings'))));
-
-    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_ANNOUNCEMENT) {
-     Navigator.push(
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_ANNOUNCEMENT) {
+      Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('announcement'))));
-
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_EVENT) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('events'))));
-
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_Document) {
-     Navigator.push(
+      Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('documents'))));
-
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_POLL) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('poll_survey'))));
-
-    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR || _dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
-
+    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR ||
+        _dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
+      Get.find<AppNotificationController>().goToMyGate();
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BILL) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyUnit(
                   AppLocalizations.of(context).translate('my_dues'))));
-
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_RECEIPT) {
       String block = await GlobalFunctions.getBlock();
       String flat = await GlobalFunctions.getFlat();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BaseLedger(block,flat)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BaseLedger(block, flat)));
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_FVISITOR) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
-    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_SInApp) {
+                  AppLocalizations.of(context).translate('my_gate'),
+                  _dbNotificationPayload.VID)));
+    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_SInApp) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),_dbNotificationPayload.VID)));
-    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_NEW_OFFER) {
+                  AppLocalizations.of(context).translate('my_gate'),
+                  _dbNotificationPayload.VID)));
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_NEW_OFFER) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseNearByShopNotificationItemDetails( _dbNotificationPayload.ID!)));
-    }else if (_dbNotificationPayload.TYPE  == NotificationTypes.TYPE_INTERESTED_CUSTOMER) {
-       Navigator.push(
+              builder: (context) => BaseNearByShopNotificationItemDetails(
+                  _dbNotificationPayload.ID!)));
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_INTERESTED_CUSTOMER) {
+      Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BaseOwnerClassifiedNotificationItemDesc(_dbNotificationPayload.ID!)));
-    }else if(_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BROADCAST){
-      FirebaseMessagingHandler().showDynamicAlert(context, _dbNotificationPayload);
-    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_UserManagement) {
-      final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseUserManagement()))
+              builder: (context) => BaseOwnerClassifiedNotificationItemDesc(
+                  _dbNotificationPayload.ID!)));
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_BROADCAST) {
+      FirebaseMessagingHandler()
+          .showDynamicAlert(context, _dbNotificationPayload);
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_UserManagement) {
+      final result = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseUserManagement()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
@@ -420,13 +434,12 @@ class NotificationsState extends State<BaseNotifications> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_MyHousehold) {
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_MyHousehold) {
       final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseAdmin()))
+              context, MaterialPageRoute(builder: (context) => BaseAdmin()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
@@ -435,13 +448,12 @@ class NotificationsState extends State<BaseNotifications> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_PaymentRequest) {
+    } else if (_dbNotificationPayload.TYPE ==
+        NotificationTypes.TYPE_PaymentRequest) {
       final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseAdmin()))
+              context, MaterialPageRoute(builder: (context) => BaseAdmin()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
@@ -450,13 +462,11 @@ class NotificationsState extends State<BaseNotifications> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_Expense) {
-      final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseExpenseSearchAdd()))
+    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_Expense) {
+      final result = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BaseExpenseSearchAdd()))
           .then((value) {
         GlobalFunctions.setBaseContext(context);
       });
@@ -465,17 +475,16 @@ class NotificationsState extends State<BaseNotifications> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => BaseDashBoard()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
-    }else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_WEB) {
+    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_WEB) {
       launch(GlobalVariables.appURL);
-    }   else {
+    } else {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(
               builder: (BuildContext context) => BaseDashBoard()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     }
   }
-
 }

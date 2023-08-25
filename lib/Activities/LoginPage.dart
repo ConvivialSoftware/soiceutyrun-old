@@ -568,6 +568,7 @@ class LoginPageState extends BaseStatefulState<LoginPage> {
         }
       }
     }).catchError((Object obj) {
+      print('ERROR : ' + obj.toString());
       switch (obj.runtimeType) {
         case DioError:
           {

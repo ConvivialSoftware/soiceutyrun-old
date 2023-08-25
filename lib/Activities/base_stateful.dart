@@ -113,7 +113,7 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
       GlobalVariables.isAlreadyTapped = false;
 
       if (gatePassPayload.tYPE == NotificationTypes.TYPE_REJECT_GATEPASS) {
-        GatepassController.closeGatepassDialog();
+        GatepassController.clearNotification();
         return;
       }
       

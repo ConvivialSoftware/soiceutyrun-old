@@ -837,8 +837,8 @@ class GlobalFunctions {
     return selectedDate;
   }
 
-  static Future<String?> getFilePath(BuildContext context,[List<String>? allowedExtensions]) async {
-    
+  static Future<String?> getFilePath(BuildContext context,
+      [List<String>? allowedExtensions]) async {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: false);
 
@@ -847,7 +847,8 @@ class GlobalFunctions {
 
     return result.files.single.path;
   }
-   static bool isEmailValid(String email) {
+
+  static bool isEmailValid(String email) {
     bool isValid = RegExp(AppRegExpPattern.emailPattern).hasMatch(email);
     //email.length <= 20 && regex.test(email)
     print('Pattern match : ' + isValid.toString());
@@ -862,18 +863,21 @@ class GlobalFunctions {
     print('mobileNumber.length : ' + mobileNumber.length.toString());
     return isValid;
   }
+
   static bool isAddressValid(String name) {
     bool isValid = RegExp(AppRegExpPattern.addressPattern).hasMatch(name);
     print('Pattern match : ' + isValid.toString());
     print('addressPattern.length : ' + name.length.toString());
     return isValid;
   }
-   static bool isVehicleNumberValid(String vehicleNumber) {
+
+  static bool isVehicleNumberValid(String vehicleNumber) {
     //todo number, charcters,no space, length 11 no special charcters MH14CR5546
     bool isValid =
         RegExp(AppRegExpPattern.vehicleNumberPattern).hasMatch(vehicleNumber);
     return isValid;
   }
+
   static bool textFormFieldValidate(GlobalKey<FormState> _formKey) {
     final FormState? form = _formKey.currentState;
     if (form!.validate()) {
@@ -884,7 +888,6 @@ class GlobalFunctions {
       return false;
     }
   }
-
 
   static bool isNameValid(String name) {
     bool isValid = RegExp(AppRegExpPattern.namePattern).hasMatch(name);
@@ -1030,6 +1033,9 @@ class GlobalFunctions {
 
   static String convertDateFormat(String date, String format) {
     String newDate;
+    if (date.isEmpty) {
+      return "";
+    }
     var dFormat = DateFormat(format);
     DateTime oldDate = DateTime.parse(date);
     newDate = dFormat.format(oldDate);
@@ -1361,7 +1367,8 @@ class GlobalFunctions {
   }
 
   static isDateSameOrGrater(String generateDate) {
-    DateTime earlier = DateTime.parse(generateDate);
+    DateTime earlier =
+        generateDate.isEmpty ? DateTime.now() : DateTime.parse(generateDate);
     //  print('earlier : '+ earlier.toIso8601String());
     DateTime now = new DateTime.now();
     DateTime currentDate = new DateTime(now.year, now.month, now.day);
@@ -1831,7 +1838,6 @@ class GlobalFunctions {
     }
   }
 
-
   static paymentSuccessDialog(BuildContext context, String paymentId,
       {VoidCallback? onCompleted}) async {
     await showDialog(
@@ -2111,4 +2117,3 @@ extension PathX on String {
     return ext == 'doc' || ext == 'docx' || ext == 'pdf';
   }
 }
-
