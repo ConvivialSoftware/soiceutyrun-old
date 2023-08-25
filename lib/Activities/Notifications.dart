@@ -1,5 +1,6 @@
 //import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:societyrun/Activities/Admin.dart';
 import 'package:societyrun/Activities/ComplaintInfoAndComments.dart';
 import 'package:societyrun/Activities/DashBoard.dart';
@@ -20,6 +21,7 @@ import 'package:societyrun/SQLiteDatabase/SQLiteDbProvider.dart';
 import 'package:societyrun/Widgets/AppButton.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+import 'package:societyrun/controllers/notification_controller.dart';
 import 'package:societyrun/firebase_notification/firebase_message_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -376,12 +378,7 @@ class NotificationsState extends State<BaseNotifications> {
                   AppLocalizations.of(context).translate('poll_survey'))));
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR ||
         _dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),
-                  _dbNotificationPayload.VID)));
+      Get.find<AppNotificationController>().goToMyGate();
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BILL) {
       Navigator.push(
           context,
