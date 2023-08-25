@@ -201,11 +201,12 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       _showNotification(message.data, false);
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      GlobalVariables.isNewlyArrivedNotification = true;
-      GlobalVariables.isAlreadyTapped = false;
-      showDialogAlertOnOpen(message.data);
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    //   print('onMessageOpened: $message');
+    //   GlobalVariables.isNewlyArrivedNotification = true;
+    //   GlobalVariables.isAlreadyTapped = false;
+    //   showDialogAlertOnOpen(message.data);
+    // });
 
     FirebaseMessaging.instance.getInitialMessage().then((value) {
       if (value != null) {
@@ -341,6 +342,8 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
 
       if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
         if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
+          Get.find<AppNotificationController>().initGatepass();
+          Get.find<AppNotificationController>().initGatepassNotifications();
           GatepassController.showGatepassDialog(
               payload: message,
               onRedirection: () {

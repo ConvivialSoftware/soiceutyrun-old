@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:society_gatepass/society_gatepass.dart';
 import 'package:societyrun/GlobalClasses/DynamicWidgetDialog.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -43,7 +44,11 @@ class FirebaseMessagingHandler {
 
   void showAlert(BuildContext context, dynamic payload) {
     GatepassController.showGatepassDialog(
-        payload: payload, onRedirection: () {});
+        payload: payload,
+        onRedirection: () {
+          Get.back();
+
+        });
   }
 
   void showDynamicAlert(BuildContext context, DBNotificationPayload payload) {

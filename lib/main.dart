@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
@@ -9,6 +11,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:society_gatepass/society_gatepass.dart';
+import 'package:societyrun/Activities/DashBoard.dart';
 import 'package:societyrun/Activities/SplashScreen.dart';
 import 'package:societyrun/Activities/base_stateful.dart';
 import 'package:societyrun/GlobalClasses/AppLanguage.dart';
@@ -26,6 +30,7 @@ import 'package:societyrun/Models/OwnerClassifiedResponse.dart';
 import 'package:societyrun/Models/ServicesResponse.dart';
 import 'package:societyrun/Models/UserManagementResponse.dart';
 import 'package:intl/intl.dart';
+import 'package:societyrun/Models/gatepass_payload.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -72,7 +77,6 @@ Future<void> showLocalNotification() async {
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
     '1003',
     'societyrun_channel_schedule',
-  
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
@@ -143,19 +147,55 @@ Future<void> showLocalNotification() async {
   });
 }
 
-class BaseAppStart extends StatelessWidget {
+class BaseAppStart extends StatefulWidget {
+  @override
+  State<BaseAppStart> createState() => _BaseAppStartState();
+}
+
+class _BaseAppStartState extends State<BaseAppStart> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.onMessageOpenedApp.listen((remoteMessage) {
+      final message = remoteMessage.data;
+      String payloadSData = message["society"];
+      var society = json.decode(payloadSData.toString());
+      GatePassPayload gatePassPayload = GatePassPayload.fromJson(society);
+      if (gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR ||
+          gatePassPayload.tYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
+        if (!GlobalFunctions.isDateGrater(gatePassPayload.dATETIME!)) {
+          GatepassController.showGatepassDialog(
+              payload: message,
+              onRedirection: () {
+                //
+                Get.to(() => DashBoardState());
+              });
+        }
+      }
+    });
+  }
+
   AppLanguage appLanguage = AppLanguage();
+
   final classifiedResponse = ClassifiedResponse();
+
   final ownerClassifiedResponse = OwnerClassifiedResponse();
+
   final nearByShopResponse = NearByShopResponse();
+
   final servicesResponse = ServicesResponse();
+
   final helpDeskResponse = HelpDeskResponse();
+
   final myComplexResponse = MyComplexResponse();
 
   // final myUnitResponse = MyUnitResponse();
   final gatePassResponse = GatePass();
+
   final loginDashboardResponse = LoginDashBoardResponse();
+
   final broadcastResponse = BroadcastResponse();
+
   final userManagementResponse = UserManagementResponse();
 
   @override
