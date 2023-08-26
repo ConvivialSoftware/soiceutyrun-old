@@ -1393,7 +1393,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8ccccccb130213624caca88f27a41ed3b91aa0d3"
+      resolved-ref: "0e83b1d40b8e1f6d16ef919f4a066b1c2c031e7f"
       url: "https://zapniroshana@bitbucket.org/Convivialsoln/society_gatepass.git"
     source: git
     version: "0.0.1"
