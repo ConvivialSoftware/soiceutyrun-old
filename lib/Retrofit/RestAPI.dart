@@ -23,6 +23,7 @@ import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 
+import '../main.dart';
 import 'RestClient.dart';
 
 const bool kDebugMode = true;
@@ -52,30 +53,26 @@ class RestAPI
   String? baseUrl;
 
   Options restClientOption() {
-    return Options(
-        headers: <String, dynamic>{
-          "Authorization": GlobalVariables.AUTH,
-        }
-    );
-    }
+    return Options(headers: <String, dynamic>{
+      "Authorization": GlobalVariables.AUTH,
+    });
+  }
+
   Options restClientERPOption() {
-    return Options(
-        headers: <String, dynamic>{
-          "Authorization": GlobalVariables.AUTHERP,
-        }
-    );
-    }
+    return Options(headers: <String, dynamic>{
+      "Authorization": GlobalVariables.AUTHERP,
+    });
+  }
+
   Options restClientDiscoverOption() {
-    return Options(
-        headers: <String, dynamic>{
-          "Authorization": GlobalVariables.AUTHDiscover,
-        }
-    );
+    return Options(headers: <String, dynamic>{
+      "Authorization": GlobalVariables.AUTHDiscover,
+    });
   }
 
   @override
-  Future<LoginResponse> getLogin(String username, String password,
-      String token) async {
+  Future<LoginResponse> getLogin(
+      String username, String password, String token) async {
 // TODO: implement getLogin
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
     ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
@@ -89,11 +86,12 @@ class RestAPI
       GlobalVariables.keyUsername: username,
       GlobalVariables.keyPassword: password,
       Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:
-      token
+          token
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.LoginAPI);
     print('LOGIN TOKEN >>>> $token');
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.LoginAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.LoginAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -121,10 +119,11 @@ class RestAPI
       "mobile_no": mobileNo,
       "Email_id": emailId,
       Platform.isIOS ? GlobalVariables.TOKEN_ID : GlobalVariables.keyToken:
-      token
+          token
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.otpLoginAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.otpLoginAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.otpLoginAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -139,9 +138,10 @@ class RestAPI
     //ArgumentError.checkNotNull(emailId, "Email_id");
 
     FormData formData =
-    FormData.fromMap({"mobile_no": mobile, "Email_id": emailId});
+        FormData.fromMap({"mobile_no": mobile, "Email_id": emailId});
     print('baseurl : ' + baseUrl! + GlobalVariables.otpSendAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.otpSendAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.otpSendAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -155,8 +155,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> changeNewPassword(String societyId, String userId,
-      String confirmPassword) async {
+  Future<StatusMsgResponse> changeNewPassword(
+      String societyId, String userId, String confirmPassword) async {
 // TODO: implement changeNewPassword
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
@@ -168,7 +168,8 @@ class RestAPI
       "confirm_pwd": confirmPassword
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.newPasswordAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.newPasswordAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.newPasswordAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -178,8 +179,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getAllSocietyData(String username
-      /*, String password*/) async {
+  Future<DataResponse> getAllSocietyData(
+      String username /*, String password*/) async {
 // TODO: implement getAllSocietyData
     ArgumentError.checkNotNull(username, GlobalVariables.keyUsername);
     //ArgumentError.checkNotNull(password, GlobalVariables.keyPassword);
@@ -191,7 +192,8 @@ class RestAPI
     print('username : ' + username);
     // print('password : ' + password);
     print('baseurl : ' + baseUrl! + GlobalVariables.AllSocietyAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.AllSocietyAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.AllSocietyAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -201,8 +203,8 @@ class RestAPI
   }
 
   @override
-  Future<DuesResponse> getDuesData(String socId, String blockflat,
-      String block) async {
+  Future<DuesResponse> getDuesData(
+      String socId, String blockflat, String block) async {
     // TODO: implement getDuesData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(blockflat, GlobalVariables.flat);
@@ -218,17 +220,16 @@ class RestAPI
     print(GlobalVariables.block + " " + block);
 
     print('baseurlERP : ' + baseUrl! + GlobalVariables.duesAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.duesAPI,
-        options: restClientERPOption(),
-        data: formData);
+    final Response _result = await _dio.post(baseUrl! + GlobalVariables.duesAPI,
+        options: restClientERPOption(), data: formData);
     final value = _result.data;
     print('value of getDuesData : ' + value.toString());
     return DuesResponse.fromJson(value);
   }
 
   @override
-  Future<MemberResponse> getMembersData(String socId, String block,
-      String flat) async {
+  Future<MemberResponse> getMembersData(
+      String socId, String block, String flat) async {
     // TODO: implement getMembersData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -244,7 +245,8 @@ class RestAPI
     print(GlobalVariables.flat + ": " + flat);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.unitMemberAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitMemberAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.unitMemberAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -253,8 +255,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getStaffData(String socId, String block,
-      String flat) async {
+  Future<DataResponse> getStaffData(
+      String socId, String block, String flat) async {
     // TODO: implement getStaffData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -270,7 +272,8 @@ class RestAPI
     print(GlobalVariables.flat + ": " + flat);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.unitStaffAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitStaffAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.unitStaffAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -298,8 +301,8 @@ class RestAPI
   }
 
   @override
-  Future<VehicleResponse> getVehicleData(String socId, String block,
-      String flat) async {
+  Future<VehicleResponse> getVehicleData(
+      String socId, String block, String flat) async {
     // TODO: implement getVehicleData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -315,7 +318,8 @@ class RestAPI
     print(GlobalVariables.flat + ": " + flat);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.unitVehicleAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitVehicleAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.unitVehicleAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -335,16 +339,16 @@ class RestAPI
     //AppPermission.isUserAdminHelpDeskPermission=false;
     FormData formData = !AppUserPermission.isUserAdminPermission
         ? FormData.fromMap({
-      GlobalVariables.societyId: socId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat
-    })
+            GlobalVariables.societyId: socId,
+            GlobalVariables.block: block,
+            GlobalVariables.flat: flat
+          })
         : FormData.fromMap({
-      GlobalVariables.societyId: socId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
-      GlobalVariables.userID: userId
-    });
+            GlobalVariables.societyId: socId,
+            GlobalVariables.block: block,
+            GlobalVariables.flat: flat,
+            GlobalVariables.userID: userId
+          });
     print(GlobalVariables.societyId + ": " + socId);
     print(GlobalVariables.block + ": " + block);
     print(GlobalVariables.flat + ": " + flat);
@@ -355,9 +359,8 @@ class RestAPI
         ? GlobalVariables.assignComplaintsAPI
         : GlobalVariables.ComplaintsAPI;
     print('baseurl : ' + baseUrl! + url);
-    final Response _result = await _dio.post(baseUrl!+url,
-        options: restClientOption(),
-        data: formData);
+    final Response _result = await _dio.post(baseUrl! + url,
+        options: restClientOption(), data: formData);
     final value = _result.data;
     print('value of getComplaintData : ' + value.toString());
     return DataResponse.fromJson(value);
@@ -377,7 +380,8 @@ class RestAPI
     print(GlobalVariables.ticketNo + ": " + ticketNo);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.CommentAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.CommentAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.CommentAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -399,7 +403,8 @@ class RestAPI
     print(GlobalVariables.userID + ": " + userId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.DocumentAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.DocumentAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.DocumentAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -408,7 +413,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> getUpdateComplaintStatus(String socId,
+  Future<StatusMsgResponse> getUpdateComplaintStatus(
+      String socId,
       String block,
       String flat,
       String userId,
@@ -475,7 +481,8 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.UpdateStatusAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.UpdateStatusAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.UpdateStatusAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -494,7 +501,8 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.ComplaintsAreaAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.ComplaintsAreaAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.ComplaintsAreaAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -513,8 +521,8 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.ComplaintsCategoryAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.ComplaintsCategoryAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.ComplaintsCategoryAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -523,7 +531,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addComplaint(String socId,
+  Future<StatusMsgResponse> addComplaint(
+      String socId,
       String block,
       String flat,
       String userId,
@@ -578,26 +587,28 @@ class RestAPI
     //print(GlobalVariables.societyId+": "+socId);
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
-    print('data : ' +  {
-      GlobalVariables.societyId: socId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
-      GlobalVariables.userID: userId,
-      GlobalVariables.SUBJECT: subject,
-      GlobalVariables.TYPE: type,
-      // GlobalVariables.COMPLAINT_AREA: area,
-      GlobalVariables.CATEGORY: category,
-      GlobalVariables.PRIORITY: priority,
-      GlobalVariables.DESCRIPTION: description,
-      GlobalVariables.NAME: name,
-      GlobalVariables.ATTACHMENT: attachment,
-      GlobalVariables.ATTACHMENT_NAME: attachmentName,
-      GlobalVariables.societyName: socName,
-      GlobalVariables.societyEmail: socEmail,
-      GlobalVariables.userEmail: eMail,
-    }.toString());
+    print('data : ' +
+        {
+          GlobalVariables.societyId: socId,
+          GlobalVariables.block: block,
+          GlobalVariables.flat: flat,
+          GlobalVariables.userID: userId,
+          GlobalVariables.SUBJECT: subject,
+          GlobalVariables.TYPE: type,
+          // GlobalVariables.COMPLAINT_AREA: area,
+          GlobalVariables.CATEGORY: category,
+          GlobalVariables.PRIORITY: priority,
+          GlobalVariables.DESCRIPTION: description,
+          GlobalVariables.NAME: name,
+          GlobalVariables.ATTACHMENT: attachment,
+          GlobalVariables.ATTACHMENT_NAME: attachmentName,
+          GlobalVariables.societyName: socName,
+          GlobalVariables.societyEmail: socEmail,
+          GlobalVariables.userEmail: eMail,
+        }.toString());
     print('baseurl : ' + baseUrl! + GlobalVariables.AddComplaintsAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.AddComplaintsAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.AddComplaintsAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -606,8 +617,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getAnnouncementData(String societyId, String type,
-      String userId) async {
+  Future<DataResponse> getAnnouncementData(
+      String societyId, String type, String userId) async {
     // TODO: implement getAnnouncementData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(societyId, GlobalVariables.Type);
@@ -622,7 +633,8 @@ class RestAPI
     print(GlobalVariables.Type + ": " + type);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.AnnouncementAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.AnnouncementAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.AnnouncementAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -641,8 +653,8 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.CommitteeDirectoryAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.CommitteeDirectoryAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.CommitteeDirectoryAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -661,8 +673,8 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.EmergencyDirectoryAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.EmergencyDirectoryAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.EmergencyDirectoryAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -680,8 +692,8 @@ class RestAPI
     });
 
     print('baseurl : ' + baseUrl! + GlobalVariables.NeighboursDirectoryAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.NeighboursDirectoryAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.NeighboursDirectoryAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -710,13 +722,13 @@ class RestAPI
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.AnnouncementPollAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.AnnouncementPollAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.AnnouncementPollAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getAnnouncementPollData'
-        ' : ' +
+            ' : ' +
         value.toString());
     return DataResponse.fromJson(value);
   }
@@ -772,7 +784,7 @@ class RestAPI
       GlobalVariables.PROFILE_PHOTO: profilePic,
     });
     print({
-    GlobalVariables.userID: userId,
+      GlobalVariables.userID: userId,
       GlobalVariables.societyId: socId,
       GlobalVariables.block: block,
       GlobalVariables.flat: flat,
@@ -794,7 +806,8 @@ class RestAPI
 
     // print("Pic String: " + profilePic);
     // print('attachment lengtth : ' + profilePic.length.toString());
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitAddMemberAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.unitAddMemberAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -803,7 +816,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addVehicle(String socId,
+  Future<StatusMsgResponse> addVehicle(
+      String socId,
       String block,
       String flat,
       String vehicleNo,
@@ -835,8 +849,9 @@ class RestAPI
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.unitAddVehicleAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitAddVehicleAPI,
-        options:restClientOption(),
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.unitAddVehicleAPI,
+        options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of addVehicle : ' + value.toString());
@@ -844,7 +859,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addScheduleVisitorGatePass(String socId,
+  Future<StatusMsgResponse> addScheduleVisitorGatePass(
+      String socId,
       String block,
       String flat,
       String name,
@@ -873,8 +889,8 @@ class RestAPI
     print(GlobalVariables.MOBILE_NO + ": " + mobile);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.AddGatePassScheduleAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.AddGatePassScheduleAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.AddGatePassScheduleAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -883,8 +899,8 @@ class RestAPI
   }
 
   @override
-  Future<GatePassResponse> getGatePassData(String societyId, String block,
-      String flat) async {
+  Future<GatePassResponse> getGatePassData(
+      String societyId, String block, String flat) async {
     // TODO: implement getGatePassData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -899,12 +915,13 @@ class RestAPI
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.GatePassAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.GatePassAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.GatePassAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getGatePassData'
-        ' : ' +
+            ' : ' +
         value.toString());
 
     /*{visitor: [{ID: 489, SID: 59, VISITOR_NAME: Ashish Tiwari, CONTACT: 9867579867,
@@ -917,8 +934,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getGatePassScheduleVisitorData(String societyId,
-      String block, String flat) async {
+  Future<DataResponse> getGatePassScheduleVisitorData(
+      String societyId, String block, String flat) async {
     // TODO: implement getGatePassData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -933,13 +950,13 @@ class RestAPI
     //print(GlobalVariables.ticketNo+": "+ticketNo);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.GetGatePassScheduleAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.GetGatePassScheduleAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.GetGatePassScheduleAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
     print('value of getGatePassScheduleVisitorData'
-        ' : ' +
+            ' : ' +
         value.toString());
 
 /*{data: [{DATE: 2021-08-04, MOBILE_NO: +9183788602, NAME: Akash Agarwal, PASS_CODE: },
@@ -950,8 +967,8 @@ class RestAPI
   }
 
   @override
-  Future<LedgerResponse> getLedgerData(String socId, String flat, String block,
-      String year) async {
+  Future<LedgerResponse> getLedgerData(
+      String socId, String flat, String block, String year) async {
     // TODO: implement getLedgerData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -969,7 +986,8 @@ class RestAPI
     print('YEAR' + " " + year.toString());
 
     print('baseurlERP : ' + baseUrl! + GlobalVariables.ledgerAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.ledgerAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.ledgerAPI,
         options: restClientERPOption(),
         data: formData);
     final value = _result.data;
@@ -984,8 +1002,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getAllBillData(String socId, String flat,
-      String block) async {
+  Future<DataResponse> getAllBillData(
+      String socId, String flat, String block) async {
     // TODO: implement getAllBillData
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.flat);
@@ -1001,7 +1019,8 @@ class RestAPI
     print(GlobalVariables.block + ":" + block);
 
     print('baseurlERP : ' + baseUrl! + GlobalVariables.viewBillsAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.viewBillsAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.viewBillsAPI,
         options: restClientERPOption(),
         data: formData);
     final value = _result.data;
@@ -1026,9 +1045,8 @@ class RestAPI
     print(GlobalVariables.INVOICE_NO + ":" + invoiceNo.toString());
 
     print('baseurlERP : ' + baseUrl! + GlobalVariables.bankAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.bankAPI,
-        options: restClientERPOption(),
-        data: formData);
+    final Response _result = await _dio.post(baseUrl! + GlobalVariables.bankAPI,
+        options: restClientERPOption(), data: formData);
     final value = _result.data;
     print('value of getBankData : ' + value.toString());
     return BankResponse.fromJson(value);
@@ -1052,19 +1070,20 @@ class RestAPI
       'YEAR': year
     });
 
-    print('getBillData' + ":" + {
-      GlobalVariables.societyId: socId,
-      GlobalVariables.flat: flat,
-      GlobalVariables.block: block,
-      GlobalVariables.INVOICE_NO: invoiceNo,
-      // "Bill_no": invoiceNo,
-      'YEAR': year
-    }.toString());
+    print('getBillData' +
+        ":" +
+        {
+          GlobalVariables.societyId: socId,
+          GlobalVariables.flat: flat,
+          GlobalVariables.block: block,
+          GlobalVariables.INVOICE_NO: invoiceNo,
+          // "Bill_no": invoiceNo,
+          'YEAR': year
+        }.toString());
 
     print('baseurlERP : ' + baseUrl! + GlobalVariables.billAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.billAPI,
-        options: restClientERPOption(),
-        data: formData);
+    final Response _result = await _dio.post(baseUrl! + GlobalVariables.billAPI,
+        options: restClientERPOption(), data: formData);
     final value = _result.data;
     print('value of getBillData : ' + value.toString());
     return BillViewResponse.fromJson(value);
@@ -1096,7 +1115,8 @@ class RestAPI
     }.toString());
 
     print('baseurlERP : ' + baseUrl! + GlobalVariables.receiptAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.receiptAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.receiptAPI,
         options: restClientERPOption(),
         data: formData);
     final value = _result.data;
@@ -1105,7 +1125,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addAlreadyPaidPaymentRequest(String socId,
+  Future<StatusMsgResponse> addAlreadyPaidPaymentRequest(
+      String socId,
       String flat,
       String block,
       String invoiceNo,
@@ -1155,7 +1176,8 @@ class RestAPI
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.paymentRequestAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.paymentRequestAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1164,7 +1186,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addOnlinePaymentRequest(String socId,
+  Future<StatusMsgResponse> addOnlinePaymentRequest(
+      String socId,
       String flat,
       String block,
       String invoiceNo,
@@ -1214,7 +1237,8 @@ class RestAPI
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.insertPaymentAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.insertPaymentAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1232,7 +1256,8 @@ class RestAPI
         {GlobalVariables.societyId: societyId, GlobalVariables.userID: userId});
 
     print('baseurl : ' + baseUrl! + GlobalVariables.profileAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.profileAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.profileAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1243,7 +1268,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> editProfileInfo(String societyId,
+  Future<DataResponse> editProfileInfo(
+      String societyId,
       String userId,
       String name,
       String phone,
@@ -1280,25 +1306,27 @@ class RestAPI
       //GlobalVariables.
     });
 
-    print('profilePhoto : ' + {
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.userID: userId,
-      GlobalVariables.PROFILE_PHOTO: profilePhoto,
-      GlobalVariables.TYPE: type,
-      GlobalVariables.LIVES_HERE: livesHere,
-      GlobalVariables.NAME: name,
-      GlobalVariables.MOBILE: phone,
-      GlobalVariables.ALTERNATE_CONTACT1: altCon1,
-      GlobalVariables.GENDER: gender,
-      GlobalVariables.DOB: dob,
-      GlobalVariables.BLOOD_GROUP: bloodGroup,
-      GlobalVariables.OCCUPATION: occupation,
-      GlobalVariables.Email: email,
-      GlobalVariables.ADDRESS: address
-      //GlobalVariables.
-    }.toString());
+    print('profilePhoto : ' +
+        {
+          GlobalVariables.societyId: societyId,
+          GlobalVariables.userID: userId,
+          GlobalVariables.PROFILE_PHOTO: profilePhoto,
+          GlobalVariables.TYPE: type,
+          GlobalVariables.LIVES_HERE: livesHere,
+          GlobalVariables.NAME: name,
+          GlobalVariables.MOBILE: phone,
+          GlobalVariables.ALTERNATE_CONTACT1: altCon1,
+          GlobalVariables.GENDER: gender,
+          GlobalVariables.DOB: dob,
+          GlobalVariables.BLOOD_GROUP: bloodGroup,
+          GlobalVariables.OCCUPATION: occupation,
+          GlobalVariables.Email: email,
+          GlobalVariables.ADDRESS: address
+          //GlobalVariables.
+        }.toString());
     print('baseurl : ' + baseUrl! + GlobalVariables.editProfileAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.editProfileAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.editProfileAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1314,10 +1342,11 @@ class RestAPI
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
     FormData formData =
-    FormData.fromMap({GlobalVariables.societyId: societyId});
+        FormData.fromMap({GlobalVariables.societyId: societyId});
 
     print('baseurl : ' + baseUrl! + GlobalVariables.payOptionAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.payOptionAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.payOptionAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1328,8 +1357,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getStaffMobileVerifyData(societyId,
-      String contact) async {
+  Future<DataResponse> getStaffMobileVerifyData(
+      societyId, String contact) async {
     // TODO: implement getStaffMobileVerifyData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(contact, GlobalVariables.Contact);
@@ -1340,8 +1369,8 @@ class RestAPI
     });
 
     print('baseurl : ' + baseUrl! + GlobalVariables.staffMobileVerifyAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.staffMobileVerifyAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.staffMobileVerifyAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1407,23 +1436,22 @@ class RestAPI
     return StatusMsgResponse.fromJsonWithPassCode(value);
   }
 
-
   @override
   Future<StatusMsgResponse> addMaintenanceStaffMember(
-      String userId,
-      String socId,
-      String name,
-      String mobile,
-      String email,
-      String vehicleNo,
-      String gender,
-      String dob,
-      String role,
-      String qualification,
-      String address,
-      String? picture,
-      String? identityProof,) async {
-
+    String userId,
+    String socId,
+    String name,
+    String mobile,
+    String email,
+    String vehicleNo,
+    String gender,
+    String dob,
+    String role,
+    String qualification,
+    String address,
+    String? picture,
+    String? identityProof,
+  ) async {
     /*@Field("USER_ID") String userId,
       @Field("SOCIETY_ID") String societyId,
       @Field("NAME") String visitorName,
@@ -1470,8 +1498,10 @@ class RestAPI
       "PROFILE_PHOTO": picture,
     }.toString());
 
-    print('baseurl : ' + baseUrl! + GlobalVariables.addMaintenanceStaffMemberAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addMaintenanceStaffMemberAPI,
+    print(
+        'baseurl : ' + baseUrl! + GlobalVariables.addMaintenanceStaffMemberAPI);
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.addMaintenanceStaffMemberAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1481,10 +1511,12 @@ class RestAPI
 
   /*approve visitor*/
   @override
-  Future<DataResponse> postApproveGatePass(String id,
-      String visitorStatus,
-      String gcmId,
-      String societyId,) async {
+  Future<DataResponse> postApproveGatePass(
+    String id,
+    String visitorStatus,
+    String gcmId,
+    String societyId,
+  ) async {
     FormData formData = FormData.fromMap({
       GatePassFields.ID: id,
       GatePassFields.VISITOR_STATUS: visitorStatus,
@@ -1493,7 +1525,8 @@ class RestAPI
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.approveGatePassAPI);
 
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.approveGatePassAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.approveGatePassAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1550,9 +1583,8 @@ class RestAPI
       'YEAR': year
     }.toString());
     print('baseurl : ' + baseUrl! + GlobalVariables.mailAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.mailAPI,
-        options: restClientOption(),
-        data: formData);
+    final Response _result = await _dio.post(baseUrl! + GlobalVariables.mailAPI,
+        options: restClientOption(), data: formData);
     final value = _result.data;
     print('value of getBillMail response : ' + value.toString());
 
@@ -1560,8 +1592,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> getResendOTP(String otp, String mobile,
-      String emailId) async {
+  Future<StatusMsgResponse> getResendOTP(
+      String otp, String mobile, String emailId) async {
     // TODO: implement getResendOTP
     ArgumentError.checkNotNull(mobile, "mobile_no");
     ArgumentError.checkNotNull(emailId, "Email_id");
@@ -1571,7 +1603,8 @@ class RestAPI
         {"mobile_no": mobile, "Email_id": emailId, "otp": otp});
     print('otp : ' + otp);
     print('baseurl : ' + baseUrl! + GlobalVariables.otpReSendAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.otpReSendAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.otpReSendAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1589,7 +1622,7 @@ class RestAPI
     // TODO: implement getBannerData
     print('baseurl : ' + baseUrl! + GlobalVariables.bannerAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.bannerAPI,
+      baseUrl! + GlobalVariables.bannerAPI,
       options: restClientOption(),
       //    data: formData
     );
@@ -1599,8 +1632,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getComplaintDataAgainstTicketNo(String socId,
-      String ticketNo) async {
+  Future<DataResponse> getComplaintDataAgainstTicketNo(
+      String socId, String ticketNo) async {
     // TODO: implement getComplaintDataAgainstTicketNo
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(ticketNo, GlobalVariables.parentTicket);
@@ -1613,8 +1646,8 @@ class RestAPI
     print(GlobalVariables.parentTicket + ": " + ticketNo);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.TicketNoComplaintAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.TicketNoComplaintAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.TicketNoComplaintAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1633,7 +1666,8 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.allMemberAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.allMemberAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.allMemberAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1642,7 +1676,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addFeedback(String socId,
+  Future<StatusMsgResponse> addFeedback(
+      String socId,
       String block,
       String flat,
       String name,
@@ -1668,7 +1703,8 @@ class RestAPI
     });
 
     print('baseurl : ' + baseUrl! + GlobalVariables.feedbackAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.feedbackAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.feedbackAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1677,27 +1713,28 @@ class RestAPI
   }
 
   @override
-  Future<Map<String, dynamic>> getRazorPayOrderID(RazorPayOrderRequest request,
-      String razorKey, String secretKey) async {
+  Future<Map<String, dynamic>> getRazorPayOrderID(
+      RazorPayOrderRequest request, String razorKey, String secretKey) async {
     var authorizedToken = razorKey + ":" + secretKey;
     print('baseurl : ' + baseUrl! + GlobalVariables.razorPayOrderAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.razorPayOrderAPI,
-        options: Options(
-          //method: GlobalVariables.Post,
-            headers: <String, dynamic>{
-              "Authorization":
-              "Basic " + base64Url.encode(utf8.encode(authorizedToken)),
-              "Content-type": "application/json"
-            }),
-        data: request);
+    final Response _result =
+        await _dio.post(baseUrl! + GlobalVariables.razorPayOrderAPI,
+            options: Options(
+                //method: GlobalVariables.Post,
+                headers: <String, dynamic>{
+                  "Authorization":
+                      "Basic " + base64Url.encode(utf8.encode(authorizedToken)),
+                  "Content-type": "application/json"
+                }),
+            data: request);
     final value = _result.data;
     print('value of getRazorPayOrderID : ' + value.toString());
     return value;
   }
 
   @override
-  Future<StatusMsgResponse> postRazorPayTransactionOrderID(String socId,
-      String flat, String orderId, String amount) async {
+  Future<StatusMsgResponse> postRazorPayTransactionOrderID(
+      String socId, String flat, String orderId, String amount) async {
     // TODO: implement postRazorPayTransactionOrderID
     ArgumentError.checkNotNull(socId, "SOCIETY_ID");
     ArgumentError.checkNotNull(flat, "FLAT_NO");
@@ -1711,8 +1748,8 @@ class RestAPI
       "AMOUNT": amount
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.razorPayTransactionAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.razorPayTransactionAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.razorPayTransactionAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1722,8 +1759,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> userLogout(String societyId, String userId,
-      String gcmId) async {
+  Future<StatusMsgResponse> userLogout(
+      String societyId, String userId, String gcmId) async {
     // TODO: implement userLogout
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(userId, GlobalVariables.userID);
@@ -1735,7 +1772,8 @@ class RestAPI
       GlobalVariables.GCM_ID: gcmId
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.logoutAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.logoutAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.logoutAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1766,7 +1804,8 @@ class RestAPI
     print('ID : ' + pollId);
     print('OPTION : ' + optionId);
     print('baseurl : ' + baseUrl! + GlobalVariables.pollVoteAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.pollVoteAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.pollVoteAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1776,8 +1815,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addGatePassWrongEntry(String societyId, String id,
-      String status) async {
+  Future<StatusMsgResponse> addGatePassWrongEntry(
+      String societyId, String id, String status) async {
     // TODO: implement addGatePassWrongEntry
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(id, GlobalVariables.ID);
@@ -1789,8 +1828,8 @@ class RestAPI
       GlobalVariables.status: status
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.gatePassWrongEntryAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.gatePassWrongEntryAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.gatePassWrongEntryAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1800,8 +1839,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> deleteExpectedVisitor(String societyId,
-      String srNo) async {
+  Future<StatusMsgResponse> deleteExpectedVisitor(
+      String societyId, String srNo) async {
     // TODO: implement deleteExpectedVisitor
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(srNo, GlobalVariables.SR_NO);
@@ -1809,8 +1848,8 @@ class RestAPI
     FormData formData = FormData.fromMap(
         {GlobalVariables.societyId: societyId, GlobalVariables.SR_NO: srNo});
     print('baseurl : ' + baseUrl! + GlobalVariables.deleteExpectedVisitorAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.deleteExpectedVisitorAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.deleteExpectedVisitorAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1830,7 +1869,8 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.accountLedgerAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.accountLedgerAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.accountLedgerAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1860,7 +1900,8 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.expenseAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.expenseAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.expenseAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1879,7 +1920,8 @@ class RestAPI
     print(GlobalVariables.societyId + ": " + societyId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.expenseBankAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.expenseBankAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.expenseBankAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1888,7 +1930,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addExpense(String societyId,
+  Future<StatusMsgResponse> addExpense(
+      String societyId,
       String amount,
       String referenceNo,
       String transactionType,
@@ -1934,7 +1977,8 @@ class RestAPI
 
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addExpenseAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.addExpenseAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1943,8 +1987,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> getReceiptMail(String socId, String receiptNo,
-      String emailId, String year) async {
+  Future<StatusMsgResponse> getReceiptMail(
+      String socId, String receiptNo, String emailId, String year) async {
     // TODO: implement getReceiptMail
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(receiptNo, GlobalVariables.RECEIPT_NO);
@@ -1957,7 +2001,8 @@ class RestAPI
       'YEAR': year
     });
     print('baseurl : ' + baseUrl! + GlobalVariables.receiptMailAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.receiptMailAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.receiptMailAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1967,7 +2012,7 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> staffCount(String societyId,String staffType) async {
+  Future<DataResponse> staffCount(String societyId, String staffType) async {
     // TODO: implement staffCount
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
@@ -1981,7 +2026,8 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.staffCountAPI);
-    final Response _result = await _dio.post(GlobalVariables.BaseURLGatepass!+GlobalVariables.staffCountAPI,
+    final Response _result = await _dio.post(
+        GlobalVariables.BaseURLGatepass + GlobalVariables.staffCountAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -1990,26 +2036,26 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> staffRoleDetails(String societyId, String role,String type) async {
+  Future<DataResponse> staffRoleDetails(
+      String societyId, String role, String type) async {
     // TODO: implement staffRoleDetails
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(role, GlobalVariables.ROLE);
 
-    FormData formData = FormData.fromMap(
-        {
-          GlobalVariables.societyId: societyId,
-          GlobalVariables.ROLE: role,
-          GlobalVariables.Type: type
-        });
-    print( {
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.ROLE: role,
+      GlobalVariables.Type: type
+    });
+    print({
       GlobalVariables.societyId: societyId,
       GlobalVariables.ROLE: role,
       GlobalVariables.Type: type
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.staffRoleDetailsAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.staffRoleDetailsAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.staffRoleDetailsAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -2040,7 +2086,8 @@ class RestAPI
     print('Rate : ' + rate);
     print('SID : ' + staffId);
     print('baseurl : ' + baseUrl! + GlobalVariables.addStaffRattingAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addStaffRattingAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.addStaffRattingAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -2050,8 +2097,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addHouseHold(String societyId, String block,
-      String flat, String staffId) async {
+  Future<StatusMsgResponse> addHouseHold(
+      String societyId, String block, String flat, String staffId) async {
     // TODO: implement addHouseHold
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -2069,7 +2116,8 @@ class RestAPI
     print(GlobalVariables.flat + ": " + flat);
     print('SID : ' + staffId);
     print('baseurl : ' + baseUrl! + GlobalVariables.addHouseholdAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addHouseholdAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.addHouseholdAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -2079,8 +2127,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> removeHouseHold(String societyId, String block,
-      String flat, String staffId) async {
+  Future<StatusMsgResponse> removeHouseHold(
+      String societyId, String block, String flat, String staffId) async {
     // TODO: implement removeHouseHold
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -2098,7 +2146,8 @@ class RestAPI
     print(GlobalVariables.flat + ": " + flat);
     print('SID : ' + staffId);
     print('baseurl : ' + baseUrl! + GlobalVariables.removeHouseholdAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.removeHouseholdAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.removeHouseholdAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -2119,7 +2168,8 @@ class RestAPI
     print(GlobalVariables.id + ": " + id);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.deleteVehicleAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.deleteVehicleAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.deleteVehicleAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -2128,18 +2178,20 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> deleteFamilyMember(String id,
-      String societyId,String userId,) async {
+  Future<StatusMsgResponse> deleteFamilyMember(
+    String id,
+    String societyId,
+    String userId,
+  ) async {
     // TODO: implement deleteFamilyMember
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(id, GlobalVariables.id);
 
-    FormData formData = FormData.fromMap(
-        {
-          GlobalVariables.societyId: societyId,
-          GlobalVariables.userID: userId,
-          GlobalVariables.id: id
-        });
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      GlobalVariables.id: id
+    });
     print({
       GlobalVariables.societyId: societyId,
       GlobalVariables.userID: userId,
@@ -2147,8 +2199,8 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.deleteFamilyMemberAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.deleteFamilyMemberAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.deleteFamilyMemberAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -2157,8 +2209,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getClassifiedData(String userId,
-      String societyId) async {
+  Future<DataResponse> getClassifiedData(
+      String userId, String societyId) async {
     // TODO: implement getClassifiedData
 
     ArgumentError.checkNotNull(userId, "User_Id");
@@ -2174,7 +2226,7 @@ class RestAPI
     }.toString());
     print('baseurl : ' + baseUrl! + GlobalVariables.displayClassifiedAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.displayClassifiedAPI,
+      baseUrl! + GlobalVariables.displayClassifiedAPI,
       options: restClientDiscoverOption(),
       data: formData,
     );
@@ -2184,7 +2236,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> insertClassifiedData(String userId,
+  Future<StatusMsgResponse> insertClassifiedData(
+      String userId,
       String name,
       String email,
       String phone,
@@ -2248,8 +2301,8 @@ class RestAPI
     //print(GlobalVariables.societyId+": "+socId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.insertClassifiedAPI);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.insertClassifiedAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.insertClassifiedAPI,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2258,7 +2311,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> editClassifiedData(String classifiedId,
+  Future<StatusMsgResponse> editClassifiedData(
+      String classifiedId,
       String userId,
       String name,
       String email,
@@ -2274,7 +2328,8 @@ class RestAPI
       images,
       String address,
       String pinCode,
-      String societyName,String visibilityPriority) async {
+      String societyName,
+      String visibilityPriority) async {
     // TODO: implement insertClassifiedData
     ArgumentError.checkNotNull(classifiedId, "C_Id");
     ArgumentError.checkNotNull(userId, "User_Id");
@@ -2319,7 +2374,8 @@ class RestAPI
     print("C_Id: " + classifiedId);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.editClassifiedData);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.editClassifiedData,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.editClassifiedData,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2337,7 +2393,8 @@ class RestAPI
     });
     print('appName : ' + appName);
     print('baseurl : ' + baseUrl! + GlobalVariables.exclusiveOfferAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.exclusiveOfferAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.exclusiveOfferAPI,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2350,7 +2407,7 @@ class RestAPI
     // TODO: implement getCityData
     print('baseurl : ' + baseUrl! + GlobalVariables.cityAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.cityAPI,
+      baseUrl! + GlobalVariables.cityAPI,
       options: restClientDiscoverOption(),
     );
     final value = _result.data;
@@ -2361,7 +2418,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(String userId,
+  Future<StatusMsgResponse> insertUserInfoOnExclusiveGetCode(
+      String userId,
       String societyName,
       String unit,
       String mobile,
@@ -2396,8 +2454,8 @@ class RestAPI
     print('baseurl : ' +
         baseUrl! +
         GlobalVariables.insertUserInfoOnExclusiveGetCode);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.insertUserInfoOnExclusiveGetCode,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.insertUserInfoOnExclusiveGetCode,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2406,8 +2464,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getOwnerClassifiedData(String userId, String societyId,
-      String? classifiedId) async {
+  Future<DataResponse> getOwnerClassifiedData(
+      String userId, String societyId, String? classifiedId) async {
     // TODO: implement getOwnerClassifiedData
     ArgumentError.checkNotNull(userId, "User_Id");
     FormData formData = FormData.fromMap({
@@ -2423,7 +2481,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.displayOwnerClassifiedAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.displayOwnerClassifiedAPI,
+      baseUrl! + GlobalVariables.displayOwnerClassifiedAPI,
       options: restClientDiscoverOption(),
       data: formData,
     );
@@ -2433,7 +2491,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> interestedClassified(String cId,
+  Future<StatusMsgResponse> interestedClassified(
+      String cId,
       String userId,
       String societyName,
       String unit,
@@ -2471,8 +2530,8 @@ class RestAPI
 
     print('C_Id : ' + cId);
     print('baseurl : ' + baseUrl! + GlobalVariables.interestedClassified);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.interestedClassified,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.interestedClassified,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2490,7 +2549,7 @@ class RestAPI
     });
 
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.servicesCategory,
+      baseUrl! + GlobalVariables.servicesCategory,
       options: restClientDiscoverOption(),
       data: formData,
     );
@@ -2514,17 +2573,17 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.servicePerCategory);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.servicePerCategory,
-      options: restClientDiscoverOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.servicePerCategory,
+        options: restClientDiscoverOption(),
+        data: formData);
     final value = _result.data;
     print('value of getServicePerCategory : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<StatusMsgResponse> bookServicePerCategory(String sId,
+  Future<StatusMsgResponse> bookServicePerCategory(
+      String sId,
       String userId,
       String userName,
       String userEmail,
@@ -2565,8 +2624,8 @@ class RestAPI
 
     print('S_Id : ' + sId);
     print('baseurl : ' + baseUrl! + GlobalVariables.bookServicePerCategory);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.bookServicePerCategory,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.bookServicePerCategory,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2586,18 +2645,17 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.ownerServices);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.ownerServices,
-      options: restClientDiscoverOption(),
-        data: formData
-    );
+        baseUrl! + GlobalVariables.ownerServices,
+        options: restClientDiscoverOption(),
+        data: formData);
     final value = _result.data;
     print('value of ownerServices : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<StatusMsgResponse> updateServicesRatting(String userId, String sId,
-      String rate, String societyId) async {
+  Future<StatusMsgResponse> updateServicesRatting(
+      String userId, String sId, String rate, String societyId) async {
     // TODO: implement addServicesRatting
     ArgumentError.checkNotNull(userId, "User_Id");
     ArgumentError.checkNotNull(sId, "S_Id");
@@ -2616,7 +2674,8 @@ class RestAPI
     print('Rating : ' + rate);
     print('S_Id : ' + sId);
     print('User_Id : ' + userId);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.addServicesRatting,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.addServicesRatting,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2625,8 +2684,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> updateClassifiedStatus(String classifiedId,
-      String Reason) async {
+  Future<StatusMsgResponse> updateClassifiedStatus(
+      String classifiedId, String Reason) async {
     // TODO: implement updateClassifiedStatus
     ArgumentError.checkNotNull(classifiedId, "C_Id");
     ArgumentError.checkNotNull(Reason, "Reason");
@@ -2640,8 +2699,8 @@ class RestAPI
     print('baseurl : ' +
         baseUrl! +
         GlobalVariables.updateClassifiedReasonForRemove);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.updateClassifiedReasonForRemove,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.updateClassifiedReasonForRemove,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2660,8 +2719,8 @@ class RestAPI
     });
 
     print('baseurl : ' + baseUrl! + GlobalVariables.activeClassifiedStatus);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.activeClassifiedStatus,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.activeClassifiedStatus,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2670,8 +2729,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> deleteClassifiedImage(String classifiedId,
-      String imageId) async {
+  Future<StatusMsgResponse> deleteClassifiedImage(
+      String classifiedId, String imageId) async {
     // TODO: implement deleteClassifiedImage
     ArgumentError.checkNotNull(classifiedId, "C_Id");
     ArgumentError.checkNotNull(imageId, "Id");
@@ -2683,8 +2742,8 @@ class RestAPI
     });
 
     print('baseurl : ' + baseUrl! + GlobalVariables.deleteClassifiedImage);
-    final Response _result =
-    await _dio.post(baseUrl!+GlobalVariables.deleteClassifiedImage,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.deleteClassifiedImage,
         options: restClientDiscoverOption(),
         data: formData);
     final value = _result.data;
@@ -2693,7 +2752,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> broadcastMail(String societyId,
+  Future<DataResponse> broadcastMail(
+      String societyId,
       String userId,
       List<String> flats,
       String? attachment,
@@ -2734,7 +2794,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastEmailAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastEmailAPI,
+      baseUrl! + GlobalVariables.broadcastEmailAPI,
       options: restClientOption(),
       data: formData,
     );
@@ -2744,7 +2804,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> broadcastNotification(String societyId,
+  Future<DataResponse> broadcastNotification(
+      String societyId,
       String userId,
       List<String> flats,
       /*String attachment,*/ String sendTo,
@@ -2780,7 +2841,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastNotificationAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastNotificationAPI,
+      baseUrl! + GlobalVariables.broadcastNotificationAPI,
       options: restClientOption(),
       data: formData,
     );
@@ -2800,7 +2861,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.flatNoAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.flatNoAPI,
+      baseUrl! + GlobalVariables.flatNoAPI,
       options: restClientOption(),
       data: formData,
     );
@@ -2810,7 +2871,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> importantCommunicationSMS(String societyId,
+  Future<DataResponse> importantCommunicationSMS(
+      String societyId,
       String userId,
       List<String> flats,
       String sendTo,
@@ -2841,17 +2903,17 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastSMSAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.broadcastSMSAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<DataResponse> meetingSMS(String societyId,
+  Future<DataResponse> meetingSMS(
+      String societyId,
       String userId,
       List<String> flats,
       String sendTo,
@@ -2897,17 +2959,17 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.broadcastSMSAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.broadcastSMSAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<DataResponse> waterSupplySMS(String societyId,
+  Future<DataResponse> waterSupplySMS(
+      String societyId,
       String userId,
       List<String> flats,
       String sendTo,
@@ -2956,17 +3018,17 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastSMSAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.broadcastSMSAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<DataResponse> waterDisruptionSMS(String societyId,
+  Future<DataResponse> waterDisruptionSMS(
+      String societyId,
       String userId,
       List<String> flats,
       String sendTo,
@@ -3015,7 +3077,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastSMSAPI,
+      baseUrl! + GlobalVariables.broadcastSMSAPI,
       options: restClientOption(),
       data: formData,
     );
@@ -3025,12 +3087,17 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> fireDrillSMS(String societyId,
+  Future<DataResponse> fireDrillSMS(
+      String societyId,
       String userId,
       List<String> flats,
-      String sendTo, String smsType,
-      String date2, String startTime2, String startMinute2,
-      String startTimeType2, String societyName) async {
+      String sendTo,
+      String smsType,
+      String date2,
+      String startTime2,
+      String startMinute2,
+      String startTimeType2,
+      String societyName) async {
     // TODO: implement fireDrillSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3061,25 +3128,31 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastSMSAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.broadcastSMSAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<DataResponse> serviceDownSMS(String societyId,
+  Future<DataResponse> serviceDownSMS(
+      String societyId,
       String userId,
       List<String> flats,
       String sendTo,
-      String smsType, String reason, String reason1, String date1,
+      String smsType,
+      String reason,
+      String reason1,
+      String date1,
       String startTime1,
-      String startMinute1, String startTimeType1, String endTime,
+      String startMinute1,
+      String startTimeType1,
+      String endTime,
       String endMinute,
-      String endTimeType, String societyName) async {
+      String endTimeType,
+      String societyName) async {
     // TODO: implement serviceDownSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3120,23 +3193,29 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastSMSAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.broadcastSMSAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<DataResponse> powerOutageSMS(String societyId,
+  Future<DataResponse> powerOutageSMS(
+      String societyId,
       String userId,
       List<String> flats,
       String sendTo,
-      String smsType, String date, String startTime, String startMinute,
+      String smsType,
+      String date,
+      String startTime,
+      String startMinute,
       String startTimeType,
-      String time, String minute, String timeType, String societyName) async {
+      String time,
+      String minute,
+      String timeType,
+      String societyName) async {
     // TODO: implement powerOutageSMS
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3173,19 +3252,23 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.broadcastSMSAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.broadcastSMSAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.broadcastSMSAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of broadcastMail : ' + value.toString());
     return DataResponse.fromJson(value);
   }
 
   @override
-  Future<StatusMsgResponse> editUnitDetails(String societyId, String ID,
+  Future<StatusMsgResponse> editUnitDetails(
+      String societyId,
+      String ID,
       String consumerNo,
-      String parkingSlot, String AREA, String gstinNo, String billingName,
+      String parkingSlot,
+      String AREA,
+      String gstinNo,
+      String billingName,
       String INTERCOM) async {
     // TODO: implement editUnitDetails
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
@@ -3214,7 +3297,8 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.editUnitDetailsAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.editUnitDetailsAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.editUnitDetailsAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3239,7 +3323,8 @@ class RestAPI
     //  print(GlobalVariables.block + ": " + block);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.unitDetailsAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.unitDetailsAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.unitDetailsAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3261,7 +3346,8 @@ class RestAPI
     print(GlobalVariables.type + ": " + type);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.userTypeListAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.userTypeListAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.userTypeListAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3270,8 +3356,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> getUserManagementDashboard(String societyId,
-      String userId) async {
+  Future<DataResponse> getUserManagementDashboard(
+      String societyId, String userId) async {
     // TODO: implement getUserManagementDashboard
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
@@ -3286,7 +3372,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.userManagementDashboardAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.userManagementDashboardAPI,
+        baseUrl! + GlobalVariables.userManagementDashboardAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3295,11 +3381,20 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addMemberByAdmin(String userId,String socId, String block,
-      String flat, String name,
-      String mobile, String Email, String livesHere, String membershipType,
+  Future<StatusMsgResponse> addMemberByAdmin(
+      String userId,
+      String socId,
+      String block,
+      String flat,
+      String name,
+      String mobile,
+      String Email,
+      String livesHere,
+      String membershipType,
       String address,
-      String? profilePic, String notForModerator, String societyName) async {
+      String? profilePic,
+      String notForModerator,
+      String societyName) async {
     // TODO: implement addMemberByAdmin
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(block, GlobalVariables.block);
@@ -3326,24 +3421,25 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.addMemberByAdminAPI);
 
-    print("from data" + {
-      GlobalVariables.userID: userId,
-      GlobalVariables.societyName: societyName,
-      GlobalVariables.societyId: socId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
-      GlobalVariables.NAME: name,
-      GlobalVariables.PHONE: mobile,
-      GlobalVariables.EMAIL: Email,
-      GlobalVariables.LIVES_HERE: livesHere,
-      GlobalVariables.TYPE: membershipType,
-      GlobalVariables.ADDRESS: address,
-      GlobalVariables.note: notForModerator,
-      GlobalVariables.IDENTITY_PROOF: profilePic,
-    }.toString());
+    print("from data" +
+        {
+          GlobalVariables.userID: userId,
+          GlobalVariables.societyName: societyName,
+          GlobalVariables.societyId: socId,
+          GlobalVariables.block: block,
+          GlobalVariables.flat: flat,
+          GlobalVariables.NAME: name,
+          GlobalVariables.PHONE: mobile,
+          GlobalVariables.EMAIL: Email,
+          GlobalVariables.LIVES_HERE: livesHere,
+          GlobalVariables.TYPE: membershipType,
+          GlobalVariables.ADDRESS: address,
+          GlobalVariables.note: notForModerator,
+          GlobalVariables.IDENTITY_PROOF: profilePic,
+        }.toString());
     // print('attachment lengtth : ' + profilePic.length.toString());
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.addMemberByAdminAPI,
+        baseUrl! + GlobalVariables.addMemberByAdminAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3363,7 +3459,8 @@ class RestAPI
     //  print(GlobalVariables.block + ": " + block);
 
     print('baseurl : ' + baseUrl! + GlobalVariables.blockAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.blockAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.blockAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3388,9 +3485,8 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.flatAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.flatAPI,
-        options: restClientOption(),
-        data: formData);
+    final Response _result = await _dio.post(baseUrl! + GlobalVariables.flatAPI,
+        options: restClientOption(), data: formData);
     final value = _result.data;
     print('value of getFlat : ' + value.toString());
     return DataResponse.fromJsonUnitDetails(value);
@@ -3406,7 +3502,8 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
     print('baseurl : ' + baseUrl! + GlobalVariables.smsDataAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.smsDataAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.smsDataAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3424,7 +3521,8 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
     print('baseurl : ' + baseUrl! + GlobalVariables.moveOutRequestAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.moveOutRequestAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.moveOutRequestAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3442,7 +3540,8 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
     print('baseurl : ' + baseUrl! + GlobalVariables.pendingRequestAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.pendingRequestAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.pendingRequestAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3460,7 +3559,8 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
     print('baseurl : ' + baseUrl! + GlobalVariables.rentalRequestAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.rentalRequestAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.rentalRequestAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3469,8 +3569,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> getSendInvite(String societyId, String societyName,
-      List<String> userId) async {
+  Future<StatusMsgResponse> getSendInvite(
+      String societyId, String societyName, List<String> userId) async {
     // TODO: implement getSendInvite
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3487,19 +3587,17 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.sendInviteAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.sendInviteAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.sendInviteAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of getSendInvite : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
   @override
-  Future<StatusMsgResponse> approvePendingRequest(String societyId,
-      String userId,
-      String societyName, String id) async {
+  Future<StatusMsgResponse> approvePendingRequest(
+      String societyId, String userId, String societyName, String id) async {
     // TODO: implement approvePendingRequest
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3518,18 +3616,17 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.approvePendingRequestAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.approvePendingRequestAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.approvePendingRequestAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of getSendInvite : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
   @override
-  Future<StatusMsgResponse> deactivateUser(String societyId, String userId,String Reason,
-      String id) async {
+  Future<StatusMsgResponse> deactivateUser(
+      String societyId, String userId, String Reason, String id) async {
     // TODO: implement deactivateUser
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3548,19 +3645,23 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.deactivateUserAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.deactivateUserAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.deactivateUserAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     print('value of deactivateUser : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
   @override
-  Future<StatusMsgResponse> nocApprove(String societyId, String ID,
+  Future<StatusMsgResponse> nocApprove(
+      String societyId,
+      String ID,
       String block,
-      String flat, String userId, String note, String societyName) async {
+      String flat,
+      String userId,
+      String note,
+      String societyName) async {
     // TODO: implement nocApprove
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3583,7 +3684,8 @@ class RestAPI
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.nocApproveAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.nocApproveAPI,
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.nocApproveAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3592,67 +3694,82 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addAgreement(String societyId, String block,
-      String flat, List<Map<String, String?>> userID,
-      String agreementFrom, String agreementTo, String agreement,
-      String rentedTo, String? nocIssue, String fileType, bool isAdmin) async {
+  Future<StatusMsgResponse> addAgreement(
+      String societyId,
+      String block,
+      String flat,
+      List<Map<String, String?>> userID,
+      String agreementFrom,
+      String agreementTo,
+      String agreement,
+      String rentedTo,
+      String? nocIssue,
+      String fileType,
+      bool isAdmin) async {
     // TODO: implement addAgreement
-    FormData formData = FormData.fromMap(isAdmin ? {
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
-      "user_details": jsonEncode(userID),
-      GlobalVariables.AGREEMENT_FROM: agreementFrom,
-      GlobalVariables.AGREEMENT_TO: agreementTo,
-      GlobalVariables.AGREEMENT: agreement,
-      GlobalVariables.RENTED_TO: rentedTo,
-      GlobalVariables.Noc_Issue: nocIssue,
-      //  GlobalVariables.ATTACHMENT: attachment,
-      "FILE_TYPE": fileType,
-    } : {
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
-      "user_details": jsonEncode(userID),
-      GlobalVariables.AGREEMENT_FROM: agreementFrom,
-      GlobalVariables.AGREEMENT_TO: agreementTo,
-      GlobalVariables.AGREEMENT: agreement,
-      GlobalVariables.RENTED_TO: rentedTo,
-      //GlobalVariables.ATTACHMENT: attachment,
-      "FILE_TYPE": fileType,
-    });
+    FormData formData = FormData.fromMap(isAdmin
+        ? {
+            GlobalVariables.societyId: societyId,
+            GlobalVariables.block: block,
+            GlobalVariables.flat: flat,
+            "user_details": jsonEncode(userID),
+            GlobalVariables.AGREEMENT_FROM: agreementFrom,
+            GlobalVariables.AGREEMENT_TO: agreementTo,
+            GlobalVariables.AGREEMENT: agreement,
+            GlobalVariables.RENTED_TO: rentedTo,
+            GlobalVariables.Noc_Issue: nocIssue,
+            //  GlobalVariables.ATTACHMENT: attachment,
+            "FILE_TYPE": fileType,
+          }
+        : {
+            GlobalVariables.societyId: societyId,
+            GlobalVariables.block: block,
+            GlobalVariables.flat: flat,
+            "user_details": jsonEncode(userID),
+            GlobalVariables.AGREEMENT_FROM: agreementFrom,
+            GlobalVariables.AGREEMENT_TO: agreementTo,
+            GlobalVariables.AGREEMENT: agreement,
+            GlobalVariables.RENTED_TO: rentedTo,
+            //GlobalVariables.ATTACHMENT: attachment,
+            "FILE_TYPE": fileType,
+          });
 
-    print(isAdmin ? {
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
-      "user_details": jsonEncode(userID),
-      GlobalVariables.AGREEMENT_FROM: agreementFrom,
-      GlobalVariables.AGREEMENT_TO: agreementTo,
-      GlobalVariables.AGREEMENT: agreement,
-      GlobalVariables.RENTED_TO: rentedTo,
-      GlobalVariables.Noc_Issue: nocIssue,
-      //   GlobalVariables.ATTACHMENT: attachment,
-      "FILE_TYPE": fileType,
-    }.toString() : {
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.block: block,
-      GlobalVariables.flat: flat,
-      "user_details": jsonEncode(userID),
-      GlobalVariables.AGREEMENT_FROM: agreementFrom,
-      GlobalVariables.AGREEMENT_TO: agreementTo,
-      GlobalVariables.AGREEMENT: agreement,
-      GlobalVariables.RENTED_TO: rentedTo,
-      // GlobalVariables.ATTACHMENT: attachment,
-      "FILE_TYPE": fileType,
-    }.toString());
+    print(isAdmin
+        ? {
+            GlobalVariables.societyId: societyId,
+            GlobalVariables.block: block,
+            GlobalVariables.flat: flat,
+            "user_details": jsonEncode(userID),
+            GlobalVariables.AGREEMENT_FROM: agreementFrom,
+            GlobalVariables.AGREEMENT_TO: agreementTo,
+            GlobalVariables.AGREEMENT: agreement,
+            GlobalVariables.RENTED_TO: rentedTo,
+            GlobalVariables.Noc_Issue: nocIssue,
+            //   GlobalVariables.ATTACHMENT: attachment,
+            "FILE_TYPE": fileType,
+          }.toString()
+        : {
+            GlobalVariables.societyId: societyId,
+            GlobalVariables.block: block,
+            GlobalVariables.flat: flat,
+            "user_details": jsonEncode(userID),
+            GlobalVariables.AGREEMENT_FROM: agreementFrom,
+            GlobalVariables.AGREEMENT_TO: agreementTo,
+            GlobalVariables.AGREEMENT: agreement,
+            GlobalVariables.RENTED_TO: rentedTo,
+            // GlobalVariables.ATTACHMENT: attachment,
+            "FILE_TYPE": fileType,
+          }.toString());
 
-    print('baseurl : ' + baseUrl! +
-        (isAdmin ? GlobalVariables.adminAddAgreementAPI : GlobalVariables
-            .addAgreementAPI));
+    print('baseurl : ' +
+        baseUrl! +
+        (isAdmin
+            ? GlobalVariables.adminAddAgreementAPI
+            : GlobalVariables.addAgreementAPI));
     final Response _result = await _dio.post(
-        isAdmin ? baseUrl!+GlobalVariables.adminAddAgreementAPI : baseUrl!+GlobalVariables
-            .addAgreementAPI,
+        isAdmin
+            ? baseUrl! + GlobalVariables.adminAddAgreementAPI
+            : baseUrl! + GlobalVariables.addAgreementAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3661,11 +3778,17 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> adminAddAgreementAPI(String societyId,
+  Future<StatusMsgResponse> adminAddAgreementAPI(
+      String societyId,
       List<String> userID,
-      String agreementFrom, String agreementTo, String agreement,
+      String agreementFrom,
+      String agreementTo,
+      String agreement,
       String rentedTo,
-      String block, String flat, String societyName, String nocIssue) async {
+      String block,
+      String flat,
+      String societyName,
+      String nocIssue) async {
     // TODO: implement adminAddAgreementAPI
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3695,7 +3818,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.adminAddAgreementAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.adminAddAgreementAPI,
+        baseUrl! + GlobalVariables.adminAddAgreementAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3719,10 +3842,9 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.billPDFAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.billPDFAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.billPDFAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     //print('value of getBillPDFData : ' + value.toString());
     return DataResponse.fromJsonDataAsString(value);
@@ -3744,19 +3866,22 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.receiptPDFAPI);
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.receiptPDFAPI,
-      options: restClientOption(),
-      data: formData
-    );
+        baseUrl! + GlobalVariables.receiptPDFAPI,
+        options: restClientOption(),
+        data: formData);
     final value = _result.data;
     //print('value of getBillPDFData : ' + value.toString());
     return DataResponse.fromJsonDataAsString(value);
   }
 
   @override
-  Future<StatusMsgResponse> renewAgreement(String societyId, String id,
+  Future<StatusMsgResponse> renewAgreement(
+      String societyId,
+      String id,
       String agreementFrom,
-      String agreementTo, String agreement, String fileType,
+      String agreementTo,
+      String agreement,
+      String fileType,
       bool isAdmin) async {
     // TODO: implement renewAgreement
     FormData formData = FormData.fromMap({
@@ -3780,7 +3905,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.renewAgreementAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.renewAgreementAPI,
+        baseUrl! + GlobalVariables.renewAgreementAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3789,7 +3914,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> closeAgreement(String societyId, String id,String userId) async {
+  Future<StatusMsgResponse> closeAgreement(
+      String societyId, String id, String userId) async {
     // TODO: implement closeAgreement
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3805,7 +3931,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.closeAgreementAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.closeAgreementAPI,
+        baseUrl! + GlobalVariables.closeAgreementAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3823,8 +3949,9 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print('baseurl : ' + baseUrl!+ GlobalVariables.incomeLedgerAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.incomeLedgerAPI,
+    print('baseurl : ' + baseUrl! + GlobalVariables.incomeLedgerAPI);
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.incomeLedgerAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3843,10 +3970,11 @@ class RestAPI
     });
     print(GlobalVariables.societyId + ": " + societyId);
 
-    print(
-        'baseurl : ' + baseUrl! + GlobalVariables.monthExpensePendingRequestAPI);
+    print('baseurl : ' +
+        baseUrl! +
+        GlobalVariables.monthExpensePendingRequestAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.monthExpensePendingRequestAPI,
+        baseUrl! + GlobalVariables.monthExpensePendingRequestAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3855,9 +3983,14 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addInvoice(String societyId, String amount,
+  Future<StatusMsgResponse> addInvoice(
+      String societyId,
+      String amount,
       String dueDate,
-      String flatNo, String ledgerId, String date, String narration) async {
+      String flatNo,
+      String ledgerId,
+      String date,
+      String narration) async {
     // TODO: implement addInvoice
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
     ArgumentError.checkNotNull(amount, "amount");
@@ -3887,7 +4020,7 @@ class RestAPI
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.addInvoiceAPI,
+        baseUrl! + GlobalVariables.addInvoiceAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3897,8 +4030,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> cancelReceiptRequest(String societyId,
-      String id) async {
+  Future<StatusMsgResponse> cancelReceiptRequest(
+      String societyId, String id) async {
     // TODO: implement cancelReceiptRequest
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -3912,7 +4045,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.cancelReceiptRequestAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.cancelReceiptRequestAPI,
+        baseUrl! + GlobalVariables.cancelReceiptRequestAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3945,7 +4078,8 @@ class RestAPI
   }*/
 
   @override
-  Future<DataResponse> getHeadWiseExpenseData(String societyId,String startDate,String endDate) async {
+  Future<DataResponse> getHeadWiseExpenseData(
+      String societyId, String startDate, String endDate) async {
     // TODO: implement getHeadWiseExpenseData
     ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
@@ -3962,7 +4096,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.headWiseExpenseAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.headWiseExpenseAPI,
+        baseUrl! + GlobalVariables.headWiseExpenseAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -3971,11 +4105,18 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> addApproveReceiptRequest(String socId,String invoiceNo,
+  Future<StatusMsgResponse> addApproveReceiptRequest(
+      String socId,
+      String invoiceNo,
       String flatNo,
-      String paymentDate, String amount,/* String penaltyAmount,*/
-      String referenceNo, String transactionMode, String bankAccountNo,
-      String? id, String narration) async {
+      String paymentDate,
+      String amount,
+      /* String penaltyAmount,*/
+      String referenceNo,
+      String transactionMode,
+      String bankAccountNo,
+      String? id,
+      String narration) async {
     // TODO: implement addApproveReceiptRequest
     ArgumentError.checkNotNull(socId, GlobalVariables.societyId);
     // ArgumentError.checkNotNull(id, GlobalVariables.ID);
@@ -4021,7 +4162,7 @@ class RestAPI
     // print("Pic String: " + attachment.toString());
     // print('attachment lengtth : ' + attachment.length.toString());
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.approveReceiptRequestAPI,
+        baseUrl! + GlobalVariables.approveReceiptRequestAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -4029,12 +4170,12 @@ class RestAPI
     return StatusMsgResponse.fromJson(value);
   }
 
-
   @override
   Future<PaymentChargesResponse> getPaymentCharges() async {
     // TODO: implement getPaymentCharges
     print('baseurl : ' + baseUrl! + GlobalVariables.paymentChargesAPI);
-    final Response _result = await _dio.post(baseUrl!+GlobalVariables.paymentChargesAPI,
+    final Response _result = await _dio.post(
+      baseUrl! + GlobalVariables.paymentChargesAPI,
       options: restClientOption(),
     );
     final value = _result.data;
@@ -4062,7 +4203,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.updateExpenseAttachmentAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.updateExpenseAttachmentAPI,
+        baseUrl! + GlobalVariables.updateExpenseAttachmentAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -4071,45 +4212,54 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> referAndEarn(String societyId,String societyName, String flat,
+  Future<StatusMsgResponse> referAndEarn(
+      String societyId,
+      String societyName,
+      String flat,
       String address,
-      String name, String phone, String email, String message,
-      String loggedSocietyName,String loggedFlat,String loggedName,String loggedPhone) async {
+      String name,
+      String phone,
+      String email,
+      String message,
+      String loggedSocietyName,
+      String loggedFlat,
+      String loggedName,
+      String loggedPhone) async {
     // TODO: implement referAndEarn
     FormData formData = FormData.fromMap({
-    GlobalVariables.societyId:societyId,
-    "society_name":societyName,
-    "flat":flat,
-    "address":address,
-    "name":name,
-    "phone":phone,
-    "email":email,
-    "message":message,
-    "SocietyName":loggedSocietyName,
-    "FlatNo":loggedFlat,
-    "Name":loggedName,
-    "Phone":loggedPhone,
+      GlobalVariables.societyId: societyId,
+      "society_name": societyName,
+      "flat": flat,
+      "address": address,
+      "name": name,
+      "phone": phone,
+      "email": email,
+      "message": message,
+      "SocietyName": loggedSocietyName,
+      "FlatNo": loggedFlat,
+      "Name": loggedName,
+      "Phone": loggedPhone,
     });
 
     print({
-      GlobalVariables.societyId:societyId,
-      "society_name":societyName,
-      "flat":flat,
-      "address":address,
-      "name":name,
-      "phone":phone,
-      "email":email,
-      "message":message,
-      "SocietyName":loggedSocietyName,
-      "FlatNo":loggedFlat,
-      "Name":loggedName,
-      "Phone":loggedPhone,
+      GlobalVariables.societyId: societyId,
+      "society_name": societyName,
+      "flat": flat,
+      "address": address,
+      "name": name,
+      "phone": phone,
+      "email": email,
+      "message": message,
+      "SocietyName": loggedSocietyName,
+      "FlatNo": loggedFlat,
+      "Name": loggedName,
+      "Phone": loggedPhone,
     }.toString());
 
     print('baseurl : ' + baseUrl! + GlobalVariables.referAPI);
 
     final Response _result = await _dio.post(
-      baseUrl!+GlobalVariables.referAPI,
+      baseUrl! + GlobalVariables.referAPI,
       options: restClientOption(),
       data: formData,
     );
@@ -4119,7 +4269,8 @@ class RestAPI
   }
 
   @override
-  Future<DataResponse> amountCalculation(String societyId,String invoiceNo, String amount) async {
+  Future<DataResponse> amountCalculation(
+      String societyId, String invoiceNo, String amount) async {
     // TODO: implement amountCalculation
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -4135,7 +4286,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.amountCalculationAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.amountCalculationAPI,
+        baseUrl! + GlobalVariables.amountCalculationAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -4144,7 +4295,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> staffDelete(String societyId, String id, String type) async {
+  Future<StatusMsgResponse> staffDelete(
+      String societyId, String id, String type) async {
     // TODO: implement staffDelete
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -4160,7 +4312,7 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.staffDeleteAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.staffDeleteAPI,
+        baseUrl! + GlobalVariables.staffDeleteAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
@@ -4169,8 +4321,8 @@ class RestAPI
   }
 
   @override
-  Future<StatusMsgResponse> tenantMoveOut(String societyId, String userId,String Reason,
-      String id,String societyName,String societyEmail) async {
+  Future<StatusMsgResponse> tenantMoveOut(String societyId, String userId,
+      String Reason, String id, String societyName, String societyEmail) async {
     // TODO: implement deactivateUser
     FormData formData = FormData.fromMap({
       GlobalVariables.societyId: societyId,
@@ -4193,29 +4345,29 @@ class RestAPI
 
     print('baseurl : ' + baseUrl! + GlobalVariables.tenantMoveOutAPI);
     final Response _result = await _dio.post(
-        baseUrl!+GlobalVariables.tenantMoveOutAPI,
+        baseUrl! + GlobalVariables.tenantMoveOutAPI,
         options: restClientOption(),
-        data: formData
-    );
+        data: formData);
     final value = _result.data;
     print('value of tenantMoveOut : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
+
   @override
   Future<AvenueResponse> getAvenueParams(
-      String tid,
-      String merchantId,
-      String name,
-      String address,
-      String city,
-      String tel,
-      String email,
-      String amount,
-      String invoice,
-      String societyId,
-      String block,
-      String subAccId,
-      ) async {
+    String tid,
+    String merchantId,
+    String name,
+    String address,
+    String city,
+    String tel,
+    String email,
+    String amount,
+    String invoice,
+    String societyId,
+    String block,
+    String subAccId,
+  ) async {
     final userId = await GlobalFunctions.getUserId();
     final billinAddress = await GlobalFunctions.getSocietyName();
 
@@ -4239,11 +4391,36 @@ class RestAPI
       AvenueConst.integrationType: 'iframe_normal',
       AvenueConst.amount: amount,
       AvenueConst.userId: userId,
-      // AvenueConst.subAccId: subAccId,
-      // AvenueConst.subAccountId: subAccId,
+      AvenueConst.subAccId: subAccId,
+      AvenueConst.subAccountId: subAccId,
       AvenueConst.appName: 'SocietyrunSociety',
     });
-
+    logger.e({
+      {
+        AvenueConst.tid: tid,
+        AvenueConst.language: 'EN',
+        AvenueConst.currency: 'INR',
+        AvenueConst.billingName: name,
+        AvenueConst.billingAddress: billinAddress,
+        AvenueConst.billingCity: 'Mumbai',
+        AvenueConst.billingState: 'Maharashtra ',
+        AvenueConst.billingZip: '411018',
+        AvenueConst.billingCountry: 'India',
+        AvenueConst.billingTel: tel,
+        AvenueConst.billingEmail: email,
+        AvenueConst.merchantParam1: invoice,
+        AvenueConst.merchantParam2: societyId,
+        AvenueConst.merchantParam3: block,
+        AvenueConst.promoCode: '',
+        AvenueConst.custIdentifier: '',
+        AvenueConst.integrationType: 'iframe_normal',
+        AvenueConst.amount: amount,
+        AvenueConst.userId: userId,
+        // AvenueConst.subAccId: subAccId,
+        AvenueConst.subAccountId: subAccId,
+        AvenueConst.appName: 'SocietyrunSociety',
+      }
+    });
     final Response _result = await _dio.post(
         GlobalVariables.BaseURLERP + GlobalVariables.getccAveneuParams,
         options: restClientOption(),
@@ -4255,6 +4432,7 @@ class RestAPI
     }
     return AvenueResponse(errorMessage: 'Error connecting CCAvenue');
   }
+
   @override
   Future<String> getUPIStatus(String socId, String orderId) async {
     FormData formData = FormData.fromMap({
@@ -4274,9 +4452,9 @@ class RestAPI
     }
     return '';
   }
+
   @override
   Future<DataResponse> getVehicleDirectoryData(String societyId) async {
-   
     try {
       ArgumentError.checkNotNull(societyId, GlobalVariables.societyId);
 
@@ -4294,7 +4472,6 @@ class RestAPI
       print('value of getVehicleDirectoryData : ' + value.toString());
       return DataResponse.fromVehicleJson(value);
     } catch (e) {
-     
       throw Exception(e);
     }
   }

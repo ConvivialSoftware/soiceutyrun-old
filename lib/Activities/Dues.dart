@@ -366,7 +366,7 @@ class _BaseDuesState extends State<BaseDues> {
                                           null,
                                           widget.mBlock!,
                                           widget.mFlat!,
-                                          value.ledgerList[position])));
+                                          null)));
                             } else {
                               Navigator.push(
                                   context,
@@ -1270,7 +1270,8 @@ class _BaseDuesState extends State<BaseDues> {
                                       value.ledgerList[position].RECEIPT_NO,
                                       UserManagementResponse.listYear[0].years,
                                       widget.mBlock,
-                                      widget.mFlat,value.ledgerList[position])));
+                                      widget.mFlat,
+                                      value.ledgerList[position])));
                         } else {
                           Navigator.push(
                               context,
