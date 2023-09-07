@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
@@ -24,11 +21,16 @@ class BaseAlreadyPaid extends StatefulWidget {
   Receipt? receiptData;
   String invoiceNo;
   double amount;
-  int penaltyAmount;
-  String mBlock, mFlat;
-  BaseAlreadyPaid(
-      this.invoiceNo, this.amount, this.mBlock, this.mFlat, this.penaltyAmount,
-      {this.receiptData, this.isAdmin = false});
+  double penaltyAmount;
+
+  String mBlock;
+  String mFlat;
+
+  BaseAlreadyPaid(this.invoiceNo, this.amount, this.penaltyAmount,
+      {this.receiptData,
+      this.isAdmin = false,
+      required this.mBlock,
+      required this.mFlat});
 
   @override
   State<StatefulWidget> createState() {
@@ -42,6 +44,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
 
   // List<BankResponse> _bankResponseList = new List<BankResponse>();
   String paymentType = "Cheque";
+
   //String complaintPriority="No";
 
   TextEditingController _chequeBankNameController = TextEditingController();
@@ -50,8 +53,16 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   TextEditingController _noteController = TextEditingController();
   TextEditingController _referenceController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
+  List<String> _paidByList = <String>[];
+  List<DropdownMenuItem<String>> _paidByListItems =
+      <DropdownMenuItem<String>>[];
+  String? _selectedPaidBy;
 
   var insertedDate;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isValidate = true;
+
 /*
 
 
@@ -70,6 +81,7 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   String? attachmentCompressFilePath;
 
   ProgressDialog? _progressDialog;
+  var amount = '0.00';
 
   /* String invoiceNo;
   double amount;*/
@@ -78,8 +90,9 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   @override
   void initState() {
     super.initState();
+    getPaidByData();
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
- 
+   
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         getBankData();
@@ -99,14 +112,19 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
         _referenceController.text = widget.receiptData!.REFERENCE_NO!;
         paymentType = widget.receiptData!.TRANSACTION_MODE!;
       }
-      _amountController.text = (double.parse(widget.amount
-              .toString()) /*-double.parse(widget.penaltyAmount.t
-      oString())*/
-          )
-          .toStringAsFixed(2);
+      amount = double.parse(widget.amount.toString()).toStringAsFixed(
+          2); /*-
+              double.parse(widget.penaltyAmount.toString()))*/
+      amount = double.parse(amount) > 0
+          ? _amountController.text =
+              double.parse(amount.toString()).toStringAsFixed(2)
+          : _amountController.text = '0.00';
     } else {
-      _amountController.text =
-          (double.parse(widget.amount.toString())).toStringAsFixed(2);
+      amount = (double.parse(widget.amount.toString())).toStringAsFixed(2);
+      amount = double.parse(amount) > 0
+          ? _amountController.text =
+              double.parse(amount.toString()).toStringAsFixed(2)
+          : _amountController.text = '0.00';
       _dateController.text =
           DateTime.now().toLocal().day.toString().padLeft(2, '0') +
               "-" +
@@ -145,10 +163,29 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     );
   }
 
+  void changePaidByDropDownItem(String? value) {
+    setState(() {
+      _selectedPaidBy = value;
+      paymentType = value ?? '';
+    });
+  }
+
+  void getPaidByData() {
+    _paidByList = ["Cash", "Cheque", "NEFT/IMPS/UPI"];
+    for (int i = 0; i < _paidByList.length; i++) {
+      _paidByListItems.add(DropdownMenuItem(
+        value: _paidByList[i],
+        child: text(
+          _paidByList[i],
+          textColor: GlobalVariables.primaryColor,
+        ),
+      ));
+    }
+  }
+
   getBaseLayout() {
     return Stack(
       children: <Widget>[
-        GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(context, 200.0),
         getAlreadyPaidLayout(),
       ],
     );
@@ -156,300 +193,305 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
 
   getAlreadyPaidLayout() {
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
-        padding: EdgeInsets.all(
-            20), // height: MediaQuery.of(context).size.height / 0.5,
-        decoration: BoxDecoration(
-            color: GlobalVariables.white,
-            borderRadius: BorderRadius.circular(10)),
+      child: Form(
+        key: _formKey,
         child: Container(
-          child: Column(
-            children: <Widget>[
-              AppTextField(
-                textHintContent: widget.isAdmin
-                    ? 'Receipt Date'
-                    : AppLocalizations.of(context).translate('date'),
-                controllerCallback: _dateController,
-                readOnly: true,
-                contentPadding: EdgeInsets.only(top: 14),
-                suffixIcon: AppIconButton(
-                  Icons.date_range,
-                  iconColor: GlobalVariables.secondaryColor,
-                  onPressed: () {
-                    GlobalFunctions.getSelectedDate(context).then((value) {
-                      _dateController.text =
-                          value.day.toString().padLeft(2, '0') +
-                              "-" +
-                              value.month.toString().padLeft(2, '0') +
-                              "-" +
-                              value.year.toString();
-                      insertedDate = value.toLocal().year.toString() +
-                          "-" +
-                          value.toLocal().month.toString().padLeft(2, '0') +
-                          "-" +
-                          value.day.toString().padLeft(2, '0');
-                    });
-                  },
+          margin: EdgeInsets.fromLTRB(18, 40, 18, 40),
+          padding: EdgeInsets.all(
+              20), // height: MediaQuery.of(context).size.height / 0.5,
+          decoration: BoxDecoration(
+              color: GlobalVariables.white,
+              borderRadius: BorderRadius.circular(10)),
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                AppTextField(
+                  textHintContent: widget.isAdmin
+                      ? 'Receipt Date'
+                      : AppLocalizations.of(context).translate('date'),
+                  controllerCallback: _dateController,
+                  readOnly: true,
+                  contentPadding: EdgeInsets.only(top: 14),
+                  suffixIcon: AppIconButton(
+                    Icons.date_range,
+                    iconColor: GlobalVariables.secondaryColor,
+                    onPressed: () {
+                      GlobalFunctions.getSelectedDate(context).then((value) {
+                        _dateController.text =
+                            value.day.toString().padLeft(2, '0') +
+                                "-" +
+                                value.month.toString().padLeft(2, '0') +
+                                "-" +
+                                value.year.toString();
+                        insertedDate = value.toLocal().year.toString() +
+                            "-" +
+                            value.toLocal().month.toString().padLeft(2, '0') +
+                            "-" +
+                            value.day.toString().padLeft(2, '0');
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-/*
-                          AppLocalizations.of(context)
-                              .translate('personal')*/
-                          paymentType = "Cheque";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: paymentType == "Cheque"
-                                        ? GlobalVariables.primaryColor
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: paymentType == "Cheque"
-                                          ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text("Cheque",
-                                    textColor: GlobalVariables.primaryColor,
-                                    fontSize: GlobalVariables.textSizeMedium),
-                              ),
-                            ],
-                          ),
-                        ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: GlobalVariables.lightGray,
+                        width: 2.0,
+                      )),
+                  child: ButtonTheme(
+                    child: DropdownButtonFormField(
+                      items: _paidByListItems,
+                      value: _selectedPaidBy,
+                      onChanged: changePaidByDropDownItem,
+                      isExpanded: true,
+                      icon: AppIcon(
+                        Icons.keyboard_arrow_down,
+                        iconColor: GlobalVariables.secondaryColor,
                       ),
+                      decoration: InputDecoration(
+                          //filled: true,
+                          //fillColor: Hexcolor('#ecedec'),
+                          labelText: AppLocalizations.of(context)
+                                  .translate('paid_by') +
+                              '*',
+                          labelStyle: TextStyle(
+                              color: GlobalVariables.lightGray,
+                              fontSize: GlobalVariables.textSizeSMedium),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent))
+                          // border: new CustomBorderTextFieldSkin().getSkin(),
+                          ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: InkWell(
-                        //  splashColor: GlobalVariables.mediumGreen,
-                        onTap: () {
-                          paymentType = "NEFT/IMPS";
-                          setState(() {});
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: paymentType != "Cheque"
-                                        ? GlobalVariables.primaryColor
-                                        : GlobalVariables.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: paymentType != "Cheque"
-                                          ? GlobalVariables.primaryColor
-                                          : GlobalVariables.secondaryColor,
-                                      width: 2.0,
-                                    )),
-                                child: AppIcon(Icons.check,
-                                    iconColor: GlobalVariables.white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: text(
-                                  "NEFT/IMPS",
-                                  textColor: GlobalVariables.primaryColor,
-                                  fontSize: GlobalVariables.textSizeMedium,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
-              ),
-              paymentType == "Cheque"
-                  ? AppTextField(
-                      textHintContent: AppLocalizations.of(context)
-                          .translate('cheque_bank_name'),
-                      controllerCallback: _chequeBankNameController,
-                    )
-                  : Container(),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                margin: EdgeInsets.fromLTRB(
-                    0, paymentType == "Cheque" ? 10 : 20, 0, 0),
-                decoration: BoxDecoration(
-                    color: GlobalVariables.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: GlobalVariables.lightGray,
-                      width: 2.0,
-                    )),
-                child: ButtonTheme(
-                  child: DropdownButtonFormField(
-                    items: __bankListItems,
-                    value: _bankSelectedItem,
-                    onChanged: changeBankDropDownItem,
-                    isExpanded: true,
-                    icon: AppIcon(
-                      Icons.keyboard_arrow_down,
-                      iconColor: GlobalVariables.secondaryColor,
-                    ),
-                    /*underline: SizedBox(),
+                paymentType == "Cheque"
+                    ? AppTextField(
+                        textHintContent: AppLocalizations.of(context)
+                            .translate('cheque_bank_name'),
+                        controllerCallback: _chequeBankNameController,
+                        /*inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(
+                              RegExp(AppRegExpPattern.namePattern)),
+                        ],*/
+                        validator: (value) {
+                          print('validate value : ' + value.toString());
+                          if (!GlobalFunctions.isNameValid(value)) {
+                            return AppLocalizations.of(context)
+                                .translate('invalid_name');
+                          }
+                          return null;
+                        },
+                      )
+                    : Container(),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  margin: EdgeInsets.fromLTRB(
+                      0, paymentType == "Cheque" ? 10 : 20, 0, 0),
+                  decoration: BoxDecoration(
+                      color: GlobalVariables.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: GlobalVariables.lightGray,
+                        width: 2.0,
+                      )),
+                  child: ButtonTheme(
+                    child: DropdownButtonFormField(
+                      items: __bankListItems,
+                      value: _bankSelectedItem,
+                      onChanged: changeBankDropDownItem,
+                      isExpanded: true,
+                      icon: AppIcon(
+                        Icons.keyboard_arrow_down,
+                        iconColor: GlobalVariables.secondaryColor,
+                      ),
+                      /*underline: SizedBox(),
                     hint: text(
                       AppLocalizations.of(context).translate('select_bank')+'*',
                       textColor: GlobalVariables.lightGray, fontSize: GlobalVariables.textSizeSMedium,
                     ),*/
-                    decoration: InputDecoration(
-                        //filled: true,
-                        //fillColor: Hexcolor('#ecedec'),
-                        labelText: AppLocalizations.of(context)
-                                .translate('select_bank') +
-                            '*',
-                        labelStyle: TextStyle(
-                            color: GlobalVariables.lightGray,
-                            fontSize: GlobalVariables.textSizeSMedium),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent))
-                        // border: new CustomBorderTextFieldSkin().getSkin(),
-                        ),
+                      decoration: InputDecoration(
+                          //filled: true,
+                          //fillColor: Hexcolor('#ecedec'),
+                          labelText: AppLocalizations.of(context)
+                                  .translate('select_bank') +
+                              '*',
+                          labelStyle: TextStyle(
+                              color: GlobalVariables.lightGray,
+                              fontSize: GlobalVariables.textSizeSMedium),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent))
+                          // border: new CustomBorderTextFieldSkin().getSkin(),
+                          ),
+                    ),
                   ),
                 ),
-              ),
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('amount'),
-                controllerCallback: _amountController,
-                keyboardType: TextInputType.number,
-              ),
-              /*widget.isAdmin
+                AppTextField(
+                  textHintContent:
+                      AppLocalizations.of(context).translate('amount'),
+                  controllerCallback: _amountController,
+                  keyboardType: TextInputType.number,
+                ),
+                /*widget.isAdmin
                   ? AppTextField(
-                textHintContent:
-                AppLocalizations.of(context).translate('penalty_amount') ,
-                controllerCallback: _penaltyAmountController,
-                keyboardType: TextInputType.number,
+                      textHintContent: AppLocalizations.of(context)
+                          .translate('penalty_amount'),
+                      controllerCallback: _penaltyAmountController,
+                      keyboardType: TextInputType.number,
                     )
                   : SizedBox(),*/
-              AppTextField(
-                textHintContent:
-                    AppLocalizations.of(context).translate('reference_no') +
-                        '*',
-                controllerCallback: _referenceController,
-              ),
-              Container(
-                height: 150,
-                child: AppTextField(
+                AppTextField(
                   textHintContent:
-                      AppLocalizations.of(context).translate('enter_note'),
-                  controllerCallback: _noteController,
-                  maxLines: 99,
-                  contentPadding: EdgeInsets.only(top: 14),
+                      AppLocalizations.of(context).translate('reference_no') +
+                          '*',
+                  controllerCallback: _referenceController,
+                  /*inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(AppRegExpPattern.descriptionPattern)),
+                  ],*/
+                  validator: (value) {
+                    print('validate value : ' + value.toString());
+                    if (value.toString().length > 0 && !isValidate) {
+                      if (!GlobalFunctions.isDescriptionValid(value)) {
+                        return AppLocalizations.of(context)
+                            .translate('invalid_reference_number');
+                      }
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              widget.isAdmin
-                  ? SizedBox()
-                  : Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                            decoration: attachmentFilePath == null
-                                ? BoxDecoration(
-                                    color: GlobalVariables.secondaryColor,
-                                    borderRadius: BorderRadius.circular(25),
+                Container(
+                  height: 150,
+                  child: AppTextField(
+                    textHintContent:
+                        AppLocalizations.of(context).translate('enter_note'),
+                    controllerCallback: _noteController,
+                    /*inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(AppRegExpPattern.descriptionPattern)),
+                    ],*/
+                    validator: (value) {
+                      print('validate value : ' + value.toString());
+                      if (!GlobalFunctions.isDescriptionValid(value)) {
+                        return AppLocalizations.of(context)
+                            .translate('invalid_description');
+                      }
+                      return null;
+                    },
+                    maxLines: 999,
+                    contentPadding: EdgeInsets.only(top: 14),
+                  ),
+                ),
+                widget.isAdmin
+                    ? SizedBox()
+                    : Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            attachmentFilePath == null
+                                ? AppAssetsImage(
+                                    GlobalVariables.componentUserProfilePath,
+                                    imageWidth: 50.0,
+                                    imageHeight: 50.0,
+                                    borderColor: GlobalVariables.grey,
+                                    borderWidth: 1.0,
+                                    fit: BoxFit.cover,
+                                    radius: 25.0,
                                   )
-                                : BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: FileImage(
-                                            File(attachmentFilePath!)),
-                                        fit: BoxFit.cover),
-                                    border: Border.all(
-                                        color: GlobalVariables.primaryColor,
-                                        width: 2.0)),
-                            //child: attachmentFilePath==null?Container() : ClipRRect(child: Image.file(File(attachmentFilePath))),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                child: TextButton.icon(
-                                  onPressed: () {
-                                     openFile(context);
-                                  },
-                                  icon: AppIcon(
-                                    Icons.attach_file,
-                                    iconColor: GlobalVariables.secondaryColor,
-                                    iconSize: 20.0,
-                                  ),
-                                  label: text(
-                                      AppLocalizations.of(context)
-                                          .translate('attach_photo'),
-                                      textColor: GlobalVariables.primaryColor,
-                                      fontSize:
-                                          GlobalVariables.textSizeSMedium),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: text('OR',
-                                    textColor: GlobalVariables.lightGray,
-                                    fontSize: GlobalVariables.textSizeSMedium),
-                              ),
-                              Container(
-                                child: TextButton.icon(
+                                : attachmentFilePath!.contains(".pdf") ||
+                                        attachmentFilePath!.contains(".doc")
+                                    ? AppAssetsImage(
+                                        attachmentFilePath!.contains(".pdf")
+                                            ? GlobalVariables.pdfIconPath
+                                            : GlobalVariables
+                                                .documentImageIconPath,
+                                        imageWidth: 60.0,
+                                        imageHeight: 60.0,
+                                        borderColor:
+                                            GlobalVariables.transparent,
+                                        borderWidth: 1.0,
+                                        fit: BoxFit.cover,
+                                        radius: 30.0,
+                                      )
+                                    : AppFileImage(
+                                        attachmentFilePath,
+                                        imageWidth: 50.0,
+                                        imageHeight: 50.0,
+                                        borderColor: GlobalVariables.grey,
+                                        borderWidth: 1.0,
+                                        fit: BoxFit.cover,
+                                        radius: 25.0,
+                                      ),
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  child: TextButton.icon(
                                     onPressed: () {
-                                      openCamera(context);
+                                      openFile(context);
                                     },
                                     icon: AppIcon(
-                                      Icons.camera_alt,
+                                      Icons.attach_file,
                                       iconColor: GlobalVariables.secondaryColor,
                                       iconSize: 20.0,
                                     ),
                                     label: text(
                                         AppLocalizations.of(context)
-                                            .translate('take_picture'),
+                                            .translate('attach_photo'),
                                         textColor: GlobalVariables.primaryColor,
                                         fontSize:
-                                            GlobalVariables.textSizeSMedium)),
-                              ),
-                            ],
-                          ),
-                        ],
+                                            GlobalVariables.textSizeSMedium),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  child: text('OR',
+                                      textColor: GlobalVariables.lightGray,
+                                      fontSize:
+                                          GlobalVariables.textSizeSMedium),
+                                ),
+                                Container(
+                                  child: TextButton.icon(
+                                      onPressed: () {
+                                        openCamera(context);
+                                      },
+                                      icon: AppIcon(
+                                        Icons.camera_alt,
+                                        iconColor:
+                                            GlobalVariables.secondaryColor,
+                                        iconSize: 20.0,
+                                      ),
+                                      label: text(
+                                          AppLocalizations.of(context)
+                                              .translate('take_picture'),
+                                          textColor:
+                                              GlobalVariables.primaryColor,
+                                          fontSize:
+                                              GlobalVariables.textSizeSMedium)),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-              Container(
-                alignment: Alignment.topLeft,
-                height: 45,
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: AppButton(
-                  textContent: AppLocalizations.of(context).translate('submit'),
-                  onPressed: () {
-                    verifyData();
-                  },
+                Container(
+                  alignment: Alignment.topLeft,
+                  height: 45,
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: AppButton(
+                    textContent:
+                        AppLocalizations.of(context).translate('submit'),
+                    onPressed: () {
+                      if (GlobalFunctions.textFormFieldValidate(_formKey)) {
+                        verifyData();
+                      }
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -485,9 +527,9 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
       _bankList = List<Bank>.from(_list.map((i) => Bank.fromJson(i)));
 
       //_categorySelectedItem = __categoryListItems[0].value;
-      if (widget.receiptData != null) {
+      /*if (widget.receiptData != null) {
         getAmountCalculationData();
-      }
+      }*/
       for (int i = 0; i < _bankList.length; i++) {
         __bankListItems.add(DropdownMenuItem(
           value: _bankList[i].BANK_NAME,
@@ -524,7 +566,11 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
       //print('Response : ' + value.toString());
       // _progressDialog.dismiss();
       print('bsnk list lenght : ' + value.toString());
-      _amountController.text = (value.AMOUNT).toString();
+      amount = (value.AMOUNT).toString();
+      amount = double.parse(amount) > 0
+          ? _amountController.text =
+              double.parse(amount.toString()).toStringAsFixed(2)
+          : _amountController.text = '0.00';
       //_penaltyAmountController.text = value.PENALTY.toString();
       setState(() {});
     });
@@ -538,16 +584,13 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     //  String block = await GlobalFunctions.getBlock();
     // String flat = await GlobalFunctions.getFlat();
     String userId = await GlobalFunctions.getUserId();
-    String attachmentName;
-    String attachment;
+    String? attachmentName;
+    String? attachment;
 
     if (attachmentFileName != null && attachmentFilePath != null) {
       attachmentName = attachmentFileName!;
       attachment =
           GlobalFunctions.convertFileToString(attachmentCompressFilePath!);
-    } else {
-      attachmentName = "";
-      attachment = "";
     }
 /*
     print('Before : Date :'+_dateController.text);
@@ -568,8 +611,9 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
                 userId,
                 _noteController.text,
                 _chequeBankNameController.text.toString(),
-                attachment,
-                "P")
+                attachment??'',
+                "P",
+               )
             .then((value) async {
       print("add paymentRequest response : " + value.toString());
       _progressDialog!.dismiss();
@@ -577,8 +621,12 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
         //   Navigator.of(context).pop();
         if (attachmentFileName != null && attachmentFilePath != null) {
           await GlobalFunctions.removeFileFromDirectory(attachmentFilePath!);
-          await GlobalFunctions.removeFileFromDirectory(
-              attachmentCompressFilePath!);
+          if (attachmentCompressFilePath!.endsWith(".jpg") ||
+              attachmentCompressFilePath!.endsWith(".jpeg") ||
+              attachmentCompressFilePath!.endsWith(".png")) {
+            await GlobalFunctions.removeFileFromDirectory(
+                attachmentCompressFilePath!);
+          }
         }
         Provider.of<UserManagementResponse>(context, listen: false)
             .getLedgerData(null, widget.mBlock, widget.mFlat);
@@ -600,7 +648,8 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
   }
 
   void openFile(BuildContext context) {
-    GlobalFunctions.getFilePath(context).then((value) {
+    GlobalFunctions.getFilePath(context, AppFileExtensions.allFileExtensions)
+        .then((value) {
       attachmentFilePath = value;
       getCompressFilePath();
     });
@@ -619,33 +668,51 @@ class AlreadyPaidState extends State<BaseAlreadyPaid> {
     print('file Name : ' + attachmentFileName.toString());
     GlobalFunctions.getAppDocumentDirectory().then((value) {
       print('cache file Path : ' + value.toString());
-      GlobalFunctions.getFilePathOfCompressImage(
-              attachmentFilePath!, value.toString() + '/' + attachmentFileName!)
-          .then((value) {
-        attachmentCompressFilePath = value.toString();
-        print('Cache file path : ' + attachmentCompressFilePath!);
+      if (attachmentFileName!.contains(".pdf") ||
+          attachmentFileName!.contains(".doc")) {
+        attachmentCompressFilePath = attachmentFilePath;
         setState(() {});
-      });
+      } else {
+        GlobalFunctions.getFilePathOfCompressImage(attachmentFilePath!,
+                value.toString() + '/' + attachmentFileName!)
+            .then((value) {
+          attachmentCompressFilePath = value.toString();
+          print('Cache file path : ' + attachmentCompressFilePath!);
+          setState(() {});
+        });
+      }
     });
   }
 
   void verifyData() {
-    if (_bankSelectedItem != null) {
-      if (_referenceController.text.length > 0) {
-        if (double.parse(_amountController.text) > 0) {
-          if (widget.isAdmin) {
-            addApproveReceiptPaymentRequest();
+    if (_noteController.text.length > 0 &&
+        !GlobalFunctions.isDescriptionValid(_noteController.text)) {
+      isValidate = false;
+    } else {
+      isValidate = true;
+    }
+
+    if (isValidate) {
+      if (_bankSelectedItem != null) {
+        if (_referenceController.text.length > 0) {
+          if (double.parse(_amountController.text) > 0) {
+            if (widget.isAdmin) {
+              addApproveReceiptPaymentRequest();
+            } else {
+              addPaymentRequest();
+            }
           } else {
-            addPaymentRequest();
+            GlobalFunctions.showToast("Please Enter Valid Amount");
           }
         } else {
-          GlobalFunctions.showToast("Please Enter Valid Amount");
+          GlobalFunctions.showToast("Please Enter Reference Number");
         }
       } else {
-        GlobalFunctions.showToast("Please Enter Reference Number");
+        GlobalFunctions.showToast("Please Select Paid to Bank");
       }
     } else {
-      GlobalFunctions.showToast("Please Select Paid to Bank");
+      setState(() {});
+      return;
     }
   }
 

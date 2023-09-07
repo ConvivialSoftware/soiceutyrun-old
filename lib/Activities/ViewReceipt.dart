@@ -509,14 +509,16 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                                             _receiptList[0]
                                                                 .AMOUNT!
                                                                 .toDouble(),
-                                                            arr[0].trim(),
-                                                            arr[1].trim(),
-                                                            int.parse(_receiptList[
-                                                                    0]
-                                                                .PENALTY_AMOUNT!),
+                                                            double.parse(
+                                                                _receiptList[0]
+                                                                    .PENALTY_AMOUNT!),
                                                             receiptData:
                                                                 _receiptList[0],
                                                             isAdmin: true,
+                                                            mBlock:
+                                                                arr[0].trim(),
+                                                            mFlat:
+                                                                arr[1].trim(),
                                                           )));
                                             }),
                                       ),

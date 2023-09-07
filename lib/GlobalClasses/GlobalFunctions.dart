@@ -1030,6 +1030,12 @@ class GlobalFunctions {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences!.clear();
   }
+   static bool isDescriptionValid(String name) {
+    bool isValid = RegExp(AppRegExpPattern.descriptionPattern).hasMatch(name);
+    print('Pattern match : ' + isValid.toString());
+    print('descriptionPattern.length : ' + name.length.toString());
+    return isValid;
+  }
 
   static String convertDateFormat(String date, String format) {
     String newDate;
@@ -1041,6 +1047,18 @@ class GlobalFunctions {
     newDate = dFormat.format(oldDate);
 
     return newDate;
+  }
+
+  static String getFormattedDate(DateTime date) {
+    String newDate = '';
+    var dFormat = DateFormat('yyyy-MM-dd');
+    newDate = dFormat.format(date);
+
+    return newDate;
+  }
+
+  static DateTime convertToLedgerDate(String date) {
+    return DateFormat('d MMMM y').parse(date);
   }
 
   static String getFormattedDateForPayment(String date) {

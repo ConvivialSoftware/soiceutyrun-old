@@ -2,7 +2,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +25,8 @@ import 'package:societyrun/Widgets/AppContainer.dart';
 import 'package:societyrun/Widgets/AppImage.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../Models/Ledger.dart';
 
 class BaseDues extends StatefulWidget {
   bool isAdmin;
@@ -119,12 +120,10 @@ class _BaseDuesState extends State<BaseDues> {
 
   getMyDuesLayout(UserManagementResponse value) {
     print('getMyDuesLayout Tab call');
-    return GlobalVariables.isERPAccount
+    return GlobalVariables.isERPAccount || widget.isAdmin
         ? SingleChildScrollView(
             child: Stack(
               children: <Widget>[
-                GlobalFunctions.getAppHeaderWidgetWithoutAppIcon(
-                    context, 150.0),
                 Container(
                   margin: EdgeInsets.only(top: 8),
                   child: Column(
@@ -181,9 +180,6 @@ class _BaseDuesState extends State<BaseDues> {
                                       )),
                             )
                           : Container(),
-                      SizedBox(
-                        height: 8,
-                      ),
                       value.ledgerList.length > 0
                           ? Container(
                               margin: EdgeInsets.only(left: 20, right: 20),
@@ -208,8 +204,8 @@ class _BaseDuesState extends State<BaseDues> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => BaseLedger(
-                                                  widget.mBlock!,
-                                                  widget.mFlat!)));
+                                                  widget.mBlock ?? '',
+                                                  widget.mFlat ?? '')));
                                     },
                                     child: smallTextContainerOutlineLayout(
                                         AppLocalizations.of(context)
@@ -219,24 +215,35 @@ class _BaseDuesState extends State<BaseDues> {
                               ),
                             )
                           : Container(),
-                      value.ledgerList.length > 0
-                          ? Container(
-                              margin: EdgeInsets.all(16.0),
-                              color: GlobalVariables.white,
-                              child: Builder(
-                                  builder: (context) => ListView.builder(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: value.ledgerList.length >= 3
-                                            ? 3
-                                            : value.ledgerList.length,
-                                        itemBuilder: (context, position) {
-                                          return getListItemLayout(
-                                              position, value);
-                                        }, //  scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                      )),
-                            )
+                      value.recentTransactionList.length > 0
+                          ? Builder(builder: (context) {
+                              final ledgers = value.recentTransactionList;
+                              // sort leder list to show latest first
+                              ledgers.sort((a, b) =>
+                                  GlobalFunctions.convertToLedgerDate(
+                                          b.C_DATE ?? '')
+                                      .compareTo(
+                                          GlobalFunctions.convertToLedgerDate(
+                                              a.C_DATE ?? '')));
+
+                              return Container(
+                                margin: EdgeInsets.all(16.0),
+                                color: GlobalVariables.white,
+                                child: Builder(
+                                    builder: (context) => ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: ledgers.length >= 3
+                                              ? 3
+                                              : ledgers.length,
+                                          itemBuilder: (context, position) {
+                                            return getTransacationItem(
+                                                ledgers[position]);
+                                          }, //  scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                        )),
+                              );
+                            })
                           : Container(),
                     ],
                   ),
@@ -249,13 +256,14 @@ class _BaseDuesState extends State<BaseDues> {
 
   getBillListItemLayout(
       int position, BuildContext context, UserManagementResponse value) {
+    bool isOpeningBalance = value.billList[position].TYPE == 'Opening Balance';
     return Align(
       alignment: Alignment.center,
       child: AppContainer(
         isListItem: true,
         child: Stack(
           children: <Widget>[
-            Container(
+            /*Container(
               //margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
               child: Align(
                 alignment: Alignment.centerRight,
@@ -263,7 +271,8 @@ class _BaseDuesState extends State<BaseDues> {
                   GlobalVariables.whileBGPath,
                 ),
               ),
-            ),
+            ),*/
+
             Container(
               //margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
               child: Column(
@@ -317,19 +326,14 @@ class _BaseDuesState extends State<BaseDues> {
                               (value.billList[position].AMOUNT! -
                                       value.billList[position].RECEIVED!)
                                   .toString()),
-                          /*+
-                              double.parse((value.billList[position].AMOUNT -
-                                  value.billList[position].RECEIVED)
-                                  .toString())
-                                  .toStringAsFixed(2)*/
                           textColor: GlobalVariables.primaryColor,
                           fontSize: GlobalVariables.textSizeLarge,
                           fontWeight: FontWeight.bold,
                         ),
                         text(
-                          value.billList[position].DUE_DATE != null
+                          value.billList[position].DUE_DATE?.isNotEmpty ?? false
                               ? GlobalFunctions.convertDateFormat(
-                                  value.billList[position].DUE_DATE!,
+                                  value.billList[position].DUE_DATE ?? '',
                                   "dd-MM-yyyy")
                               : '',
                           textColor: GlobalVariables.primaryColor,
@@ -346,182 +350,332 @@ class _BaseDuesState extends State<BaseDues> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            if (value.billList[position].TYPE!
-                                        .toLowerCase()
-                                        .toString() ==
-                                    'bill' ||
-                                value.billList[position].TYPE!
-                                        .toLowerCase()
-                                        .toString() ==
-                                    'invoice') {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BaseViewBill(
-                                          value.billList[position].INVOICE_NO,
-                                          null,
-                                          widget.mBlock!,
-                                          widget.mFlat!,
-                                          null)));
-                            } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BaseViewReceipt(
-                                          value.billList[position].INVOICE_NO,
-                                          null,
-                                          widget.mBlock,
-                                          widget.mFlat)));
-                            }
-                          },
-                          child: Container(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: AppIcon(
-                                    Icons.visibility,
-                                    iconColor: GlobalVariables.secondaryColor,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: isOpeningBalance
+                          ? [
+                              Visibility(
+                                visible: !widget.isAdmin,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseDuesBillPayment(
+                                                  value.billList[position],
+                                                )));
+                                  },
+                                  child: Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: AppIcon(
+                                            Icons.payment,
+                                            iconColor:
+                                                GlobalVariables.secondaryColor,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('pay_now'),
+                                            fontSize:
+                                                GlobalVariables.textSizeSmall,
+                                            textColor: GlobalVariables.grey,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: text(
-                                    AppLocalizations.of(context)
-                                        .translate('view'),
-                                    fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.grey,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: !widget.isAdmin,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BaseDuesBillPayment(
-                                          value.billList[position])));
-                            },
-                            child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: AppIcon(
-                                      Icons.payment,
-                                      iconColor: GlobalVariables.secondaryColor,
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: text(
-                                      AppLocalizations.of(context)
-                                          .translate('pay_now'),
-                                      fontSize: GlobalVariables.textSizeSmall,
-                                      textColor: GlobalVariables.grey,
-                                    ),
-                                  )
-                                ],
                               ),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            emailBillDialog(context, position, value);
-                            // getBillMail(value.billList[position].INVOICE_NO,value.billList[position].TYPE);
-                          },
-                          child: Container(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: AppIcon(
-                                    Icons.mail,
-                                    iconColor: GlobalVariables.secondaryColor,
+                              InkWell(
+                                onTap: () async {
+                                  if (!AppSocietyPermission
+                                      .isSocHideAlreadyPaidPermission) {
+                                    final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseAlreadyPaid(
+                                                    value.billList[position]
+                                                            .INVOICE_NO ??
+                                                        '',
+                                                    value.billList[position]
+                                                            .AMOUNT ??
+                                                        0,
+                                                    value.billList[position]
+                                                            .PENALTY_REM ??
+                                                        0,
+                                                    isAdmin: widget.isAdmin,
+                                                    mBlock: widget.mBlock ?? '',
+                                                    mFlat:
+                                                        widget.mFlat ?? '')));
+                                    if (result == 'back') {
+                                      Provider.of<UserManagementResponse>(
+                                              context,
+                                              listen: false)
+                                          .getAllBillData(
+                                              widget.mBlock!, widget.mFlat!);
+                                    }
+                                  } else {
+                                    GlobalFunctions
+                                        .showAdminPermissionDialogToAccessFeature(
+                                            context, true);
+                                  }
+                                },
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: /*true ? */ AppIcon(
+                                          Icons.check_circle,
+                                          iconColor:
+                                              GlobalVariables.secondaryColor,
+                                        ) //: AppAssetsImage(GlobalVariables.alreadyPaidImagePath,imageHeight: 18.0,imageWidth: 18.0,),
+                                        ),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: text(
+                                        !widget.isAdmin
+                                            ? AppLocalizations.of(context)
+                                                .translate('already_paid')
+                                            : AppLocalizations.of(context)
+                                                .translate('payment'),
+                                        fontSize: GlobalVariables.textSizeSmall,
+                                        textColor: GlobalVariables.grey,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ]
+                          : [
+                              isOpeningBalance
+                                  ? const SizedBox.shrink()
+                                  : InkWell(
+                                      onTap: () {
+                                        if (value.billList[position].TYPE!
+                                                    .toLowerCase()
+                                                    .toString() ==
+                                                'bill' ||
+                                            value.billList[position].TYPE!
+                                                    .toLowerCase()
+                                                    .toString() ==
+                                                'invoice') {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BaseViewBill(
+                                                        value.billList[position]
+                                                            .INVOICE_NO,
+                                                        null,
+                                                        widget.mBlock!,
+                                                        widget.mFlat!,
+                                                        null,
+                                                      )));
+                                        } else {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BaseViewReceipt(
+                                                        value.billList[position]
+                                                            .INVOICE_NO,
+                                                        null,
+                                                        widget.mBlock,
+                                                        widget.mFlat,
+                                                        type: value.ledgerList[
+                                                            position],
+                                                      )));
+                                        }
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 0),
+                                              child: AppIcon(
+                                                Icons.visibility,
+                                                iconColor: GlobalVariables
+                                                    .secondaryColor,
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 0),
+                                              child: text(
+                                                AppLocalizations.of(context)
+                                                    .translate('view'),
+                                                fontSize: GlobalVariables
+                                                    .textSizeSmall,
+                                                textColor: GlobalVariables.grey,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                              Visibility(
+                                visible: !widget.isAdmin,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseDuesBillPayment(
+                                                  value.billList[position],
+                                                )));
+                                  },
+                                  child: Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: AppIcon(
+                                            Icons.payment,
+                                            iconColor:
+                                                GlobalVariables.secondaryColor,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: text(
+                                            AppLocalizations.of(context)
+                                                .translate('pay_now'),
+                                            fontSize:
+                                                GlobalVariables.textSizeSmall,
+                                            textColor: GlobalVariables.grey,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: text(
-                                    !widget.isAdmin
-                                        ? AppLocalizations.of(context)
-                                            .translate('get_bill')
-                                        : AppLocalizations.of(context)
-                                            .translate('send_bill'),
-                                    fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.grey,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            if (!AppSocietyPermission
-                                .isSocHideAlreadyPaidPermission) {
-                              final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BaseAlreadyPaid(
-                                            value
-                                                .billList[position].INVOICE_NO!,
-                                            value.billList[position].AMOUNT!,
-                                            widget.mBlock!,
-                                            widget.mFlat!,
-                                            value.billList[position]
-                                                .PENALTY_REM!,
-                                            isAdmin: widget.isAdmin,
-                                          )));
-                              if (result == 'back') {
-                                Provider.of<UserManagementResponse>(context,
-                                        listen: false)
-                                    .getAllBillData(
-                                        widget.mBlock!, widget.mFlat!);
-                              }
-                            } else {
-                              GlobalFunctions
-                                  .showAdminPermissionDialogToAccessFeature(
-                                      context, true);
-                            }
-                          },
-                          child: Container(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: /*true ? */ AppIcon(
-                                      Icons.check_circle,
-                                      iconColor: GlobalVariables.secondaryColor,
-                                    ) //: AppAssetsImage(GlobalVariables.alreadyPaidImagePath,imageHeight: 18.0,imageWidth: 18.0,),
+                              ),
+                              isOpeningBalance
+                                  ? const SizedBox.shrink()
+                                  : InkWell(
+                                      onTap: () {
+                                        emailBillDialog(
+                                            context, position, value);
+                                        // getBillMail(value.billList[position].INVOICE_NO,value.billList[position].TYPE);
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 0),
+                                              child: AppIcon(
+                                                Icons.mail,
+                                                iconColor: GlobalVariables
+                                                    .secondaryColor,
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 0),
+                                              child: text(
+                                                !widget.isAdmin
+                                                    ? AppLocalizations.of(
+                                                            context)
+                                                        .translate('get_bill')
+                                                    : AppLocalizations.of(
+                                                            context)
+                                                        .translate('send_bill'),
+                                                fontSize: GlobalVariables
+                                                    .textSizeSmall,
+                                                textColor: GlobalVariables.grey,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: text(
-                                    !widget.isAdmin
-                                        ? AppLocalizations.of(context)
-                                            .translate('already_paid')
-                                        : AppLocalizations.of(context)
-                                            .translate('payment'),
-                                    fontSize: GlobalVariables.textSizeSmall,
-                                    textColor: GlobalVariables.grey,
+                              InkWell(
+                                onTap: () async {
+                                  if (!AppSocietyPermission
+                                      .isSocHideAlreadyPaidPermission) {
+                                    final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BaseAlreadyPaid(
+                                                  value.billList[position]
+                                                          .INVOICE_NO ??
+                                                      '',
+                                                  value.billList[position]
+                                                          .AMOUNT ??
+                                                      0,
+                                                  value.billList[position]
+                                                          .PENALTY_REM ??
+                                                      0,
+                                                  isAdmin: widget.isAdmin,
+                                                  mBlock: value
+                                                          .billList[position]
+                                                          .BLOCK
+                                                          ?.split(' ')[0] ??
+                                                      '',
+                                                  mFlat: value
+                                                          .billList[position]
+                                                          .BLOCK
+                                                          ?.split(' ')[1] ??
+                                                      '',
+                                                )));
+                                    if (result == 'back') {
+                                      Provider.of<UserManagementResponse>(
+                                              context,
+                                              listen: false)
+                                          .getAllBillData(
+                                              widget.mBlock!, widget.mFlat!);
+                                    }
+                                  } else {
+                                    GlobalFunctions
+                                        .showAdminPermissionDialogToAccessFeature(
+                                            context, true);
+                                  }
+                                },
+                                child: Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: /*true ? */ AppIcon(
+                                            Icons.check_circle,
+                                            iconColor:
+                                                GlobalVariables.secondaryColor,
+                                          ) //: AppAssetsImage(GlobalVariables.alreadyPaidImagePath,imageHeight: 18.0,imageWidth: 18.0,),
+                                          ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: text(
+                                          !widget.isAdmin
+                                              ? AppLocalizations.of(context)
+                                                  .translate('already_paid')
+                                              : AppLocalizations.of(context)
+                                                  .translate('payment'),
+                                          fontSize:
+                                              GlobalVariables.textSizeSmall,
+                                          textColor: GlobalVariables.grey,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                                ),
+                              ),
+                            ],
                     ),
                   )
                 ],
@@ -607,6 +761,7 @@ class _BaseDuesState extends State<BaseDues> {
                                       widget.mBlock,
                                       widget.mFlat,
                                       receipt: value.pendingList[position],
+                                      type: null,
                                     )));
                       },
                       child: Container(
@@ -647,7 +802,7 @@ class _BaseDuesState extends State<BaseDues> {
           color: GlobalVariables.white,
           child: Stack(
             children: <Widget>[
-              Container(
+              /*Container(
                 margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                 child: Align(
                   alignment: Alignment.centerRight,
@@ -655,7 +810,7 @@ class _BaseDuesState extends State<BaseDues> {
                     GlobalVariables.whileBGPath,
                   ),
                 ),
-              ),
+              ),*/
               Container(
                 margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: Column(
@@ -722,19 +877,28 @@ class _BaseDuesState extends State<BaseDues> {
   }
 
   String getBillPaymentStatus(int position, UserManagementResponse value) {
+    if (value.billList[position].DUE_DATE?.isEmpty ?? true) {
+      return '';
+    }
     String status = '';
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
-    final toDateTine =
-        DateTime.parse(value.billList[position].DUE_DATE.toString());
+    final toDateTine = DateTime.parse(
+        value.billList[position].DUE_DATE?.isEmpty ?? true
+            ? '2023-04-16'
+            : value.billList[position].DUE_DATE!);
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
 
     if (days > 0) {
-      status = "Overdue";
+      if (value.billList[position].AMOUNT == 0) {
+        status = "Paid";
+      } else {
+        status = "Overdue";
+      }
     } else if (days == 0) {
       status = "Due Today";
     } else if (days >= -2 && days < 0) {
@@ -746,11 +910,16 @@ class _BaseDuesState extends State<BaseDues> {
   }
 
   getBillPaymentStatusColor(int position, UserManagementResponse value) {
+    if (value.billList[position].DUE_DATE?.isEmpty ?? true) {
+      return Color(0xFFf39c12);
+    }
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String fromDate = formatter.format(now);
-    final toDateTine =
-        DateTime.parse(value.billList[position].DUE_DATE.toString());
+    final toDateTine = DateTime.parse(
+        value.billList[position].DUE_DATE?.isEmpty ?? true
+            ? '2023-04-16'
+            : value.billList[position].DUE_DATE!);
     final String toDate = formatter.format(toDateTine);
 
     int days = GlobalFunctions.getDaysFromDate(fromDate, toDate);
@@ -936,8 +1105,8 @@ class _BaseDuesState extends State<BaseDues> {
                                             color: _selectedPaymentGateway !=
                                                     "PayTM"
                                                 ? GlobalVariables.primaryColor
-                                                : GlobalVariables
-                                                    .secondaryColor,
+                                                : GlobalVariables.secondaryColor
+                                                    .withOpacity(0.5),
                                             width: 2.0,
                                           )),
                                       child: AppIcon(Icons.check,
@@ -985,8 +1154,8 @@ class _BaseDuesState extends State<BaseDues> {
                                             color: _selectedPaymentGateway ==
                                                     "PayTM"
                                                 ? GlobalVariables.primaryColor
-                                                : GlobalVariables
-                                                    .secondaryColor,
+                                                : GlobalVariables.secondaryColor
+                                                    .withOpacity(0.5),
                                             width: 2.0,
                                           )),
                                       child: AppIcon(Icons.check,
@@ -1034,7 +1203,7 @@ class _BaseDuesState extends State<BaseDues> {
                         _amountTextController.text.toString());
                     if (double.parse(_amountTextController.text) <= 0) {
                       GlobalFunctions.showToast(
-                          'Amount must be grater than zero');
+                          'Amount must be greater than zero');
                     } else if (AppSocietyPermission
                         .isSocPayAmountNoLessPermission) {
                       if (double.parse(amount) <=
@@ -1044,7 +1213,7 @@ class _BaseDuesState extends State<BaseDues> {
                             position, _amountTextController.text, value);
                       } else {
                         GlobalFunctions.showToast(
-                            'Amount must be Grater or equal to Actual Amount');
+                            'Amount must be greater or equal to Actual Amount');
                       }
                     } else {
                       Navigator.of(context).pop();
@@ -1218,17 +1387,17 @@ class _BaseDuesState extends State<BaseDues> {
     );
   }
 
-  getListItemLayout(var position, UserManagementResponse value) {
+  getTransacationItem(Ledger ledger) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(5),
-          color: GlobalVariables.AccentColor,
+          color: GlobalVariables.primaryColor.withOpacity(.5),
           child: Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: text(
-              value.ledgerList[position].C_DATE,
+              ledger.C_DATE,
               textColor: GlobalVariables.grey,
               fontSize: GlobalVariables.textSizeSMedium,
             ),
@@ -1245,9 +1414,9 @@ class _BaseDuesState extends State<BaseDues> {
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: text(
-                          value.ledgerList[position].TYPE == 'Bill'
+                          ledger.TYPE == 'Bill'
                               ? 'Maintenance Bill'
-                              : value.ledgerList[position].TYPE,
+                              : ledger.LEDGER,
                           textColor: GlobalVariables.grey,
                           fontSize: GlobalVariables.textSizeSMedium,
                         ),
@@ -1255,49 +1424,56 @@ class _BaseDuesState extends State<BaseDues> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (value.ledgerList[position].TYPE!
-                                    .toLowerCase()
-                                    .toString() ==
-                                'bill' ||
-                            value.ledgerList[position].TYPE!
-                                    .toLowerCase()
-                                    .toString() ==
+                        if (ledger.TYPE!.toLowerCase().toString() == 'bill' ||
+                            ledger.TYPE!.toLowerCase().toString() ==
                                 'invoice') {
+                          final String activeYear = UserManagementResponse
+                              .listYear
+                              .where((e) => e.Active_account == 'Yes')
+                              .first
+                              .years;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewBill(
-                                      value.ledgerList[position].RECEIPT_NO,
-                                      UserManagementResponse.listYear[0].years,
-                                      widget.mBlock,
-                                      widget.mFlat,
-                                      value.ledgerList[position])));
+                                        ledger.RECEIPT_NO,
+                                        activeYear,
+                                        widget.mBlock,
+                                        widget.mFlat,
+                                        ledger,
+                                      )));
                         } else {
+                          final String activeYear = UserManagementResponse
+                              .listYear
+                              .where((e) => e.Active_account == 'Yes')
+                              .first
+                              .years;
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BaseViewReceipt(
-                                      value.ledgerList[position].RECEIPT_NO,
-                                      UserManagementResponse.listYear[0].years,
-                                      widget.mBlock,
-                                      widget.mFlat)));
+                                        ledger.RECEIPT_NO,
+                                        activeYear,
+                                        widget.mBlock,
+                                        widget.mFlat,
+                                        type: ledger,
+                                      )));
                         }
                       },
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: text(
                           GlobalFunctions.getCurrencyFormat(
-                              value.ledgerList[position].AMOUNT.toString())
-                          /*double.parse(value.ledgerList[position].AMOUNT
+                              ledger.AMOUNT.toString())
+                          /*double.parse(ledger.AMOUNT
                                   .toString())
                                   .toStringAsFixed(2)*/
                           ,
-                          textColor: value.ledgerList[position].TYPE!
-                                      .toLowerCase()
-                                      .toString() ==
-                                  'bill'
-                              ? GlobalVariables.red
-                              : GlobalVariables.primaryColor,
+                          textColor:
+                              ledger.TYPE!.toLowerCase().toString() == 'bill'
+                                  ? GlobalVariables.red
+                                  : Colors.green,
                           fontSize: GlobalVariables.textSizeSMedium,
                           fontWeight: FontWeight.bold,
                         ),
@@ -1394,6 +1570,8 @@ class _BaseDuesState extends State<BaseDues> {
             }));
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   void emailBillDialog(
       BuildContext context, int position, UserManagementResponse value) {
     showDialog(
@@ -1405,7 +1583,9 @@ class _BaseDuesState extends State<BaseDues> {
                   : _emailTextController.text =
                       value.billList[position].Email ?? email;
 
-              return Dialog(
+              return Form(
+                key: _formKey,
+                child: Dialog(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Container(
@@ -1464,6 +1644,21 @@ class _BaseDuesState extends State<BaseDues> {
                                       cursorColor: GlobalVariables.primaryColor,
                                       keyboardType: TextInputType.emailAddress,
                                       showCursor: isEditEmail ? true : false,
+                                      /*inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(RegExp(AppRegExpPattern.emailPattern)),
+                                        ],*/
+                                      validator: (value) {
+                                        print('validate value : ' +
+                                            value.toString());
+                                        if (value.toString().length > 0) {
+                                          if (!GlobalFunctions.isEmailValid(
+                                              value!)) {
+                                            return AppLocalizations.of(context)
+                                                .translate('invalid_email');
+                                          }
+                                        }
+                                        return null;
+                                      },
                                       decoration: InputDecoration(
                                         border: isEditEmail
                                             ? new UnderlineInputBorder(
@@ -1499,10 +1694,15 @@ class _BaseDuesState extends State<BaseDues> {
                                               iconSize: 24,
                                             ),
                                             onPressed: () {
-                                              _emailTextController.clear();
-                                              _emailTextController.text = email;
-                                              isEditEmail = false;
-                                              setState(() {});
+                                              if (GlobalFunctions
+                                                  .textFormFieldValidate(
+                                                      _formKey)) {
+                                                _emailTextController.clear();
+                                                _emailTextController.text =
+                                                    email;
+                                                isEditEmail = false;
+                                                setState(() {});
+                                              }
                                             }),
                                   ),
                                 )
@@ -1543,7 +1743,9 @@ class _BaseDuesState extends State<BaseDues> {
                         ),
                       ],
                     ),
-                  ));
+                  ),
+                ),
+              );
             }));
   }
 
@@ -1562,8 +1764,8 @@ class _BaseDuesState extends State<BaseDues> {
           Container(
             child: Image.asset(
               GlobalVariables.creditCardPath,
-              width: 300,
-              height: 300,
+              width: 200,
+              height: 200,
               fit: BoxFit.fill,
             ),
           ),
@@ -1596,9 +1798,9 @@ class _BaseDuesState extends State<BaseDues> {
                     borderRadius: BorderRadius.circular(10),
                     side: BorderSide(color: GlobalVariables.primaryColor)),
                 child: text(
-                  AppLocalizations.of(context).translate('i_am_interested'),
-                  fontSize: GlobalVariables.textSizeMedium,
-                ),
+                    AppLocalizations.of(context).translate('i_am_interested'),
+                    fontSize: GlobalVariables.textSizeMedium,
+                    textColor: GlobalVariables.white),
               ),
             ),
           ),
@@ -1765,12 +1967,16 @@ class _BaseDuesState extends State<BaseDues> {
       orderId = value['id'];
       print('id : ' + orderId);
       postRazorPayTransactionOrderID(value['id'], value['amount'].toString(),
-          position, UserManagementResponse);
+          position, UserManagementResponse, invoiceNo);
     });
   }
 
-  Future<void> postRazorPayTransactionOrderID(String orderId, String amount,
-      int position, UserManagementResponse UserManagementResponse) async {
+  Future<void> postRazorPayTransactionOrderID(
+      String orderId,
+      String amount,
+      int position,
+      UserManagementResponse UserManagementResponse,
+      String invoice) async {
     final dio = Dio();
     final RestClientERP restClientERP =
         RestClientERP(dio, baseUrl: GlobalVariables.BaseURLERP);
@@ -1780,10 +1986,11 @@ class _BaseDuesState extends State<BaseDues> {
 
     restClientERP
         .postRazorPayTransactionOrderID(
-            societyId,
-            widget.mBlock! + ' ' + widget.mFlat!,
-            orderId,
-            (double.parse(amount) / 100).toString())
+      societyId,
+      widget.mBlock! + ' ' + widget.mFlat!,
+      orderId,
+      (double.parse(amount) / 100).toString(),
+    )
         .then((value) {
       print('Value : ' + value.toString());
       _progressDialog!.dismiss();
@@ -1841,9 +2048,9 @@ class _BaseDuesState extends State<BaseDues> {
       if (value.status!) {
         // Navigator.of(context).pop('back');
         if (paymentStatus == 'success') {
-          Provider.of<UserManagementResponse>(context, listen: false)
-              .getPayOption(widget.mBlock!, widget.mFlat!)
-              .then((value) {});
+          // Provider.of<UserManagementResponse>(context, listen: false)
+          //     .getPayOption(widget.mBlock!, widget.mFlat!)
+          //     .then((value) {});
           paymentSuccessDialog(paymentId);
         } else {
           paymentFailureDialog();
@@ -1970,27 +2177,9 @@ class _BaseDuesState extends State<BaseDues> {
   }
 
   void getDuesData() {
-    if (GlobalVariables.isERPAccount) {
+    if (GlobalVariables.isERPAccount || widget.isAdmin) {
       Provider.of<UserManagementResponse>(context, listen: false)
-          .getPayOption(widget.mBlock, widget.mFlat)
-          .then((payOptionList) {
-        if (payOptionList.length > 0) {
-          print(payOptionList[0].KEY_ID.toString());
-
-          if (payOptionList[0].KEY_ID != null &&
-              payOptionList[0].KEY_ID.length > 0 &&
-              payOptionList[0].SECRET_KEY != null &&
-              payOptionList[0].SECRET_KEY.length > 0) {
-            hasRazorPayGateway = true;
-          }
-          if (payOptionList[0].PAYTM_URL != null &&
-              payOptionList[0].PAYTM_URL.length > 0) {
-            hasPayTMGateway = true;
-          }
-          print('hasPayTMGateway' + hasPayTMGateway.toString());
-          print('hasRazorPayGateway' + hasRazorPayGateway.toString());
-        }
-      });
+          .getAllBillData(widget.mBlock, widget.mFlat);
     }
   }
 }

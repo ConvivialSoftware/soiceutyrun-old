@@ -70,11 +70,13 @@ class UserManagementResponse extends ChangeNotifier {
   List<PayOption> payOptionList = <PayOption>[];
   List<Bills> billList = <Bills>[];
   List<Ledger> ledgerList = <Ledger>[];
+  List<Ledger> recentTransactionList = <Ledger>[];
   List<OpeningBalance> openingBalanceList = <OpeningBalance>[];
   static List<LedgerYear> listYear = <LedgerYear>[];
   double totalOutStanding = 0;
   String openingBalance = "0.0";
   String openingBalanceRemark = "";
+  bool isOpeningbalance = false;
 
   bool hasRazorPayGateway = false;
   bool hasPayTMGateway = false;
@@ -106,10 +108,8 @@ class UserManagementResponse extends ChangeNotifier {
   }
 
   getPaymentCharges() async {
-    if (preferredMethod.isEmpty) {
-      isLoading = true;
-      notifyListeners();
-    }
+    isLoading = true;
+    notifyListeners();
     final dio = Dio();
     final RestClient restClient = RestClient(dio);
     await restClient.getPaymentCharges().then((value) {
@@ -152,6 +152,9 @@ class UserManagementResponse extends ChangeNotifier {
                 avenue[0].Other_Method!.map((i) => PaymentMethod.fromJson(i)))
             : [];
       }
+    }).catchError((e) {
+      isLoading = false;
+      notifyListeners();
     });
     isLoading = false;
     notifyListeners();
@@ -203,11 +206,6 @@ class UserManagementResponse extends ChangeNotifier {
       notifyListeners();
     });
 
-    if (block == null && flat == null) {
-      block = await GlobalFunctions.getBlock();
-      flat = await GlobalFunctions.getFlat();
-    }
-    getAllBillData(block!, flat!);
     return payOptionList;
   }
 
@@ -215,6 +213,11 @@ class UserManagementResponse extends ChangeNotifier {
     if (block == null && flat == null) {
       block = await GlobalFunctions.getBlock();
       flat = await GlobalFunctions.getFlat();
+    }
+
+    if (billList.length == 0) {
+      isLoading = true;
+      notifyListeners();
     }
     final dio = Dio();
     final RestClientERP restClientERP =
@@ -233,7 +236,11 @@ class UserManagementResponse extends ChangeNotifier {
 
       isLoading = false;
       notifyListeners();
-      // getLedgerData(null, block ?? '', flat ?? '');
+      getLedgerData(null, block!, flat!);
+    }).onError((error, stackTrace) {
+      isLoading = false;
+      notifyListeners();
+      logger.e(error);
     });
   }
 
@@ -370,42 +377,46 @@ class UserManagementResponse extends ChangeNotifier {
       await restClientERP
           .getLedgerData(societyId, flat, block, year ?? '')
           .then((value) {
-        logger.wtf(value);
-        List<dynamic> _listLedger = value.ledger!;
-        List<dynamic> _listPending = value.pending_request!;
-        List<dynamic> _listOpeningBalance = value.openingBalance!;
-        List<dynamic> _year = value.year!;
+        notifyListeners();
+        if (value.ledger?.isNotEmpty ?? false) {
+          List<dynamic> _listLedger = value.ledger!;
+          List<dynamic> _listPending = value.pending_request!;
+          List<dynamic> _listOpeningBalance = value.openingBalance!;
+          List<dynamic> _year = value.year!;
 
-        ledgerList =
-            List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
-        pendingList =
-            List<Receipt>.from(_listPending.map((i) => Receipt.fromJson(i)));
-        openingBalanceList = List<OpeningBalance>.from(
-            _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
-        listYear =
-            List<LedgerYear>.from(_year.map((i) => LedgerYear.fromJson(i)));
-        openingBalance = double.parse(openingBalanceList[0].AMOUNT.toString())
-            .toStringAsFixed(2);
-        openingBalanceRemark = openingBalanceList[0].Remark!;
-        double totalAmount = 0;
+          ledgerList =
+              List<Ledger>.from(_listLedger.map((i) => Ledger.fromJson(i)));
 
-        for (int i = 0; i < ledgerList.length; i++) {
-          print("_ledgerList[i].RECEIPT_NO : " +
-              ledgerList[i].RECEIPT_NO.toString());
-          print("_ledgerList[i].TYPE : " + ledgerList[i].TYPE.toString());
-          if (ledgerList[i].TYPE!.toLowerCase().toString() == 'bill') {
-            totalAmount += double.parse(ledgerList[i].AMOUNT!);
-          } else {
-            totalAmount -= double.parse(ledgerList[i].AMOUNT!);
+          pendingList =
+              List<Receipt>.from(_listPending.map((i) => Receipt.fromJson(i)));
+          openingBalanceList = List<OpeningBalance>.from(
+              _listOpeningBalance.map((i) => OpeningBalance.fromJson(i)));
+          listYear =
+              List<LedgerYear>.from(_year.map((i) => LedgerYear.fromJson(i)));
+          openingBalance = double.parse(openingBalanceList[0].AMOUNT.toString())
+              .toStringAsFixed(2);
+          openingBalanceRemark = openingBalanceList[0].Remark!;
+          double totalAmount = 0;
+
+          for (int i = 0; i < ledgerList.length; i++) {
+            if (ledgerList[i].TYPE!.toLowerCase().toString() == 'bill') {
+              totalAmount += double.parse(ledgerList[i].AMOUNT!);
+            } else {
+              totalAmount -= double.parse(ledgerList[i].AMOUNT!);
+            }
+            totalOutStanding = double.parse(value.closingBalance ?? '0');
           }
-          totalOutStanding = totalAmount + double.parse(openingBalance);
         }
       });
     } catch (e) {
+      notifyListeners();
       logger.e(e);
     }
 
     isLoading = false;
+    if (year == null) {
+      recentTransactionList = ledgerList;
+    }
     notifyListeners();
     return ledgerList;
   }
