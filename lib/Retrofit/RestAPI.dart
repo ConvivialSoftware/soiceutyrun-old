@@ -23,7 +23,6 @@ import 'package:societyrun/Retrofit/RestClientDiscover.dart';
 import 'package:societyrun/Retrofit/RestClientERP.dart';
 import 'package:societyrun/Retrofit/RestClientRazorPay.dart';
 
-import '../main.dart';
 import 'RestClient.dart';
 
 const bool kDebugMode = true;
@@ -4370,6 +4369,10 @@ class RestAPI
   ) async {
     final userId = await GlobalFunctions.getUserId();
     final billinAddress = await GlobalFunctions.getSocietyName();
+    final billingEmail =
+        email.isEmpty ? await GlobalFunctions.getSocietyEmail() : email;
+    final billingPhone =
+        tel.isEmpty ? await GlobalFunctions.getSocietyContact() : tel;
 
     FormData formData = FormData.fromMap({
       AvenueConst.tid: tid,
@@ -4381,8 +4384,8 @@ class RestAPI
       AvenueConst.billingState: 'Maharashtra ',
       AvenueConst.billingZip: '411018',
       AvenueConst.billingCountry: 'India',
-      AvenueConst.billingTel: tel,
-      AvenueConst.billingEmail: email,
+      AvenueConst.billingTel: billingPhone,
+      AvenueConst.billingEmail: billingEmail,
       AvenueConst.merchantParam1: invoice,
       AvenueConst.merchantParam2: societyId,
       AvenueConst.merchantParam3: block,
@@ -4395,32 +4398,7 @@ class RestAPI
       AvenueConst.subAccountId: subAccId,
       AvenueConst.appName: 'SocietyrunSociety',
     });
-    logger.e({
-      {
-        AvenueConst.tid: tid,
-        AvenueConst.language: 'EN',
-        AvenueConst.currency: 'INR',
-        AvenueConst.billingName: name,
-        AvenueConst.billingAddress: billinAddress,
-        AvenueConst.billingCity: 'Mumbai',
-        AvenueConst.billingState: 'Maharashtra ',
-        AvenueConst.billingZip: '411018',
-        AvenueConst.billingCountry: 'India',
-        AvenueConst.billingTel: tel,
-        AvenueConst.billingEmail: email,
-        AvenueConst.merchantParam1: invoice,
-        AvenueConst.merchantParam2: societyId,
-        AvenueConst.merchantParam3: block,
-        AvenueConst.promoCode: '',
-        AvenueConst.custIdentifier: '',
-        AvenueConst.integrationType: 'iframe_normal',
-        AvenueConst.amount: amount,
-        AvenueConst.userId: userId,
-        // AvenueConst.subAccId: subAccId,
-        AvenueConst.subAccountId: subAccId,
-        AvenueConst.appName: 'SocietyrunSociety',
-      }
-    });
+
     final Response _result = await _dio.post(
         GlobalVariables.BaseURLERP + GlobalVariables.getccAveneuParams,
         options: restClientOption(),
