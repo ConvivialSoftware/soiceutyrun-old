@@ -2077,7 +2077,7 @@ Future viewPdfOnline({required String type, required String number}) async {
         'CAKEPHP=2dc7b2c8686b80e904ff8933d1c0506d; CAKEPHP=3c2df7c1f9d7518020d8c3f435ca5955'
   };
 
-  final endpioint = '${GlobalVariables.BaseURLERP}AndroidApi/pdf_download';
+  final endpioint = '${GlobalVariables.BaseURLERP}AndroidApi/pdf_download_dompdf';
   final dio = d.Dio();
   var response = await dio.post(
     endpioint,

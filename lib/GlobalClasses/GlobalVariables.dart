@@ -215,7 +215,7 @@ class GlobalVariables {
   static const otpLoginAPI = "Api/otpLogin";
   static const newPasswordAPI = "Api/newpwd";
   static const unitMemberAPI = "Members";
-  static const unitAddMemberAPI = "Members/insert";
+  static const unitAddMemberAPI = "Members/member_insert";
   static const unitStaffAPI = "Userside/staff_list";
   static const unitVehicleAPI = "Vehicle";
   static const unitAddVehicleAPI = "Vehicle/insert";

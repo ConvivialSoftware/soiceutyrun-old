@@ -15,24 +15,23 @@ class AppNotificationController extends GetxController {
     final flatNo = await GlobalFunctions.getFlat();
     final societyId = await GlobalFunctions.getSocietyId();
     final userId = await GlobalFunctions.getUserId();
-
+    final myGateOption = MyGateOptions(
+        block: block,
+        flatNo: flatNo,
+        societyId: societyId,
+        userId: userId,
+        username: username);
     SocietyGatepass.initialize(
         theme: GatepassTheme(
           primaryColor: GlobalVariables.primaryColor,
           secondaryColor: GlobalVariables.primaryColor,
-          accentColor: GlobalVariables.AccentColor,
+          accentColor: GlobalVariables.primaryColor,
         ),
-        myGateOptions: MyGateOptions(
-            block: block,
-            flatNo: flatNo,
-            societyId: societyId,
-            userId: userId,
-            username: username));
+        myGateOptions: myGateOption);
   }
 
   initGatepassNotifications() async {
     final username = await GlobalFunctions.getUserName();
-    final displayName = await GlobalFunctions.getDisplayName();
     SocietyGatepass.initializeNotificationOptions(NotificationOptions(
         username: username,
         channelKey: "GatepassCallChannel",
@@ -41,7 +40,7 @@ class AppNotificationController extends GetxController {
         channelGroupKey: "GatepassCallChannel_group",
         soundSourceDialog: "assets/audio/res_alert.mp3",
         soundSource: "resource://raw/res_alert",
-        displayName: displayName));
+        displayName: "Societyrun"));
   }
 
   listenNotificationActions() async {
@@ -77,7 +76,9 @@ class AppNotificationController extends GetxController {
       Get.find<GatepassController>().showTestNotification();
 
   goToMyGate() {
+    Get.delete<ApiController>();
     initGatepass();
+
     final isAdmin = false;
     Get.to(() => MyGatePage(
         pageName: 'My Gate', isAdmin: isAdmin, type: 'helper', vid: '2548'));
@@ -90,18 +91,17 @@ class AppNotificationController extends GetxController {
         ));
   }
 
-  goToStaffTab({String? type}) {
+  goToStaffTab({String type = 'helper'}) {
+    Get.delete<ApiController>();
     initGatepass();
     final isAdmin = false;
     Get.to(() => MyGatePage(
-        pageName: 'My Gate',
-        isAdmin: isAdmin,
-        type: type ?? 'Helper',
-        vid: '2548'));
+        pageName: 'My Gate', isAdmin: isAdmin, type: type, vid: '2548'));
     Get.put(MyGateController()).setSelectedTab(1);
   }
 
   goToStaffDetail(Staff staff) async {
+    Get.delete<ApiController>();
     initGatepass();
     await Get.to(() => StaffDetailPage(
           staff: staff,

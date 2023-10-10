@@ -2712,8 +2712,10 @@ class DashBoardState extends BaseStatefulState<BaseDashBoard>
                               onPressed: () {
                                 Navigator.of(context).pop();
                                 // setState(() {
-                                GlobalFunctions.saveDataToSharedPreferences(
-                                    _selectedSocietyLogin!);
+                                if (_selectedSocietyLogin != null) {
+                                  GlobalFunctions.saveDataToSharedPreferences(
+                                      _selectedSocietyLogin!);
+                                }
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     new MaterialPageRoute(
