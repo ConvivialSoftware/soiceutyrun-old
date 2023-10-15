@@ -1,13 +1,19 @@
 //import 'package:custom_switch/custom_switch.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_custom_switch/flutter_custom_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:get/get.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Retrofit/RestClient.dart';
 import 'package:societyrun/Widgets/AppWidget.dart';
+
+import '../controllers/notification_controller.dart';
 
 class BaseAppNotificationSettings extends StatefulWidget {
   @override
@@ -20,6 +26,8 @@ class _BaseAppNotificationSettingsState
   var userId = "", name = "", photo = "", societyId = "", flat = "", block = "";
   var email = '', phone = '', consumerId = '', societyName = '';
 
+  final AppNotificationController controller = Get.find<AppNotificationController>();
+
   bool isInAppCallNotification = true;
   bool isDailyEntryNotification = true;
 
@@ -27,6 +35,14 @@ class _BaseAppNotificationSettingsState
   bool isGuestEntryNotification = true;
 
   //bool isGuestExitNotification= false;
+
+  bool isBusy = false;
+
+  void setBusy(value) {
+    setState(() {
+      isBusy = value;
+    });
+  }
 
   @override
   void initState() {
@@ -92,7 +108,10 @@ class _BaseAppNotificationSettingsState
           children: [
             inAppCall(),
             dailyHelps(),
-            yourGuest(),
+            // yourGuest(),
+            _checkNotificationPermissions(),
+            _displayTestNotification(),
+            _resetGCMId(),
           ],
         ),
       ),
@@ -254,13 +273,14 @@ class _BaseAppNotificationSettingsState
                       child: FlutterSwitch(
                         activeColor: GlobalVariables.primaryColor,
                         value: isDailyEntryNotification,
-                        onToggle: (value) {
+                        onToggle: (value)async {
                           print("VALUE : $value");
                           setState(() {
                             isDailyEntryNotification = value;
                             GlobalFunctions.setDailyEntryNotification(
                                 isDailyEntryNotification);
                           });
+                          await onNotifcationUpdate('Staff', value);
                         },
                       ),
                     )
@@ -381,55 +401,163 @@ class _BaseAppNotificationSettingsState
                       child: FlutterSwitch(
                         activeColor: GlobalVariables.primaryColor,
                         value: isGuestEntryNotification,
-                        onToggle: (value) {
+                        onToggle: (value)async{
                           print("VALUE : $value");
                           setState(() {
                             isGuestEntryNotification = value;
                             GlobalFunctions.setGuestEntryNotification(
                                 isGuestEntryNotification);
                           });
+                          await onNotifcationUpdate(
+                              'IN_APP_NOTIFICATION', value);
                         },
                       ),
                     )
                   ],
                 ),
               ),
-              /*   Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: SvgPicture.asset(GlobalVariables.logoutIconPath,width: 30,height: 30,color: GlobalVariables.grey,),
-                    ),
-                    Expanded(
-                      child: Container(
-                        alignment: (Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                        child: Text(AppLocalizations.of(context).translate('exit_notification'),style: TextStyle(
-                            fontSize: 16,fontWeight: FontWeight.w600
-                        ),),
-                      ),
-                    ),
-                    Container(
-                      child: CustomSwitch(
-                        activeColor: GlobalVariables.green,
-                        value: isGuestExitNotification,
-                        onChanged: (value) {
-                          print("VALUE : $value");
-                          setState(() {
-                            isGuestExitNotification = value;
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),*/
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _checkNotificationPermissions() => InkWell(
+        onTap: () => controller.showNotificationPermission(),
+        child: Container(
+          margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Card(
+            shape: (RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0))),
+            elevation: 2.0,
+            color: GlobalVariables.white,
+            child: Container(
+              padding: EdgeInsets.all(15),
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      child: SvgPicture.asset(
+                        GlobalVariables.settingsIconPath,
+                        width: 30,
+                        height: 30,
+                        color: GlobalVariables.grey,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: text('Check notification permissions',
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold,
+                            textColor: GlobalVariables.primaryColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+  Widget _displayTestNotification() => InkWell(
+        onTap: () => controller.showTestNotification(),
+        // onTap: () => Get.find<TtsController>().readUpiDialog("2000"),
+        child: Container(
+          margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Card(
+            shape: (RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0))),
+            elevation: 2.0,
+            color: GlobalVariables.white,
+            child: Container(
+              padding: EdgeInsets.all(15),
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      child: SvgPicture.asset(
+                        GlobalVariables.inAppCallIconPath,
+                        width: 30,
+                        height: 30,
+                        color: GlobalVariables.grey,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: text('See how notifiation works',
+                            fontSize: GlobalVariables.textSizeMedium,
+                            fontWeight: FontWeight.bold,
+                            textColor: GlobalVariables.primaryColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+  Widget _resetGCMId() => InkWell(
+      onTap: () => controller.updateFCMToken(),
+      child: Obx(
+        () => controller.isBusy.value
+            ? CupertinoActivityIndicator()
+            : Container(
+                margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Card(
+                  shape: (RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0))),
+                  elevation: 2.0,
+                  color: GlobalVariables.white,
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    child: Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            child: SvgPicture.asset(
+                              GlobalVariables.appSettingsIconPath,
+                              width: 30,
+                              height: 30,
+                              color: GlobalVariables.grey,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                              child: text('Reset notification',
+                                  fontSize: GlobalVariables.textSizeMedium,
+                                  fontWeight: FontWeight.bold,
+                                  textColor: GlobalVariables.primaryColor),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+      ));
+
+  Future<void> onNotifcationUpdate(String type, bool value) async {
+    Dio dio = Dio();
+    RestClient restClient = RestClient(dio);
+    setBusy(true);
+    String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
+    String updateValue = value ? 'Yes' : 'No';
+
+    await restClient.updateNotificationStatus(
+        societyId, userId, type, updateValue);
+    setBusy(false);
   }
 }

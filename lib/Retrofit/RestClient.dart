@@ -198,7 +198,23 @@ abstract class RestClient {
   Future<DataResponse> getEmergencyDirectoryData(
       @Field(GlobalVariables.societyId) String societyId);@FormUrlEncoded()
   @POST(GlobalVariables.VehicleDirectoryAPI)
-  Future<DataResponse> getVehicleDirectoryData(@Field(GlobalVariables.societyId) String societyId);
+  Future<DataResponse> getVehicleDirectoryData(
+      @Field(GlobalVariables.societyId) String societyId);
+
+  @FormUrlEncoded()
+  @POST(GlobalVariables.updateNotificationAPI)
+  Future<DataResponse> updateNotificationStatus(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
+      @Field('TYPE') String type,
+      @Field('VALUE') String value);
+
+  @POST(GlobalVariables.updateTokenAPI)
+  Future<DataResponse> updateGcmToken(
+      @Field(GlobalVariables.societyId) String societyId,
+      @Field(GlobalVariables.userID) String userId,
+      @Field('Tokenid') String value);
+
   @FormUrlEncoded()
   @POST(GlobalVariables.NeighboursDirectoryAPI)
   Future<DataResponse> getNeighboursDirectoryData(

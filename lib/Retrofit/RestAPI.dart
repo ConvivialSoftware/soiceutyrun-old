@@ -4353,6 +4353,87 @@ class RestAPI
   }
 
   @override
+  Future<DataResponse> updateNotificationStatus(
+      String societyId, String userId, String type, String updateValue) async {
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      'TYPE': type,
+      'VALUE': updateValue
+    });
+
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.updateNotificationAPI,
+        options: restClientOption(),
+        data: formData);
+    final value = _result.data;
+
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<DataResponse> updateGcmToken(
+      String societyId, String userId, String token) async {
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: societyId,
+      GlobalVariables.userID: userId,
+      'TYPE': Platform.isAndroid ? 'Android' : 'iOS',
+      'Tokenid': token
+    });
+
+    final Response _result = await _dio.post(
+        baseUrl! + GlobalVariables.updateTokenAPI,
+        options: restClientOption(),
+        data: formData);
+    final value = _result.data;
+
+    return DataResponse.fromJson(value);
+  }
+
+  @override
+  Future<String> getOrderId(String socId, String amount, String flatNo,
+      String invoiceNo, String? userId, String? type) async {
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      GlobalVariables.userID: userId,
+      'AMOUNT': amount,
+      'FLAT_NO': flatNo,
+      'INVOICE_NO': invoiceNo,
+      'TYPE': type,
+    });
+
+    final Response _result = await _dio.post(
+        GlobalVariables.BaseURLERP + GlobalVariables.getOrderIdForUPI,
+        options: restClientOption(),
+        data: formData);
+    final value = _result.data;
+    if (_result.statusCode == 200) {
+      return value['order_id'] ?? '';
+    }
+    return '';
+  }
+
+  @override
+  Future<String> getUPIStatus(String socId, String orderId) async {
+    FormData formData = FormData.fromMap({
+      GlobalVariables.societyId: socId,
+      'ORDER_ID': orderId,
+    });
+
+    final Response _result = await _dio.post(
+        GlobalVariables.BaseURLERP + GlobalVariables.getUPIStatus,
+        options: restClientOption(),
+        data: formData);
+    final value = _result.data;
+    if (_result.statusCode == 200) {
+      final String status = value['status'] ?? '';
+
+      return status.toLowerCase();
+    }
+    return '';
+  }
+
+  @override
   Future<AvenueResponse> getAvenueParams(
     String tid,
     String merchantId,
@@ -4411,26 +4492,7 @@ class RestAPI
     return AvenueResponse(errorMessage: 'Error connecting CCAvenue');
   }
 
-  @override
-  Future<String> getUPIStatus(String socId, String orderId) async {
-    FormData formData = FormData.fromMap({
-      GlobalVariables.societyId: socId,
-      'ORDER_ID': orderId,
-    });
-
-    final Response _result = await _dio.post(
-        GlobalVariables.BaseURLERP + GlobalVariables.getUPIStatus,
-        options: restClientERPOption(),
-        data: formData);
-    final value = _result.data;
-    if (_result.statusCode == 200) {
-      final String status = value['status'] ?? '';
-
-      return status.toLowerCase();
-    }
-    return '';
-  }
-
+ 
   @override
   Future<DataResponse> getVehicleDirectoryData(String societyId) async {
     try {

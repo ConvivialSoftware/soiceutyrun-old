@@ -518,7 +518,7 @@ class UserManagementResponse extends ChangeNotifier {
       closeComplaint = _list[0].close_complaint!;
       openComplaint = _list[0].open_complaint!;
       maintenanceStaff = _list[0].maintenanceStaff!;
-      normalStaff = _list[0].normalStaff!;
+      normalStaff = _list[0].normalStaff ?? '0';
     }
 
     isLoading = false;

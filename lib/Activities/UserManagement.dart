@@ -633,11 +633,8 @@ class _BaseUserManagementState extends State<BaseUserManagement> {
                         flex: 1,
                         child: InkWell(
                           onTap: () {
-                            if (int.parse(userManagementResponse.normalStaff) >
-                                0) {
-                              Get.find<AppNotificationController>()
-                                  .goToStaffTab();
-                            }
+                            Get.find<AppNotificationController>()
+                                .goToStaffTab();
                           },
                           child: Container(
                             //color: GlobalVariables.lightGray,

@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:society_gatepass/society_gatepass.dart';
 import 'package:societyrun/GlobalClasses/GlobalVariables.dart';
+import 'package:societyrun/Retrofit/RestClient.dart';
 
 import '../GlobalClasses/GlobalFunctions.dart';
 
@@ -15,23 +18,26 @@ class AppNotificationController extends GetxController {
     final flatNo = await GlobalFunctions.getFlat();
     final societyId = await GlobalFunctions.getSocietyId();
     final userId = await GlobalFunctions.getUserId();
-    final myGateOption = MyGateOptions(
-        block: block,
-        flatNo: flatNo,
-        societyId: societyId,
-        userId: userId,
-        username: username);
+    final displayName = await GlobalFunctions.getDisplayName();
+
     SocietyGatepass.initialize(
         theme: GatepassTheme(
           primaryColor: GlobalVariables.primaryColor,
           secondaryColor: GlobalVariables.primaryColor,
           accentColor: GlobalVariables.primaryColor,
         ),
-        myGateOptions: myGateOption);
+        myGateOptions: MyGateOptions(
+            block: block,
+            flatNo: flatNo,
+            societyId: societyId,
+            userId: userId,
+            displayName: displayName,
+            username: username));
   }
 
   initGatepassNotifications() async {
     final username = await GlobalFunctions.getUserName();
+    final displayName = await GlobalFunctions.getDisplayName();
     SocietyGatepass.initializeNotificationOptions(NotificationOptions(
         username: username,
         channelKey: "GatepassCallChannel",
@@ -40,7 +46,7 @@ class AppNotificationController extends GetxController {
         channelGroupKey: "GatepassCallChannel_group",
         soundSourceDialog: "assets/audio/res_alert.mp3",
         soundSource: "resource://raw/res_alert",
-        displayName: "Societyrun"));
+        displayName: displayName));
   }
 
   listenNotificationActions() async {
@@ -48,14 +54,19 @@ class AppNotificationController extends GetxController {
     Get.find<GatepassController>().startListenNotificaionActions();
   }
 
-  Future<void> updateFCMToken(String token) async {
-    // Dio dio = Dio();
-    // RestClient restClient = RestClient(dio);
+  Future<void> updateFCMToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    if (token == null) return;
+    isBusy.value = true;
+    Dio dio = Dio();
+    RestClient restClient = RestClient(dio);
 
-    // String societyId = await GlobalFunctions.getSocietyId();
-    // String userId = await GlobalFunctions.getUserId();
+    String societyId = await GlobalFunctions.getSocietyId();
+    String userId = await GlobalFunctions.getUserId();
 
-    // await restClient.updateGcmToken(societyId, userId, token);
+    final result = await restClient.updateGcmToken(societyId, userId, token);
+    isBusy.value = false;
+    GlobalFunctions.showToast(result.message ?? '');
   }
 
   showNotificationPermission() async {
@@ -78,10 +89,9 @@ class AppNotificationController extends GetxController {
   goToMyGate() {
     Get.delete<ApiController>();
     initGatepass();
-
     final isAdmin = false;
     Get.to(() => MyGatePage(
-        pageName: 'My Gate', isAdmin: isAdmin, type: 'helper', vid: '2548'));
+        pageName: 'My Gate', isAdmin: isAdmin, type: 'Helper', vid: '2548'));
   }
 
   goToStaffCategory(String roleName) {
@@ -91,10 +101,11 @@ class AppNotificationController extends GetxController {
         ));
   }
 
-  goToStaffTab({String type = 'helper'}) {
+  goToStaffTab({String type = 'Helper'}) {
     Get.delete<ApiController>();
     initGatepass();
     final isAdmin = false;
+
     Get.to(() => MyGatePage(
         pageName: 'My Gate', isAdmin: isAdmin, type: type, vid: '2548'));
     Get.put(MyGateController()).setSelectedTab(1);
