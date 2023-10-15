@@ -377,7 +377,8 @@ class NotificationsState extends State<BaseNotifications> {
               builder: (context) => BaseMyComplex(
                   AppLocalizations.of(context).translate('poll_survey'))));
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR ||
-        _dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR_VERIFY) {
+        _dbNotificationPayload.TYPE == NotificationTypes.TYPE_VISITOR_VERIFY ||
+        _dbNotificationPayload.TYPE == NotificationTypes.TYPE_FVISITOR) {
       Get.find<AppNotificationController>().goToMyGate();
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_BILL) {
       Navigator.push(
@@ -390,13 +391,6 @@ class NotificationsState extends State<BaseNotifications> {
       String flat = await GlobalFunctions.getFlat();
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => BaseLedger(block, flat)));
-    } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_FVISITOR) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseMyGate(
-                  AppLocalizations.of(context).translate('my_gate'),
-                  _dbNotificationPayload.VID)));
     } else if (_dbNotificationPayload.TYPE == NotificationTypes.TYPE_SInApp) {
       Navigator.push(
           context,
