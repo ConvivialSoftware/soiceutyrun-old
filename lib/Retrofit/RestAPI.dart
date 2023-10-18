@@ -3283,25 +3283,12 @@ class RestAPI
       GlobalVariables.BILLING_NAME: billingName,
       GlobalVariables.INTERCOM: INTERCOM,
     });
-    print(GlobalVariables.societyId + ": " + societyId);
-    print({
-      GlobalVariables.societyId: societyId,
-      GlobalVariables.id: ID,
-      GlobalVariables.CONSUMER_NO: consumerNo,
-      GlobalVariables.PARKING_SLOT: parkingSlot,
-      GlobalVariables.AREA: AREA,
-      GlobalVariables.GSTIN_NO: gstinNo,
-      GlobalVariables.BILLING_NAME: billingName,
-      GlobalVariables.INTERCOM: INTERCOM,
-    }.toString());
 
-    print('baseurl : ' + baseUrl! + GlobalVariables.editUnitDetailsAPI);
     final Response _result = await _dio.post(
         baseUrl! + GlobalVariables.editUnitDetailsAPI,
         options: restClientOption(),
         data: formData);
     final value = _result.data;
-    print('value of editUnitDetails : ' + value.toString());
     return StatusMsgResponse.fromJson(value);
   }
 
@@ -4492,7 +4479,6 @@ class RestAPI
     return AvenueResponse(errorMessage: 'Error connecting CCAvenue');
   }
 
- 
   @override
   Future<DataResponse> getVehicleDirectoryData(String societyId) async {
     try {

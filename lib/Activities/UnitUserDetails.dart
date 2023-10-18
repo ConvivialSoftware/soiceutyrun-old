@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:societyrun/Activities/AddAgreement.dart';
@@ -1511,8 +1512,10 @@ class _BaseUnitUserDetailsState extends State<BaseUnitUserDetails> {
                                           listen: false)
                                       .editUnitDetails(
                                           widget.block,
-                                          userManagementResponse
-                                              .unitDetailsList[0].ID!,
+                                          userManagementResponse.unitDetailsList
+                                              .firstWhereOrNull(
+                                                  (e) => e.FLAT == widget.flat)!
+                                              .ID!,
                                           consumerNo,
                                           parkingSlotTextController.text,
                                           areaTextController.text,

@@ -152,6 +152,12 @@ class DisplayProfileInfoState extends State<BaseDisplayProfileInfo> {
                 onSelected: (index) async {
                   switch (index) {
                     case 'move_out':
+                      if (loggedUserType!.toLowerCase() == 'owner') {
+                        //show toast
+                        GlobalFunctions.showToast(
+                            'Please connect with admin to move out');
+                        return;
+                      }
                       showDialog(
                           context: context,
                           builder: (BuildContext context) =>

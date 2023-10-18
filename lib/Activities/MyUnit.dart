@@ -9,7 +9,6 @@ import 'package:societyrun/Activities/DisplayProfileInfo.dart';
 import 'package:societyrun/Activities/DisplayTenantInfo.dart';
 import 'package:societyrun/Activities/Dues.dart';
 import 'package:societyrun/Activities/EditProfileInfo.dart';
-import 'package:societyrun/Activities/StaffDetails.dart';
 import 'package:societyrun/GlobalClasses/AppLocalizations.dart';
 import 'package:societyrun/GlobalClasses/CustomAppBar.dart';
 import 'package:societyrun/GlobalClasses/GlobalFunctions.dart';
@@ -359,11 +358,6 @@ class MyUnitState extends State<BaseMyUnit>
               InkWell(
                 onTap: () {
                   Get.find<AppNotificationController>().goToStaffTab();
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             BaseStaffCategory(false, "Staff")));
                 },
                 child: smallTextContainerOutlineLayout(
                   AppLocalizations.of(context).translate('add'),

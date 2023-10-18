@@ -107,8 +107,8 @@ class AppNotificationController extends GetxController {
     final isAdmin = false;
 
     Get.to(() => MyGatePage(
-        pageName: 'My Gate', isAdmin: isAdmin, type: type, vid: '2548'));
-    Get.put(MyGateController()).setSelectedTab(1);
+        pageName: 'My Gate', isAdmin: isAdmin, type: type, vid: '2548',initialIndex: 1,));
+   
   }
 
   goToStaffDetail(Staff staff) async {
