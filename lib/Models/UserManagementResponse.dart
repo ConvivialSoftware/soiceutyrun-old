@@ -1217,6 +1217,7 @@ class TenantRentalRequest {
       this.tenant_name});
 
   factory TenantRentalRequest.fromJson(Map<String, dynamic> map) {
+    print('MAP $map');
     return TenantRentalRequest(
       ID: map["ID"],
       U_ID: map["U_ID"],

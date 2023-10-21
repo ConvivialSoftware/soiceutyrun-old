@@ -66,7 +66,6 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
     _progressDialog = GlobalFunctions.getNormalProgressDialogInstance(context);
     if (widget.isAdmin) getBlockFlatData();
 
-
     GlobalFunctions.checkInternetConnection().then((internet) {
       if (internet) {
         //getComplaintAreaData();
@@ -483,20 +482,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                       Container(
                         child: TextButton.icon(
                           onPressed: () {
-                            if (isStoragePermission) {
-                              openFile(context);
-                            } else {
-                              GlobalFunctions.askPermission(Permission.storage)
-                                  .then((value) {
-                                if (value) {
-                                  openFile(context);
-                                } else {
-                                  GlobalFunctions.showToast(
-                                      AppLocalizations.of(context)
-                                          .translate('download_permission'));
-                                }
-                              });
-                            }
+                            openFile(context);
                           },
                           icon: AppIcon(
                             Icons.attach_file,
@@ -519,21 +505,7 @@ class RaiseNewTicketState extends State<BaseRaiseNewTicket> {
                       Container(
                         child: TextButton.icon(
                             onPressed: () {
-                              if (isStoragePermission) {
-                                openCamera(context);
-                              } else {
-                                GlobalFunctions.askPermission(
-                                        Permission.storage)
-                                    .then((value) {
-                                  if (value) {
-                                    openCamera(context);
-                                  } else {
-                                    GlobalFunctions.showToast(
-                                        AppLocalizations.of(context)
-                                            .translate('download_permission'));
-                                  }
-                                });
-                              }
+                              openCamera(context);
                             },
                             icon: AppIcon(
                               Icons.camera_alt,

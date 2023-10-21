@@ -406,6 +406,7 @@ class ViewReceiptState extends AppStatefulState<BaseViewReceipt> {
                                   isListItem: true,
                                   child: InkWell(
                                     onTap: () {
+                                      print(_receiptList[0].ATTACHMENT);
                                       downloadAttachment(
                                           _receiptList[0].ATTACHMENT);
                                     },

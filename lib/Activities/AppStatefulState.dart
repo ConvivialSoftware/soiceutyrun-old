@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:open_file_safe/open_file_safe.dart';
 //import 'package:flutter_downloader/flutter_downloader.dart';
@@ -61,66 +63,14 @@ abstract class AppStatefulState<T extends StatefulWidget> extends State<T> {
 
   void downloadAttachment(var url /*, var _localPath*/) async {
     print('Download URL : ' + url);
-
-    launchUrl(Uri.parse(url), mode: LaunchMode.externalNonBrowserApplication);
-    // GlobalFunctions.checkPermission(Permission.storage).then((value) async {
-    //   if (value) {
-    //     GlobalFunctions.showToast("Downloading attachment....");
-    //     String localPath;
-    //     if (Platform.isAndroid) {
-    //       localPath = _localPath! + Platform.pathSeparator;
-    //     } else {
-    //       localPath = _localPath! + Platform.pathSeparator + "Download";
-    //     }
-    //     final savedDir = Directory(localPath);
-    //     bool hasExisted = await savedDir.exists();
-    //     if (!hasExisted) {
-    //       savedDir.create();
-    //     }
-
-    //     Dio dio = Dio();
-    //     await dio.download(url, localPath+Platform.pathSeparator+fileName, onReceiveProgress: (rec, total) {
-    //       setState(() {
-    //         downloading = true;
-    //         //print('Rac : '+rec.toString());
-    //         //  print('total : '+total.toString());
-    //         downloadRate =((rec/total)*100).toInt();
-    //         print('downloadRate : '+downloadRate.toString());
-    //         //downloadingStr = "Downloading File : $rec" ;
-    //       });
-    //     } );
-    //     setState(() {
-    //       downloading = false;
-    //       //downloadingStr = "Completed";
-    //       GlobalFunctions.showToast("Downloading completed");
-    //       //launch('file://'+localPath+Platform.pathSeparator+fileName);
-    //       // Navigator.of(context).pop();
-    //     });
-    //     _openDownloadedFile(localPath+Platform.pathSeparator+fileName);
-
-    //     /*_taskId = await FlutterDownloader.enqueue(
-    //       url: url,
-    //       savedDir: localPath,
-    //       headers: {"auth": "test_for_sql_encoding"},
-    //       //fileName: "SocietyRunImage/Document",
-    //       showNotification: true,
-    //       // show download progress in status bar (for Android)
-    //       openFileFromNotification:
-    //       true, // click on notification to open downloaded file (for Android)
-    //     );*/
-    //   }else{
-    //     GlobalFunctions.askPermission(Permission.storage)
-    //         .then((value) {
-    //       if (value) {
-    //         downloadAttachment(url /*, _localPath*/);
-    //       } else {
-    //         GlobalFunctions.showToast(AppLocalizations.of(context)
-    //             .translate('download_permission'));
-    //       }
-    //     });
-    //   }
-
-    // });
+    try {
+      launchUrl(Uri.parse(url),
+          mode: Platform.isAndroid
+              ? LaunchMode.externalNonBrowserApplication
+              : LaunchMode.inAppWebView);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _openDownloadedFile(String path) async {

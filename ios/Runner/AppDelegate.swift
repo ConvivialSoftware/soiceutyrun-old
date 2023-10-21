@@ -13,7 +13,9 @@ import Firebase
       FirebaseApp.configure() //add this before the code below
 
     GeneratedPluginRegistrant.register(with: self)
-    //FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
+
+      application.registerForRemoteNotifications()
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
